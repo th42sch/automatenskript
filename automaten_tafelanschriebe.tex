@@ -1,0 +1,2706 @@
+\documentclass[fontsize=11pt, twoside=false, numbers=autoenddot]{scrbook}
+\usepackage{automaten_tafelanschriebe}
+
+\pagestyle{plain}
+% \pagestyle{scrheadings}
+% % \chead{\headmark}
+% \chead{\partmark}
+% \renewcommand{\sectionmark}[1]{\markright{\textsl{#1}}}
+% \renewcommand{\chaptermark}[1]{\markright{\textsl{#1}}{}}
+% \renewcommand{\partmark}[1]{\markright{\textsl{#1}}}
+\parindent0pt
+\parskip\smallskipamount
+
+\title{Tafelmitschriften zur Vorlesung \glqq Automatentheorie und ihre Anwendungen\grqq\\ im Wintersemester 2018/19}
+\author{%
+  Prof.\ Dr.\ Thomas Schneider\\[1pt]
+  AG Theorie der Künstlichen Intelligenz \\[1pt]
+  Fachbereich 3 \\
+  \includegraphics[width=.4\linewidth]{logo_ub.jpg} \\[\baselineskip]~%
+}
+\date{Stand: \today}
+\publishers{{\large Dieses Dokument ist noch unvollständig und wird regelmäßig aktualisiert.}}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+% ===================================================================
+% ===================================================================
+% ===================================================================
+\part[Endliche Automaten auf endlichen Wörtern]{Endliche Automaten \\ auf endlichen Wörtern}
+
+%\dots\ folgt \dots
+
+% ===================================================================
+% ===================================================================
+% ===================================================================
+\part[Endliche Automaten auf endlichen Bäumen]{Endliche Automaten \\ auf endlichen Bäumen}
+
+%\dots\ folgt \dots
+
+% ===================================================================
+% ===================================================================
+% ===================================================================
+\part[Endliche Automaten auf unendlichen Wörtern]{Endliche Automaten \\ auf unendlichen Wörtern}
+
+% ===================================================================
+\section*{T3.1~ Produktkonstruktion für NEAs ist für NBAs nicht korrekt}
+
+Sei $\Sigma = \{a,b\}$. Wir betrachten folgende \textsfbf{NEAs} $\Amc_1,\Amc_2$.
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state,initial]   (q0) {$q_0$};
+    \node[state,accepting] (q1) [right of=q0] {$q_1$};
+    \node[above left=-2mm and 6mm of q0] {$\Amc_1$};
+    
+    \path[->] (q0) edge [bend left=15] node [above] {$a$} (q1)
+              (q1) edge [bend left=15] node [below] {$a,b$} (q0);
+  \end{tikzpicture}
+  \qquad
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state,initial,accepting] (q2) {$q_2$};
+    \node[state]                   (q3) [right of=q2] {$q_3$};
+    \node[above left=-2mm and 6mm of q2] {$\Amc_2$};
+    
+    \path[->] (q2) edge [bend left=15] node [above] {$a,b$} (q3)
+              (q3) edge [bend left=15] node [below] {$b$}   (q2);
+  \end{tikzpicture}
+\end{center}
+%
+Dann gilt:
+%
+\begin{align*}
+  L(\Amc_1) & = \{a_0\cdots a_{n-1} \mid n \text{~ist ungerade und~} a_0=a_2=\dots=a\} \\
+  L(\Amc_2) & = \{a_0\cdots a_{n-1} \mid n \text{~ist gerade und~} a_1=a_3=\dots=b\} \\[6pt]
+  L(\Amc_1) \cap L(\Amc_2) & = \emptyset
+\end{align*}
+%
+Der Produktautomat \Amc ist folgender:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=40mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={ellipse,draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state,initial]   (q0q2) {$(q_0,q_2)$};
+    \node[state,accepting] (q1q2) [right of=q0q2]      {$(q_1,q_2)$};
+    \node[state]           (q0q3) [below=10mm of q0q2] {$(q_0,q_3)$};
+    \node[state]           (q1q3) [right of=q0q3]      {$(q_1,q_3)$};
+    \node[above left=-2mm and 10mm of q0q2] {$\Amc$};
+    
+    \path[->] (q0q2) edge [bend left=10] node [above,near start] {$a$} (q1q3)
+              (q1q3) edge [bend left=10] node [below,near end] {$b$} (q0q2)
+              (q1q2) edge [bend left=10] node [below,pos=.09] {$\,a,b$} (q0q3);
+  \end{tikzpicture}
+\end{center}
+%
+Diese Konstruktion ist korrekt für NEAs; in diesem Beispiel ist $L(\Amc) = \emptyset$,
+da der einzige akzeptierende Zustand $(q_1,q_2)$ unerreichbar ist.
+
+\par\medskip\noindent
+Betrachten wir nun dieselben Automaten $\Amc_1,\Amc_2$ als \textsfbf{NBAs.}
+Dann gilt:
+%
+\begin{align*}
+  L_\omega(\Amc_1) & = \{\alpha \mid n \text{~ist ungerade und~} \alpha_0=\alpha_2=\dots=a\} \\
+  L_\omega(\Amc_2) & = \{\alpha \mid n \text{~ist gerade und~} \alpha_1=\alpha_3=\dots=b\},
+  \intertext{also ist jetzt}
+  L_\omega(\Amc_1) \cap L_\omega(\Amc_2) & = \{(ab)^\omega\},
+  \intertext{aber nach wie vor ist}
+  L_\omega(\Amc) = \emptyset,
+\end{align*}
+%
+also ist die Konstruktion für NBAs nicht korrekt!
+Der Grund dafür ist, dass die erfolgreichen Runs von $\Amc_1$ bzw.\ $\Amc_2$
+die akzeptierenden Zustände asynchron erreichen,
+nämlich nach $1,3,5,\dots$ Schritten $(\Amc_1)$ bzw.\
+$0,2,4,\dots$ Schritten $(\Amc_2)$. Dadurch erreicht der entsprechende Run
+von $\Amc$ niemals einen (kombinierten) akzeptierenden Zustand.
+
+\goodbreak
+% ===================================================================
+\section*{T3.2~ Produktkonstruktion für NBAs: Beispiel und Korrektheit}
+
+\paragraph*{Beispiel.}
+Wendet man die Produktkonstruktion (Folie~30) auf die obigen NBAs
+$\Amc_1,\Amc_2$ an, so erhält man folgenden NBA $\Amc$
+(im Bild sind nur die erreichbaren Zustände wiedergegeben):
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=40mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={ellipse,draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state,initial]   (q0q21)                       {$(q_0,q_2,1)$};
+    \node[state]           (q1q31) [right of=q0q21]      {$(q_1,q_3,1)$};
+    \node[state,accepting] (q0q22) [below=10mm of q1q31] {$(q_0,q_2,2)$};
+    \node[above left=-2mm and 12mm of q0q21] {$\Amc$};
+    
+    \path[->] (q0q21) edge node [above] {$a$} (q1q31)
+              (q1q31) edge [bend left=15] node [right] {$b$} (q0q22)
+              (q0q22) edge [bend left=15] node [left]  {$a$} (q1q31);
+  \end{tikzpicture}
+\end{center}
+%
+Tatsächlich ist nun $L_\omega(\Amc) = \{(ab)^\omega\}$.
+
+\paragraph*{Korrektheitsbeweis.}
+Zu zeigen ist:
+\[
+  L_\omega(\Amc) = L_\omega(\Amc_1) \cap L_\omega(\Amc_2)
+\]
+%\begin{beweis}
+  \begin{description}
+    \item[{\boldmath"`$\subseteq$"'}]
+      Sei $\alpha \in L_\omega(\Amc)$.
+      Dann gibt es einen erfolgreichen Run $r = q_0q_1q_2\cdots$ von \Amc auf $\alpha$
+      mit $q_0 \in I$ und $\textsf{Inf}(r) \cap F \neq \emptyset$.
+      Nach Konstruktion von \Amc muss jedes $q_i$ die Form
+      \[
+        q_i = (s_i,t_0,n_i)
+      \]
+      haben mit $s_i \in Q_1$, $t_i \in Q_2$ und $n_i \in \{1,2\}$ für alle $i \geq 0$.
+      
+      Wir betrachten die Folge $s = s_0s_1s_2\cdots$.
+      Diese ist ein Run von $\Amc_1$ auf $\alpha$:
+      da $r$ ein Run ist, folgt mit der Definition von $I$ bzw.\ $\Delta$, dass
+      $s_0 \in I_1$ und $(s_i,\alpha_i,s_{i+1}) \in \Delta_1$ für alle $i \geq 0$.
+      Außerdem ist $s$ erfolgreich, denn wegen $\textsf{Inf}(r) \cap F \neq \emptyset$
+      (und der Definition von $F$)
+      enthält $r$ unendlich viele Zustände der Form
+      \[
+        \tag{$*$}
+        q_i = (s_i,t_i,2) \qquad \text{mit~} t_i \in F_2;
+      \]
+      also enthält $r$ auch unendlich viele Zustände der Form
+      \[
+        \tag{$**$}
+        q_j = (s_j,t_j,1) \qquad \text{mit~} s_j \in F_1,
+      \]
+      weil nach jedem $q_i$ der Form $(*)$ in $(s_{i+1},t_{i+1},1)$ gewechselt wird
+      und erst dann wieder ins nächste $q_i$ der Form $(*)$ gegangen werden kann,
+      wenn ein $q_j$ der Form $(**)$ gefunden wurde.
+      Also ist $\textsf{Inf}(s) \cap F_1 \neq \emptyset$ und damit $s$ erfolgreich.
+      
+      Analog argumentiert man, dass $t = t_0t_1t_2\cdots$
+      ein erfolgreicher Run von $\Amc_2$ auf $\alpha$ ist.
+      Folglich ist $\alpha \in L_\omega(\Amc_1) \cap L_\omega(\Amc_2)$.
+    \item[{\boldmath"`$\supseteq$"'}]
+      Sei $\alpha \in L_\omega(\Amc_1) \cap L_\omega(\Amc_2)$.
+      Dann gibt es erfolgreiche Runs
+      %
+      \begin{align*}
+        s & = s_0s_1s_2\dots \quad \text{von $\Amc_1$ auf $\alpha$\quad und} \\
+        t & = t_0t_1t_2\dots \quad \text{von $\Amc_2$ auf $\alpha$.}
+      \end{align*}
+      %
+      Wir betrachten die Folge
+      \[
+        r = (s_0,t_0,n_0)~(s_1,t_1,n_1)~(s_2,t_2,n_2)~\cdots,
+      \]
+      wobei die $n_i$ induktiv wie folgt definiert sind:
+      %
+      \begin{align*}
+        n_0 & = 1 \\
+        n_i & = \begin{cases}
+                  1 & \text{falls~} n_{i-1} = 1 \text{~und~} s_{i-1} \notin F_1 \\
+                    & \text{oder~}  n_{i-1} = 2 \text{~und~} t_{i-1} \in F_2 \\
+                  2 & \text{sonst}
+                \end{cases}
+      \end{align*}
+      %
+      Man zeigt leicht unter Zuhilfenahme der Konstruktion von $I,F,\Delta$,
+      dass $r$ ein erfolgreicher Run von \Amc auf $\alpha$ ist.
+      Folglich ist $\alpha \in L_\omega(\Amc)$.
+      \qedhere
+  \end{description}
+%\end{beweis}
+
+% ===================================================================
+\section*{T3.3~ Büchi-Erkennbarkeit von {\boldmath $W^\omega$ für reguläre Sprachen $W$}}
+
+\textsfbf{Noch zu zeigen:}~ $L_\omega(\Amc_2) = L(\Amc_1)^\omega$
+%
+\begin{description}
+  \item[{\boldmath"`$\subseteq$"'}]
+    Sei $\alpha \in L_\omega(\Amc_2)$.
+    Dann gibt es einen erfolgreichen Run $r = q_0q_1q_2\cdots$ von $\Amc_2$
+    auf $\alpha$, d.\,h.\ $q_0 = q_I$ (der einzige Anfangszustand von $\Amc_2$),
+    und $q_I$ kommt unendlich oft in $r$ vor (weil es auch der einzige akzeptierende Zustand von $\Amc_2$ ist).
+    
+    Seien $q_{i_0},q_{i_1},q_{i_2},\dots$ alle Vorkommen von $q_I$ in $r$.
+    Für jedes $j \geq 0$ betrachten wir die Folge
+    \[
+        r_j := \underset{\substack{||\\q_I}}{q_{i_j}}
+               q_{i_j+1}\cdots q_{i_{j+1}-1}
+               \underset{\substack{||\\q_I}}{q_{i_{j+1}}}.
+    \]
+    Nach Konstruktion von $\Delta_2$ und wegen der Annahmen über $\Amc_1$
+    gibt es ein $q_f \in F$, so dass
+    \[
+        \underset{\substack{||\\q_I}}{q_{i_j}}
+        q_{i_j+1}\cdots q_{i_{j+1}-1}
+        \underset{\substack{\turnbox{270}{$\in$}\,\,\,\\[7pt]F}}{q_f}
+    \]
+    ein erfolgreicher Run von $\Amc_1$ auf
+%    $w_j := \alpha_{i_j}\alpha_{i_j+1}\cdots\alpha_{i_{j+1}-1}$
+    $w_j := \alpha[i_j,i_{j+1}-1]$
+    ist.
+    Folglich gehört für alle $j$ das Wort $w_j$ zur Sprache $L(\Amc_1)$,
+    und damit gilt $\alpha \in L(\Amc_1)^\omega$.
+  \item[{\boldmath"`$\supseteq$"'}]
+    Sei $\alpha \in L(\Amc_1)^\omega$.
+    Dann ist $\alpha = w_0w_1w_2\cdots$ mit $w_i \in L(\Amc_1)$ für alle $i \geq 0$.
+    Wir nehmen o.\,B.\,d.\,A.\ an, dass $\varepsilon \notin L(\Amc_1)$ ist,
+    also $|w_j| > 0$ für alle $i$.
+    Also gibt es für jedes $j \geq 0$ einen erfolgreichen Run
+    \[
+      r_j := q_{j,0}q_{j,1}\cdots q_{j,|w_j|}
+    \]
+    von $\Amc_1$ auf $w_j$.
+    Nach Konstruktion von $\Delta_2$ ist dann
+    \[
+      r ~:=~ q_{0,0}q_{0,1}\cdots q_{0,|w_0|-1}~~
+             q_{1,0}q_{1,1}\cdots q_{1,|w_1|-1}~~
+             \cdots
+    \]
+    ein erfolgreicher Run von $\Amc_2$ auf $\alpha$.
+    Folglich ist $\alpha \in L_\omega(\Amc_2)$.
+    \qedhere
+\end{description}
+
+% ===================================================================
+\section*{T3.4~ Beweis Charakterisierung NBA-erkennbarer Sprachen}
+
+\textsfbf{Satz~3.9.}~
+Eine Sprache $L \subseteq \Sigma^\omega$ ist Büchi-erkennbar
+genau dann,
+wenn es reguläre Sprachen $V_1,W_1,\dots,V_n,W_n$ gibt mit $n \geqslant 1$ und
+\[
+  L = V_1W_1^\omega \cup \dots \cup V_nW_n^\omega.
+\]
+
+\par\medskip
+\textsfbf{Beweis.}~
+Sei $L \subseteq \Sigma^\omega$ Büchi-erkennbar,
+also $L = L_\omega(\Amc)$ für einen NBA $\Amc = (Q,\Sigma,\Delta,I,F)$.
+Wir nutzen folgende Beobachtung: für jedes $\omega$-Wort $\alpha \in L_\omega(\Amc)$,
+auf dem $\Amc$ einen erfolgreichen Run $r = q_0q_1q_2\cdots$
+mit $q_f \in \textsf{Inf}(r) \cap F$ hat, gibt es
+%
+\begin{itemize}
+  \item
+    ein endliches Präfix von $\alpha$, das $q_I$ nach $q_f$ überführt und
+  \item
+    unendlich viele nicht-leere Infixe, die $q_f$ nach $q_f$ überführen.
+\end{itemize}
+%
+Diese beiden Sorten von Infixen können wir durch reguläre Sprachen beschreiben.
+Dazu verwenden wir folgende Notation: Für zwei beliebige Zustände $q_1,q_2 \in Q$
+sei $\Amc_{q_1,q_2} = (Q,\Sigma,\Delta,\{q_1\},\{q_2\})$
+und $W_{q_1,q_2} = L(\Amc_{q_1,q_2})$.
+Nach Definition sind die $W_{q_1,q_2}$ regulär.
+Wegen der Akzeptanzbedingung von Büchi-Automaten und unserer Beobachtung gilt nun:
+\[
+  L_\omega = \bigcup_{\substack{q_i \in I\\q_f \in F}} W_{q_i,q_f} W_{q_f,q_f}^\omega
+\]
+\qedhere
+
+% ===================================================================
+\section*{T3.5~ Beispiele für {\boldmath $\Vec W$}}
+
+\begin{align*}
+  W_1       & = \{a^nb^m \mid n,m \geq 0\}                                           \\
+  \Vec{W_1} & = \{a^nb^\omega \mid n \geq 0\} \cup \{a^\omega\}                      \\[8pt]
+  W_2       & = \{a^nb^n \mid n \geq 0\}                                             \\
+  \Vec{W_2} & = \emptyset                                                            \\[8pt]
+  W_3       & = \{a,b\}^*                                                            \\
+  \Vec{W_3} & = \{a,b\}^\omega                                                       \\[8pt]
+  W_4       & = \{w \in \{a,b\}^* \mid \#_a(w) \text{~ist gerade}\}                  \\
+  \Vec{W_4} & = \{\alpha \in \{a,b\}^\omega \mid \#_a(\alpha) = \infty \text{~oder~}
+                 \alpha = wb^\omega \text{~mit~} \#_a(w) \text{~gerade}\}            \\[8pt]
+  W_5       & = \{w \in \{a,b\}^* \mid \#_a(w) = \#_b(w)\}                           \\
+  \Vec{W_5} & = \Big\{\alpha \in \{a,b\}^\omega ~\Big|~ \#\{i \mid \#_a(\alpha[0,i]) = \#_b(\alpha[0,i])\} = \infty\Big\}            \\[8pt]
+\end{align*}
+
+% ===================================================================
+\section*{T3.6~ Beweis Charakterisierung DBA-erkennbarer Sprachen}
+
+\textsfbf{Satz~3.11.}~
+Eine $\omega$-Sprache $L \subseteq \Sigma^\omega$
+ist DBA-erkennbar genau dann,
+wenn es eine reguläre Sprache $W \subseteq \Sigma^*$ gibt
+mit $L = \Vec W$.
+
+\par\medskip
+\textsfbf{Beweis.}~
+Es genügt zu zeigen, dass
+für jeden \textsfbf{D}EA/\textsfbf{D}BA $\Amc=(Q,\Sigma,\Delta,\{q_I\},F)$ gilt:
+\[
+  L_\omega(\Amc) = \Vec{L(\Amc)}
+\]
+\begin{description}
+  \item[{\boldmath"`$\subseteq$"'}]
+    (Diese Richtung funktioniert sogar, wenn $\Amc$ ein \textsfbf{N}EA/\textsfbf{N}BA ist.)
+    
+    Sei $\alpha \in L_\omega(\Amc)$.
+    Dann gibt es einen erfolgreichen Run $r = q_0q_1q_2\cdots$
+    von $\Amc$ auf $\alpha$.
+    Seien $i_0,i_1,i_2,\ldots \in \mathbb{N}$ die Positionen mit $q_{i_j} \in F$.
+    Dann ist für jedes $j \geq 0$ das Präfix $q_0\cdots q_{i_j}$ von $r$ ein
+    erfolgreicher Run des \textsfbf{NEAs} $\Amc$ auf $\alpha_0\cdots\alpha_{i_j-1}$.
+    Damit gibt es unendlich viele Präfixe von $\alpha$, die in $L(\Amc)$ sind,
+    und damit ist $\alpha \in \Vec{L(\Amc)}$.
+  \item[{\boldmath"`$\supseteq$"'}]
+    Sei $\alpha \in \Vec{L(\Amc)}$.
+    Dann hat $\alpha$ unendlich viele Präfixe in $L(\Amc)$.
+    Also muss der \textsfbf{eindeutig bestimmte} Run
+    $r$ von $\Amc$ (der Automat ist deterministisch!)
+    einen akzeptierenden Zustand unendlich oft erreichen.
+    Damit ist $\alpha \in L_\omega(\Amc)$.
+    \qedhere
+\end{description}
+
+% ===================================================================
+\section*{T3.7~ Beispiele für Muller-Automaten}
+
+\begin{itemize}
+  \item 
+    Betrachte den folgenden Muller-Automaten $\Amc_1 = (Q_1,\Sigma,\Delta_1,I_1,\Fmc_1)$ über dem Alphabet $\Sigma = \{a,b\}$.
+    %
+    \begin{center}
+      \begin{tikzpicture}[%
+        node distance=25mm,>=Latex,
+        initial text="", initial where=below left,
+        every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+        accepting/.style={double distance=1.5pt, double=white},
+        every edge/.style={draw=black,thin}
+      ]
+        \node[state,initial]   (q0) {$q_0$};
+        \node[state]           (q1) [right of=q0] {$q_1$};
+        \node[above left=-2mm and 6mm of q0] {$\Amc_1$};
+        
+        \path[->] (q0) edge node [above] {$b$} (q1)
+                  (q0) edge [loop above] node [right] {$~a,b$} ()
+                  (q1) edge [loop above] node [right] {$~b$} ();
+      \end{tikzpicture}
+    \end{center}
+    %
+    \begin{itemize}
+      \item[\bspnr{(M1)}]
+        Wenn $\Fmc_1 = \{\{q_0\}\}$, dann $L_\omega(\Amc_1) = \Sigma^\omega$.
+      \item[\bspnr{(M2)}]
+        Wenn $\Fmc_1 = \{\{q_1\}\}$, dann $L_\omega(\Amc_1) = \{\alpha \in \Sigma^\omega \mid \#_a(\alpha) < \infty\}$.
+      \item[\bspnr{(M3)}]
+        Wenn $\Fmc_1 = \{\{q_0,q_1\}\}$, dann $L_\omega(\Amc_1) = \emptyset$ (weil Wechsel von $q_1$ zu $q_0$ nicht möglich).
+      \item[\bspnr{(M4)}]
+        Wenn $\Fmc_1 = \{\{q_0\},\{q_1\}\}$, dann $L_\omega(\Amc_1) = \Sigma^\omega$ (Vereinigung der Fälle \bspnr{M1},\,\bspnr{M2}).
+    \end{itemize}
+    \par\medskip    
+  \item 
+    Betrachte nun den folgenden Muller-Automaten $\Amc_2 = (Q_2,\Sigma,\Delta_2,I_2,\Fmc_2)$ über demselben Alphabet.
+    %
+    \begin{center}
+      \begin{tikzpicture}[%
+        node distance=25mm,>=Latex,
+        initial text="", initial where=below left,
+        every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+        accepting/.style={double distance=1.5pt, double=white},
+        every edge/.style={draw=black,thin}
+      ]
+        \node[state,initial] (q0) {$q_0$};
+        \node[state]         (q1) [right of=q2] {$q_1$};
+        \node[above left=-2mm and 6mm of q2] {$\Amc_2$};
+        
+        \path[->] (q0) edge [bend left=15] node [above] {$b$} (q1)
+                  (q1) edge [bend left=15] node [below] {$b$} (q0)
+                  (q0) edge [loop above]   node [right] {$~a$} ();
+      \end{tikzpicture}
+    \end{center}
+    %
+    \begin{itemize}
+      \item[\bspnr{(M5)}]
+        Wenn $\Fmc_2 = \{\{q_0\}\}$, dann $L_\omega(\Amc_2) = L((a+bb)^*a^\omega)$ (Menge aller Wörter mit endlich vielen $b$'s, in denen zwischen je zwei $a$'s und vor dem ersten $a$ eine gerade Anzahl von $b$'s steht).
+      \item[\bspnr{(M6)}]
+        Wenn $\Fmc_2 = \{\{q_1\}\}$, dann $L_\omega(\Amc_2) = \emptyset$ (denn wenn $q_1$ unendlich oft besucht wird, dann auch $q_0$).
+      \item[\bspnr{(M7)}]
+        Wenn $\Fmc_2 = \{\{q_0,q_1\}\}$, dann $L_\omega(\Amc_2) = L((a^*bb)^\omega)$ (Menge aller Wörter wie in \bspnr{M5}, aber mit \emph{un}endlich vielen $b$'s).
+    \end{itemize}
+    \par\medskip    
+  \item 
+    Für \emph{alle} Muller-Automaten $\Amc = (Q,\Sigma,\Delta,I,\Fmc)$ gilt:
+    wenn $\Fmc = \emptyset$ oder $\Fmc = \{\emptyset\}$,
+    dann $L_\omega(\Amc) = \emptyset$.
+\end{itemize}
+
+% ===================================================================
+\section*{T3.8~ Beispiele für Rabin-Automaten}
+
+\begin{itemize}
+  \item 
+    Betrachte den folgenden Rabin-Automaten $\Amc = (Q,\Sigma,\Delta,I,\Pmc)$ über dem Alphabet $\Sigma = \{a,b\}$.
+    %
+    \begin{center}
+      \begin{tikzpicture}[%
+        node distance=25mm,>=Latex,
+        initial text="", initial where=below left,
+        every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+        accepting/.style={double distance=1.5pt, double=white},
+        every edge/.style={draw=black,thin}
+      ]
+        \node[state,initial] (q0) {$q_0$};
+        \node[state]         (q1) [right of=q0] {$q_1$};
+        \node[above left=-2mm and 6mm of q0] {$\Amc_2$};
+        
+        \path[->] (q0) edge [bend left=15] node [above] {$b$} (q1)
+                  (q1) edge [bend left=15] node [below] {$b$} (q0)
+                  (q0) edge [loop above]   node [right] {$~a$} ();
+      \end{tikzpicture}
+    \end{center}
+    %
+    \begin{itemize}
+      \item[\bspnr{(R1)}]
+        Wenn $\Pmc = \{(\{q_0\},\{q_1\})\}$, dann $L_\omega(\Amc) = \emptyset$ (Begründung wie bei \bspnr{M6}).
+      \item[\bspnr{(R2)}]
+        Wenn $\Pmc = \{(\{q_1\},\{q_0\})\}$, dann $L_\omega(\Amc) = L((a+bb)^*a^\omega)$ (dasselbe Akzeptanzverhalten wie in \bspnr{M5}).
+      \item[\bspnr{(R3)}]
+        Wenn $\Pmc = \{(\emptyset,\{q_1\})\}$, dann $L_\omega(\Amc) = L((a^*bb)^\omega)$ (dasselbe Akzeptanzverhalten wie NBA mit $\Fmc = \{q_1\}$).
+      \item[\bspnr{(R4)}]
+        Wenn $\Pmc = \{\{(S,\emptyset)\}\}$ für beliebiges $S \subseteq Q$, dann $L_\omega(\Amc) = \emptyset$ (folgt direkt aus Definition "`erfolgreich"' für NRAs).
+    \end{itemize}
+    \par\medskip    
+  \item 
+    Der Fall mehrerer Paare in der Akzeptanzkomponente $\Pmc$ braucht nicht gesondert illustriert zu werden,
+    denn für \emph{alle} NRAs $\Amc = (Q,\Sigma,\Delta,I,\Pmc)$ mit $\Pmc = \bigcup_{i \leq n} \Pmc_i$ gilt:
+    $L_\omega(\Amc) = \bigcup_{i \leq n} L_\omega(Q,\Sigma,\Delta,I,\Pmc_i)$.
+\end{itemize}
+
+% ===================================================================
+\section*{T3.9~ Beispiele für Streett-Automaten}
+
+\begin{itemize}
+  \item 
+    Betrachte den folgenden Streett-Automaten $\Amc = (Q,\Sigma,\Delta,I,\Pmc)$ über dem Alphabet $\Sigma = \{a,b\}$.
+    %
+    \begin{center}
+      \begin{tikzpicture}[%
+        node distance=25mm,>=Latex,
+        initial text="", initial where=below left,
+        every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+        accepting/.style={double distance=1.5pt, double=white},
+        every edge/.style={draw=black,thin}
+      ]
+        \node[state,initial] (q0) {$q_0$};
+        \node[state]         (q1) [right of=q0] {$q_1$};
+        \node[above left=-2mm and 6mm of q0] {$\Amc_2$};
+        
+        \path[->] (q0) edge [bend left=15] node [above] {$b$} (q1)
+                  (q1) edge [bend left=15] node [below] {$b$} (q0)
+                  (q0) edge [loop above]   node [right] {$~a$} ();
+      \end{tikzpicture}
+    \end{center}
+    %
+    \begin{itemize}
+      \item[\bspnr{(S1)}]
+        Wenn $\Pmc = \{(\{q_0\},\{q_1\})\}$, dann $L_\omega(\Amc) = (a+bb)^\omega$ (denn jeder Run ist erfolgreich).
+      \item[\bspnr{(S2)}]
+        Wenn $\Pmc = \{(\{q_0\},\emptyset)\}$, dann $L_\omega(\Amc) = (a+bb)^\omega$ (denn jeder Run ist erfolgreich).
+      \item[\bspnr{(S3)}]
+        Wenn $\Pmc = \{(\{q_1\},\{q_0\})\}$, dann $L_\omega(\Amc) = (a*bb)^\omega$ (dasselbe Akzeptanzverhalten wie \bspnr{M7}).
+      \item[\bspnr{(S4)}]
+        Wenn $\Pmc = \{(\emptyset,\{q_1\})\}$, dann $L_\omega(\Amc) = (a+bb)*a^\omega$ (denn die Akzeptanzbedingung besagt: $q_1$ darf \emph{nicht} $\infty$ oft vorkommen, also muss $q_0$ $\infty$ oft vorkommen $\leadsto$ wie \bspnr{M5}).
+      \item[\bspnr{(S5)}]
+        Wenn $\Pmc = \{(\emptyset,\{q_0\})\}$, dann $L_\omega(\Amc) = \emptyset$ (denn $q_0$ kommt in jedem Run $\infty$ oft vor).
+      \item[\bspnr{(S6)}]
+        Wenn $\Pmc = \{(\emptyset,\{q_0,q_1\})\}$, dann $L_\omega(\Amc) = \emptyset$ (wie \bspnr{S5}).
+    \end{itemize}
+    \par\medskip    
+  \item 
+    Der Fall mehrerer Paare in der Akzeptanzkomponente $\Pmc$ ist analog zu NRAs,
+    aber mit einem entscheidenden Unterschied:
+    für alle NSAs $\Amc = (Q,\Sigma,\Delta,I,\Pmc)$ mit $\Pmc = \bigcup_{i \leq n} \Pmc_i$ gilt:
+    $L_\omega(\Amc) = \bigcap_{i \leq n} L_\omega(Q,\Sigma,\Delta,I,\Pmc_i)$.
+\end{itemize}
+
+% ===================================================================
+\section*{T3.10~ Überblick Beweis der Gleichmächtigkeit}
+
+Das folgende Bild illustriert, wie die Aussagen der Lemmata 3.17--3.19
+zur Äquivalenz der vier Automatenmodelle (Satz 3.16) beitragen.
+Ein Pfeil vom Knoten N$x$A zum Knoten N$y$A bedeutet dabei:
+"`jede N$x$A-erkennbare Sprache ist N$y$A-erkennbar"';
+die Beschriftung der Pfeile gibt die Nummer des Lemmas an.
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={rectangle,rounded corners,draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state] (NRA)                   {NRA};
+    \node[state,above left of=NRA] (NBA) {NBA};
+    \node[state,below left of=NRA] (NSA) {NSA};
+    \node[state,right=20mm of NRA]      (NMA) {NMA};
+    
+    \path[->] (NBA) edge                node [above]            {3.17} (NMA)
+              (NRA) edge                node [above,near start] {3.17} (NMA)
+              (NSA) edge                node [below]            {~3.17} (NMA)
+              (NBA) edge[bend left=10]  node [left,near end]    {3.18} (NRA)
+              (NBA) edge[bend right=10] node [left]             {3.18} (NSA)
+              (NMA) edge[bend right=30] node [right,near start] {~3.19} (NBA)
+              ;
+  \end{tikzpicture}
+\end{center}
+
+% ===================================================================
+\section*{T3.11~ Beweis Korrektheit "`von Muller- zu Büchi-Automaten"'}
+
+Am Ende des Beweises von Lemma~3.19 ist zu zeigen:~ $L_\omega(\Amc') = L_\omega(\Amc)$.
+%
+\begin{description}
+  \item[{\boldmath"`$\supseteq$"'}]
+    Sei $\alpha \in L_\omega(\Amc)$ und $r = q_0q_1q_2\cdots$ ein
+    erfolgreicher Run von \Amc (NMA!) auf $\alpha$, also $q_0 \in I$
+    und $\textsf{Inf}(r) = F$.
+    Dann gibt es eine Position $i_0 \geq 1$, ab der nur noch
+    akzeptierende Zustände auftreten, d.\,h.\ $q_i \in F$ für alle $i \geq i_0$.
+    Daraus konstruieren wir wie folgt induktiv eine Folge $s=s_0s_1s_2\cdots$ von Zuständen
+    von $\Amc'$:
+    %
+    \begin{itemize}
+      \item
+        Für alle $i < i_0$ setze $s_i = q_i$.
+      \item
+        $s_{i_0} = \auf q_{i_0},\{q_{i_0}\}\zu$
+      \item
+        Für alle $i > i_0$ setze
+        \[
+          s_i = \begin{cases}
+                  \auf q_i,S \cup \{q_i\}\zu & \text{falls~} s_{i-1} = \auf q_{i-1},S\zu \text{~und~} S \neq F \\
+                  \auf q_i, \{q_i\}\zu & \text{falls~} s_{i-1} = \auf q_{i-1},F\zu 
+                \end{cases}
+        \]
+    \end{itemize}
+    %
+    Diese Konstruktion von $s$ stellt sicher:
+    %
+    \begin{itemize}
+      \item 
+        $s$ ist Run von $\Amc'$ auf $\alpha$ (das ist leicht schrittweise anhand der Konstruktion von $\Delta'$
+        und von $s$ nachvollziehbar).
+      \item 
+        $s_0 \in I$ (nach Definition $I'$).
+      \item 
+        $s$ ist erfolgreich, denn wegen $\textsf{Inf}(r) = F$
+        gibt es $\infty$ viele Vorkommen von Zuständen der Form $\auf q_f,F\zu$ in $S$.
+    \end{itemize}
+    %
+    Also ist $\alpha \in L_\omega(\Amc')$.
+  \item[{\boldmath"`$\subseteq$"'}]
+    Sei $\alpha \in L_\omega(\Amc')$ und $s = s_0s_1s_2\cdots$ ein
+    erfolgreicher Run von $\Amc'$ (NBA!) auf $\alpha$, also $s_0 \in I'$
+    und ein $\auf q_f,F\zu$ kommt $\infty$ oft in $s$ vor.
+    Konstruiere daraus eine Folge $r = q_0q_1q_2\cdots$ von Zuständen aus $Q$ wie folgt:
+    %
+    \goodbreak
+    \begin{itemize}
+      \item
+        Wenn $s_i \in Q$, dann $q_i = s_i$.
+      \item
+        Wenn $s_i = \auf q_f,S\zu$, dann $q_i = q_f$.
+    \end{itemize}
+    %
+    Diese Konstruktion stellt sicher:
+    %
+    \begin{itemize}
+      \item
+        $r$ ist Run von $\Amc$ auf $\alpha$ (vgl.\ Konstruktion von $\Delta'$).
+      \item
+        $r_0 \in I$.
+      \item
+        $r$ enthält nur endlich viele Zustände außerhalb $F$ (weil in "`Phase 2"' nur noch Zustände aus $F$ vorkommen).
+      \item 
+        Jeder Zustand aus $F$ kommt in $r$ unendlich oft vor (weil $\auf q_f,F\zu$ unendlich oft in $s$ vorkommt).
+    \end{itemize}
+    %
+    Damit ist $r$ ein erfolgreicher Run des NMA $\Amc$ auf $\alpha$,
+    also $\alpha \in L_\omega(\Amc)$.
+    \qedhere
+\end{description}
+
+% ===================================================================
+\section*{T3.12~ Determinisierungsversuch mittels Potenzmengenkonstruktion}
+
+Wir betrachten folgenden NBA $\Amc$ über dem Alphabet $\Sigma = \{a,b\}$.
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=25mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state,initial,accepting] (q0) {$q_0$};
+    \node[state]                   (q1) [right of=q0] {$q_1$};
+    \node[above left=-2mm and 8mm of q0] {$\Amc$};
+    
+    \path[->] (q0) edge [bend left=15] node [above] {$b$} (q1)
+              (q1) edge [bend left=15] node [below] {$b$} (q0)
+              (q1) edge [loop right]   node [right] {$a,b$} ();
+  \end{tikzpicture}
+\end{center}
+%
+Die erkannte Sprache ist
+$L_\omega(\Amc) = L((b\Sigma^*b)^\omega)
+= \{\alpha \in \Sigma^\omega \mid a_0 = b \text{~und~} \#_{bb}(\alpha) = \infty\}$.
+Mittels Potenzmengenkonstruktion erhalten wir folgenden DBA $\Amc^d$ (der Papierkorbzustand ist weggelassen).
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=40mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={ellipse,draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state,initial,accepting] (q0)                      {$\{q_0\}$};
+    \node[state]                   (q1)   [right of=q0]      {$\{q_1\}$};
+    \node[state,accepting]         (q0q1) [below=10mm of q1] {$\{q_0,q_1\}$};
+    \node[above left=-2mm and 8mm of q0q21] {$\Amc^d$};
+    
+    \path[->] (q0)   edge                 node [above] {$b$} (q1)
+              (q1)   edge [bend right=15] node [left]  {$b$} (q0q1)
+              (q0q1) edge [bend right=15] node [right] {$a$} (q1)
+              (q1)   edge [loop right]    node [right] {$a$} ()
+              (q0q1) edge [loop right]    node [right] {$b$} ();
+  \end{tikzpicture}
+\end{center}
+%
+Nun ist aber $(ba)^\omega \in L_\omega(\Amc^d) \setminus L_\omega(\Amc)$.
+Der DBA $\Amc^d$ hat also auf dem Wort $(ba)^\omega$ einen \emph{Bad Run} $r$,
+der keinem erfolgreichen Run von $\Amc$ auf $(ba)^\omega$ entspricht.
+Der Grund dafür ist, dass für jedes der unendlich vielen Präfixe
+$bab,babab,bababab,\dots$ von $(ba)^\omega$ das entsprechende Präfix von $r$
+zwar den akzeptierenden Zustand $\{q_0,q_1\}$ erreicht,
+aber der zugehörige in $q_0$ endende Teilrun von $\Amc$
+nicht mehr zu einem erfolgreichen Run auf $\alpha$
+fortgesetzt werden kann.
+
+\goodbreak
+% ===================================================================
+\section*{T3.13~ Variation der Akzeptanzbedingung im vorigen Beispiel}
+
+Wir betrachten dieselben Automaten $\Amc,\Amc^d$ wie im vorigen Beispiel.
+Man könnte versuchen, durch Variation der Akzeptanzbedingung von $\Amc^d$
+einen zu $\Amc$ äquivalenten deterministischen Muller-, Rabin- oder Streett-Automaten
+zu erhalten, ohne die eigentliche Potenzmengenkonstruktion aufzugeben.
+Dieser Versuch muss aber scheitern, wovon man sich leicht überzeugt,
+wenn man alle möglichen Akzeptanzbedingungen systematisch durchgeht.
+Diese sind entweder trivial (d.\,h.\ führen offensichtlich zu $L_\omega(\Amc^d) = \emptyset$
+oder $L_\omega(\Amc^d) = \Sigma^\omega$)
+oder laufen auf einen der folgenden Fälle hinaus:
+Erfolgreiche Runs \dots
+%
+\begin{enumerate}
+  \item
+    \dots\ müssen $\{q_1\}$ und $\{q_0,q_1\}$ unendlich oft besuchen;
+  \item
+    \dots\ dürfen nur $\{q_1\}$ unendlich oft besuchen;
+  \item
+    \dots\ dürfen nur $\{q_0,q_1\}$ unendlich oft besuchen.
+\end{enumerate}
+%
+Im 1.\ und 2.\ Fall gibt es jedoch Bad Runs auf $(ba)^\omega$ bzw.\ $ba^\omega$;
+im 3.\ Fall gibt es Wörter, die von $\Amc$ akzeptiert werden,
+aber nicht von $\Amc^d$, z.\,B.\ $(bba)^\omega$.
+
+% ===================================================================
+\section*{T3.14~ Beispiel für Safras Trick 1}
+
+Betrachte folgenden NBA $\Amc$ über dem Alphabet $\Sigma = \{a,b\}$.
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=25mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state,initial]   (q0) {$q_0$};
+    \node[state,accepting] (q1) [right of=q0] {$q_1$};
+    \node[above left=-2mm and 8mm of q0] {$\Amc$};
+    
+    \path[->] (q0) edge              node [above] {$b$}    (q1)
+              (q0) edge [loop above] node [right] {~$a,b$} ()
+              (q1) edge [loop above] node [right] {~$a$}   ();
+  \end{tikzpicture}
+\end{center}
+%
+Dieser NBA akzeptiert genau die $\omega$-Wörter mit endlich vielen $b$'s.
+Die Potenzmengen\-konstruktion liefert den DBA
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=40mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={ellipse,draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state,initial]   (q0)                      {$\{q_0\}$};
+    \node[state,accepting] (q0q1) [right of=q0]      {$\{q_0,q_1\}$};
+%    \node[above left=-2mm and 8mm of q0q21] {$\Amc^d$};
+    
+    \path[->] (q0)   edge [bend left=10]  node [above] {$a$}  (q0q1)
+              (q0q1) edge [bend left=10]  node [below] {$b$}  (q0)
+              (q0)   edge [loop above]    node [right] {~$b$} ()
+              (q0q1) edge [loop above]    node [right] {~$a$} ();
+  \end{tikzpicture}
+\end{center}
+%
+mit einem Bad Run auf $(ab)^\omega$.
+Mittels Safras Trick 1 erhält man hingegen folgenden deterministischen Automaten $\Amc^d$.
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=40mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={ellipse,draw=black,thin,fill=black!5,inner sep=.7mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \begin{scope}[
+      every node/.style={rectangle,rounded corners,draw=black,fill=white,inner sep=1mm}
+    ]    
+      \node (S0eps)                      {$\{q_0\}$};
+      \node (S1eps) [right of=S0eps]     {$\{q_0,q_1\}$};
+      \node (S2eps) [right of=S1eps]     {$\{q_0,q_1\}$};
+      \node (S20)   [below=4mm of S2eps] {$\{q_1\}$};
+    \end{scope}
+
+    \begin{scope}[
+      every node/.style={rectangle,rounded corners,draw=none,fill=none,inner sep=1mm}
+    ]    
+      \node (S00)   [below=4mm of S0eps] {$\phantom{\{q_1\}}$};
+      \node (S10)   [below=4mm of S1eps] {$\phantom{\{q_1\}}$};
+    \end{scope}
+  
+    \begin{pgfonlayer}{background}
+      \node[state,initial] (S0) [fit=(S0eps) (S00)] {};
+      \node[state]         (S1) [fit=(S1eps) (S10)] {};
+      \node[state]         (S2) [fit=(S2eps) (S20)] {};
+  %    \node[above left=-2mm and 8mm of q0q21] {$\Amc^d$};
+    \end{pgfonlayer}  
+    
+%    \node [above right=-1mm and -1mm of S0] {$S_0$};
+%    \node [above right=-1mm and -1mm of S1] {$S_1$};
+%    \node [above right=-1mm and -1mm of S2] {$S_2$};
+%
+    \node [below right=-1mm and -1mm of S0] {$S_0$};
+    \node [below right=-1mm and -1mm of S1] {$S_1$};
+    \node [below right=-1mm and -1mm of S2] {$S_2$};
+
+%    \node [below left=-1mm   and 1mm of S0.east] {$S_0$};
+%    \node [below left=-1.5mm and .5mm of S1.east] {$S_1$};
+%    \node [below left=-2mm   and 0mm of S2.east] {$S_2$};
+    
+    \node [above left=-2mm and 8mm of q0q21] {$\Amc^d$};
+    
+    \path[->] (S0) edge [bend left=10]      node [above] {$a$}  (S1)
+              (S1) edge [bend left=10]      node [below] {$b$}  (S0)
+              (S1) edge                     node [above] {$a$}  (S2)
+              (S2) edge [bend left=35]      node [very near start,above] {$b$}  (S0)
+              (S0) edge [out=98,in=82,loop] node [right] {~$b$} ()
+              (S2) edge [out=98,in=82,loop] node [right] {~$a$} ();
+
+    \path[-]  (S2eps) edge (S20);
+  \end{tikzpicture}
+\end{center}
+%
+Wenn man nun den Bad Run auf dem Wort $(ab)^\omega$ verhindern möchte,
+dann muss man die Akzeptanzbedingung so wählen, dass
+$S_2$ unendlich oft besucht werden muss, aber $S_0$ und $S_1$ nur
+endlich oft. Dies erreicht man z.\,B.\ durch die Rabin-Akzeptanzkomponente
+$\Pmc = \{(\{S_0\},\{S_2\})\}$.
+
+% ===================================================================
+\section*{T3.15~ Beispiel für die gesamte Safra-Konstruktion}
+
+Wir betrachten den NBA $\Amc$ aus dem vorigen Beispiel:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=25mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state,initial]   (q0) {$q_0$};
+    \node[state,accepting] (q1) [right of=q0] {$q_1$};
+    \node[above left=-2mm and 8mm of q0] {$\Amc$};
+    
+    \path[->] (q0) edge              node [above] {$b$}    (q1)
+              (q0) edge [loop above] node [right] {~$a,b$} ()
+              (q1) edge [loop above] node [right] {~$a$}   ();
+  \end{tikzpicture}
+\end{center}
+%
+Im Folgenden wird die Konstruktion des DRA $\Amc^d$ gemäß der Safra-Konstruktion
+schrittweise beschrieben. Dabei benennen wir die konstruierten Zustände
+(Safrabäume) der Reihe nach mit $S_0,S_1,S_2,\dots$ und schreiben diese Namen
+jeweils rechts neben den entsprechenden Zustand.
+Außerdem verwenden wir innerhalb von Safrabäumen als Knotennamen
+die Zahlen $1,2,3,\dots$ und schreiben sie
+rechts neben den jeweiligen Knoten. Markierte Knoten (Schritt 6) werden wie gehabt
+mit \circled{!} gekennzeichnet.
+
+\paragraph*{Startzustand} ist der folgende Safrabaum:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=40mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={ellipse,draw=black,thin,fill=black!5,inner sep=.7mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \begin{scope}[
+      every node/.style={rectangle,rounded corners,draw=black,fill=white,inner sep=1mm}
+    ]    
+      \node (S01)                      {$\{q_0\}$};
+    \end{scope}
+
+    \node (S01l)  [right=0mm of S01] {1};
+  
+    \begin{pgfonlayer}{background}
+      \node[state,initial] (S0) [fit=(S01) (S01l)] {};
+    \end{pgfonlayer}  
+    
+    \node [below right=-1mm and -1mm of S0] {$S_0$};
+  \end{tikzpicture}
+\end{center}
+
+\paragraph*{{\boldmath Folgezustand von $S_0$ mit $b$}}
+%
+\begin{itemize}
+  \item
+    Schritt 1 der Safra-Konstruktion ist nicht anwendbar,
+    da Knoten 1 nicht markiert ist.
+  \item
+    Schritt 2 ist nicht anwendbar, da Knoten 1 keine akzeptierenden Zustände enthält
+    ($F = \{q_1\}$, siehe Bild).
+  \item
+    In Schritt 3 ändert sich der Makrozustand von Knoten 1 nicht, 
+    da der einzige $b$-Nachfolgezustand von $q_0$ wieder $q_0$ ist.
+  \item
+    Schritte 4--6 sind nicht anwendbar, da Knoten 1 noch keine Kinder hat.
+\end{itemize}
+Also ist der $b$-Folgezustand von $S_0$ wieder $S_0$:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=40mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={ellipse,draw=black,thin,fill=black!5,inner sep=.7mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \begin{scope}[
+      every node/.style={rectangle,rounded corners,draw=black,fill=white,inner sep=1mm}
+    ]    
+      \node (S01)                      {$\{q_0\}$};
+    \end{scope}
+
+    \node (S01l)  [right=0mm of S01] {1};
+  
+    \begin{pgfonlayer}{background}
+      \node[state,initial] (S0) [fit=(S01) (S01l)] {};
+    \end{pgfonlayer}  
+    
+    \node [below right=-1mm and -1mm of S0] {$S_0$};
+
+    \path[->] (S0) edge [loop above] node [right] {~$b$} ();
+  \end{tikzpicture}
+\end{center}
+
+\paragraph*{{\boldmath Folgezustand von $S_0$ mit $a$}}
+%
+\begin{itemize}
+  \item
+    Schritte 1--2 sind nicht anwendbar, siehe oben.
+  \item
+    In Schritt 3 ändert sich der Makrozustand von Knoten 1 
+    zu $\{q_0,q_1\}$, da sowohl $q_0$ als auch $q_1$
+    von $q_0$ aus mit $a$ erreicht werden können.
+  \item
+    Schritte 4--6 sind nicht anwendbar, da Knoten 1 noch keine Kinder hat.
+\end{itemize}
+%
+Also ist der $a$-Folgezustand von $S_0$ ein neuer Safrabaum $S_1$,
+in dem Knoten 1 den Makrozustand $\{q_0,q_1\}$ hat:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=40mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={ellipse,draw=black,thin,fill=black!5,inner sep=.7mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \begin{scope}[
+      every node/.style={rectangle,rounded corners,draw=black,fill=white,inner sep=1mm}
+    ]    
+      \node (S01)                      {$\{q_0\}$};
+      \node (S11) [right=of S01]       {$\{q_0,q_1\}$};
+    \end{scope}
+
+    \node (S01l)  [right=0mm of S01] {1};
+    \node (S11l)  [right=0mm of S11] {1};
+  
+    \begin{pgfonlayer}{background}
+      \node[state,initial] (S0) [fit=(S01) (S01l)] {};
+      \node[state]         (S1) [fit=(S11) (S11l)] {};
+    \end{pgfonlayer}  
+    
+    \node [below right=-1mm and -1mm of S0] {$S_0$};
+    \node [below right=-1mm and -1mm of S1] {$S_1$};
+
+    \path[->] (S0) edge              node [above] {$a$}  (S1)
+              (S0) edge [loop above] node [right] {~$b$} ();
+  \end{tikzpicture}
+\end{center}
+
+\paragraph*{{\boldmath Folgezustand von $S_1$ mit $a$}}
+%
+\begin{itemize}
+  \item
+    Schritt 1 ist nach wie vor nicht anwendbar (keine Markierung).
+  \item
+    In Schritt 2 wird ein neues Kind von Knoten 1 erzeugt,
+    dessen Makrozustand aus dem akzeptierenden Zustand $q_1$
+    aus Knoten 1 besteht und das den Namen 2 bekommt:
+    %    
+    \begin{center}
+      \begin{tikzpicture}[%
+        node distance=40mm,>=Latex,
+        initial text="", initial where=below left,
+        every state/.style={ellipse,draw=black,thin,fill=black!5,inner sep=.7mm},
+        accepting/.style={double distance=1.5pt, double=white},
+        every edge/.style={draw=black,thin}
+      ]
+        \begin{scope}[
+          every node/.style={rectangle,rounded corners,draw=black,fill=white,inner sep=1mm}
+        ]    
+          \node (S11)                    {$\{q_0,q_1\}$};
+          \node (S12) [below=4mm of S11] {$\{q_1\}$};
+        \end{scope}
+    
+        \node (S11l)  [right=0mm of S11] {1};
+        \node (S12l)  [right=0mm of S12] {2};
+      
+        \path[-] (S11) edge (S12);
+      \end{tikzpicture}
+    \end{center}
+  \item
+    In Schritt 3 wird auf beide Knoten die Potenzmengenkonstruktion angewendet;
+    bei Übergang mit $a$ ändert sich der Inhalt beider Makrozustände nicht.
+  \item
+    Schritt 4 ist nicht anwendbar, da kein Knoten mehr als ein Kind hat.
+  \item
+    Schritt 5 ist nicht anwendbar, da der Makrozustand von Knoten 2 nicht leer ist.
+  \item
+    Schritt 6 ist nicht anwendbar, da $q_0$ im Makrozustand von Knoten 1,
+    aber nicht von Knoten 2 vorkommt. 
+\end{itemize}
+%
+Also ist der $a$-Folgezustand von $S_1$ ein neuer Safrabaum $S_2$
+mit zwei Knoten wie folgt:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=40mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={ellipse,draw=black,thin,fill=black!5,inner sep=.7mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \begin{scope}[
+      every node/.style={rectangle,rounded corners,draw=black,fill=white,inner sep=1mm}
+    ]    
+      \node (S01)                      {$\{q_0\}$};
+      \node (S11) [right=of S01]       {$\{q_0,q_1\}$};
+      \node (S21) [below=26mm of S11]  {$\{q_0,q_1\}$};
+      \node (S22) [below=4mm of S21]   {$\{q_1\}$};
+    \end{scope}
+
+    \node (S01l)  [right=0mm of S01] {1};
+    \node (S11l)  [right=0mm of S11] {1};
+    \node (S21l)  [right=0mm of S21] {1};
+    \node (S22l)  [right=0mm of S22] {2};
+  
+    \begin{scope}[
+      every node/.style={rectangle,rounded corners,draw=none,fill=none,inner sep=1mm}
+    ]    
+      \node (S02)   [below=4mm of S01] {$\phantom{\{q_1\}}$};
+      \node (S12)   [below=4mm of S11] {$\phantom{\{q_1\}}$};
+    \end{scope}
+  
+    \begin{pgfonlayer}{background}
+      \node[state,initial] (S0) [fit=(S01) (S01l) (S02)] {};
+      \node[state]         (S1) [fit=(S11) (S11l) (S12)] {};
+      \node[state]         (S2) [fit=(S21) (S21l) (S22) (S22l)] {};
+    \end{pgfonlayer}  
+    
+    \node [below right=-1mm and -1mm of S0] {$S_0$};
+    \node [below right=-1mm and -1mm of S1] {$S_1$};
+    \node [below right=-1mm and -1mm of S2] {$S_2$};
+
+    \path[->] (S0) edge                     node [above] {$a$}  (S1)
+              (S1) edge                     node [right] {$a$}  (S2)
+              (S0) edge [out=98,in=82,loop] node [right] {~$b$} ();
+              
+    \path[-] (S21) edge (S22);
+  \end{tikzpicture}
+\end{center}
+
+\paragraph*{{\boldmath Folgezustand von $S_1$ mit $b$}}
+%
+\begin{itemize}
+  \item
+    Schritte 1--2 wie oben.
+  \item
+    In Schritt 3 wird wieder auf beide Knoten die Potenzmengenkonstruktion
+    angewendet; bei Übergang mit $b$ ändern sich die Makrozustände wie folgt:
+    %    
+    \begin{center}
+      \begin{tikzpicture}[%
+        node distance=40mm,>=Latex,
+        initial text="", initial where=below left,
+        every state/.style={ellipse,draw=black,thin,fill=black!5,inner sep=.7mm},
+        accepting/.style={double distance=1.5pt, double=white},
+        every edge/.style={draw=black,thin}
+      ]
+        \begin{scope}[
+          every node/.style={rectangle,rounded corners,draw=black,fill=white,inner sep=1mm}
+        ]    
+          \node (S11)                    {$\{q_0\}$};
+          \node (S12) [below=4mm of S11] {$\emptyset$};
+        \end{scope}
+    
+        \node (S11l)  [right=0mm of S11] {1};
+        \node (S12l)  [right=0mm of S12] {2};
+      
+        \path[-] (S11) edge (S12);
+      \end{tikzpicture}
+    \end{center}
+  \item
+    Schritt 4 ist nicht anwendbar, da kein Knoten mehr als ein Kind hat.
+  \item
+    In Schritt 5 wird Knoten 2 gelöscht.
+  \item
+    Schritt 6 ist nicht anwendbar, da Knoten 1 nun kein Kind mehr hat.
+\end{itemize}
+%
+Damit ist der $b$-Folgezustand von $S_1$ der Safrabaum $S_0$:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=40mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={ellipse,draw=black,thin,fill=black!5,inner sep=.7mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \begin{scope}[
+      every node/.style={rectangle,rounded corners,draw=black,fill=white,inner sep=1mm}
+    ]    
+      \node (S01)                      {$\{q_0\}$};
+      \node (S11) [right=of S01]       {$\{q_0,q_1\}$};
+      \node (S21) [below=26mm of S11]  {$\{q_0,q_1\}$};
+      \node (S22) [below=4mm of S21]   {$\{q_1\}$};
+    \end{scope}
+
+    \node (S01l)  [right=0mm of S01] {1};
+    \node (S11l)  [right=0mm of S11] {1};
+    \node (S21l)  [right=0mm of S21] {1};
+    \node (S22l)  [right=0mm of S22] {2};
+  
+    \begin{scope}[
+      every node/.style={rectangle,rounded corners,draw=none,fill=none,inner sep=1mm}
+    ]    
+      \node (S02)   [below=4mm of S01] {$\phantom{\{q_1\}}$};
+      \node (S12)   [below=4mm of S11] {$\phantom{\{q_1\}}$};
+    \end{scope}
+  
+    \begin{pgfonlayer}{background}
+      \node[state,initial] (S0) [fit=(S01) (S01l) (S02)] {};
+      \node[state]         (S1) [fit=(S11) (S11l) (S12)] {};
+      \node[state]         (S2) [fit=(S21) (S21l) (S22) (S22l)] {};
+    \end{pgfonlayer}  
+    
+    \node [below right=-1mm and -1mm of S0] {$S_0$};
+    \node [below right=-1mm and -1mm of S1] {$S_1$};
+    \node [below right=-1mm and -1mm of S2] {$S_2$};
+
+    \path[->] (S0) edge [bend left=10]      node [above] {$a$}  (S1)
+              (S1) edge [bend left=10]      node [below] {$b$}  (S0)
+              (S1) edge                     node [right] {$a$}  (S2)
+              (S0) edge [out=98,in=82,loop] node [right] {~$b$} ();
+              
+    \path[-] (S21) edge (S22);
+  \end{tikzpicture}
+\end{center}
+
+\paragraph*{{\boldmath Folgezustand von $S_2$ mit $a$}}
+%
+\begin{itemize}
+  \item
+    Schritt 1 ist nach wie vor nicht anwendbar.
+  \item
+    In Schritt 2 wird je ein neues Kind von Knoten 1 und 2 erzeugt,
+    da die Makrozustände beider Knoten akzeptierende Zustände enthalten:
+    %    
+    \begin{center}
+      \begin{tikzpicture}[%
+        node distance=40mm,>=Latex,
+        initial text="", initial where=below left,
+        every state/.style={ellipse,draw=black,thin,fill=black!5,inner sep=.7mm},
+        accepting/.style={double distance=1.5pt, double=white},
+        every edge/.style={draw=black,thin}
+      ]
+        \begin{scope}[
+          every node/.style={rectangle,rounded corners,draw=black,fill=white,inner sep=1mm}
+        ]    
+          \node (S11)                                   {$\{q_0,q_1\}$};
+          \node (S12) [below left =4mm and -2mm of S11] {$\{q_1\}$};
+          \node (S13) [below right=4mm and -2mm of S11] {$\{q_1\}$};
+          \node (S14) [below=4mm of S12]                {$\{q_1\}$};
+        \end{scope}
+    
+        \node (S11l)  [right=0mm of S11] {1};
+        \node (S12l)  [right=0mm of S12] {2};
+        \node (S13l)  [right=0mm of S13] {3};
+        \node (S14l)  [right=0mm of S14] {4};
+      
+        \path[-] (S11) edge (S12)
+                 (S11) edge (S13)
+                 (S12) edge (S14);
+      \end{tikzpicture}
+    \end{center}
+  \item
+    In Schritt 3 wird auf alle Knoten die Potenzmengenkonstruktion angewendet;
+    bei Übergang mit $a$ ändert sich der Inhalt der Makrozustände nicht.
+  \item
+    In Schritt 4 wird $q_1$ aus Knoten 3 entfernt, da dieser Zustand im älteren
+    Geschwister 2 enthalten ist:
+    %    
+    \begin{center}
+      \begin{tikzpicture}[%
+        node distance=40mm,>=Latex,
+        initial text="", initial where=below left,
+        every state/.style={ellipse,draw=black,thin,fill=black!5,inner sep=.7mm},
+        accepting/.style={double distance=1.5pt, double=white},
+        every edge/.style={draw=black,thin}
+      ]
+        \begin{scope}[
+          every node/.style={rectangle,rounded corners,draw=black,fill=white,inner sep=1mm}
+        ]    
+          \node (S11)                                   {$\{q_0,q_1\}$};
+          \node (S12) [below left =4mm and -2mm of S11] {$\{q_1\}$};
+          \node (S13) [below right=4mm and -2mm of S11] {$\emptyset$};
+          \node (S14) [below=4mm of S12]                {$\{q_1\}$};
+        \end{scope}
+    
+        \node (S11l)  [right=0mm of S11] {1};
+        \node (S12l)  [right=0mm of S12] {2};
+        \node (S13l)  [right=0mm of S13] {3};
+        \node (S14l)  [right=0mm of S14] {4};
+      
+        \path[-] (S11) edge (S12)
+                 (S11) edge (S13)
+                 (S12) edge (S14);
+      \end{tikzpicture}
+    \end{center}
+  \item
+    In Schritt 5 wird Knoten 3 gelöscht:
+    %    
+    \begin{center}
+      \begin{tikzpicture}[%
+        node distance=40mm,>=Latex,
+        initial text="", initial where=below left,
+        every state/.style={ellipse,draw=black,thin,fill=black!5,inner sep=.7mm},
+        accepting/.style={double distance=1.5pt, double=white},
+        every edge/.style={draw=black,thin}
+      ]
+        \begin{scope}[
+          every node/.style={rectangle,rounded corners,draw=black,fill=white,inner sep=1mm}
+        ]    
+          \node (S11)                                   {$\{q_0,q_1\}$};
+          \node (S12) [below left =4mm and -2mm of S11] {$\{q_1\}$};
+          \node (S14) [below=4mm of S12]                {$\{q_1\}$};
+        \end{scope}
+    
+        \node (S11l)  [right=0mm of S11] {1};
+        \node (S12l)  [right=0mm of S12] {2};
+        \node (S14l)  [right=0mm of S14] {4};
+      
+        \path[-] (S11) edge (S12)
+                 (S12) edge (S14);
+      \end{tikzpicture}
+    \end{center}
+  \item
+    In Schritt 6 wird nun Knoten 4 gelöscht und Knoten 2 markiert:
+    %    
+    \begin{center}
+      \begin{tikzpicture}[%
+        node distance=40mm,>=Latex,
+        initial text="", initial where=below left,
+        every state/.style={ellipse,draw=black,thin,fill=black!5,inner sep=.7mm},
+        accepting/.style={double distance=1.5pt, double=white},
+        every edge/.style={draw=black,thin}
+      ]
+        \begin{scope}[
+          every node/.style={rectangle,rounded corners,draw=black,fill=white,inner sep=1mm}
+        ]    
+          \node (S11)                                   {$\{q_0,q_1\}$};
+          \node (S12) [below left=4mm and -2mm of S11] {$\{q_1\}$};
+        \end{scope}
+    
+        \node (S11l)  [right=0mm of S11] {1};
+        \node (S12l)  [right=0mm of S12] {2};
+        \node (S12m)  [left =0mm of S12] {\circled{!}};
+      
+        \path[-] (S11) edge (S12);
+      \end{tikzpicture}
+    \end{center}
+\end{itemize}
+%
+Der zuletzt abgebildete Safrabaum $S_3$ ist der $a$-Folgezustand von $S_2$:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=40mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={ellipse,draw=black,thin,fill=black!5,inner sep=.7mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \begin{scope}[
+      every node/.style={rectangle,rounded corners,draw=black,fill=white,inner sep=1mm}
+    ]    
+      \node (S01)                      {$\{q_0\}$};
+      \node (S11) [right=of S01]       {$\{q_0,q_1\}$};
+      \node (S21) [below=26mm of S11]  {$\{q_0,q_1\}$};
+      \node (S22) [below=4mm of S21]   {$\{q_1\}$};
+      \node (S31) [left=of S21]        {$\{q_0,q_1\}$};
+      \node (S32) [below=4mm of S31]   {$\{q_1\}$};
+    \end{scope}
+
+    \node (S01l)  [right=0mm of S01] {1};
+    \node (S11l)  [right=0mm of S11] {1};
+    \node (S21l)  [right=0mm of S21] {1};
+    \node (S22l)  [right=0mm of S22] {2};
+    \node (S31l)  [right=0mm of S31] {1};
+    \node (S32l)  [right=0mm of S32] {2};
+    \node (S32m)  [left =0mm of S32] {\circled{!}};
+  
+    \begin{scope}[
+      every node/.style={rectangle,rounded corners,draw=none,fill=none,inner sep=1mm}
+    ]    
+      \node (S02)   [below=4mm of S01] {$\phantom{\{q_1\}}$};
+      \node (S12)   [below=4mm of S11] {$\phantom{\{q_1\}}$};
+    \end{scope}
+  
+    \begin{pgfonlayer}{background}
+      \node[state,initial] (S0) [fit=(S01) (S01l) (S02)] {};
+      \node[state]         (S1) [fit=(S11) (S11l) (S12)] {};
+      \node[state]         (S2) [fit=(S21) (S21l) (S22) (S22l)] {};
+      \node[state]         (S3) [fit=(S31) (S31l) (S32) (S32l) (S32m)] {};
+    \end{pgfonlayer}  
+    
+    \node [below right=-1mm and -1mm of S0] {$S_0$};
+    \node [below right=-1mm and -1mm of S1] {$S_1$};
+    \node [below right=-1mm and -1mm of S2] {$S_2$};
+    \node [below right=-1mm and -1mm of S3] {$S_3$};
+
+    \path[->] (S0) edge [bend left=10]      node [above] {$a$}  (S1)
+              (S1) edge [bend left=10]      node [below] {$b$}  (S0)
+              (S1) edge                     node [right] {$a$}  (S2)
+              (S0) edge [out=98,in=82,loop] node [right] {~$b$} ()
+              (S2) edge                     node [above] {$a$}  (S3);
+              
+    \path[-] (S21) edge (S22)
+             (S31) edge (S32);
+  \end{tikzpicture}
+\end{center}
+
+\paragraph*{{\boldmath Folgezustand von $S_2$ mit $b$}}
+%
+\begin{itemize}
+  \item
+    Schritte 1--2 wie oben.
+  \item
+    In Schritt 3 wird wieder auf alle Knoten die Potenzmengenkonstruktion
+    angewendet; bei Übergang mit $b$ ändern sich die Makrozustände wie folgt:
+    %    
+    \begin{center}
+      \begin{tikzpicture}[%
+        node distance=40mm,>=Latex,
+        initial text="", initial where=below left,
+        every state/.style={ellipse,draw=black,thin,fill=black!5,inner sep=.7mm},
+        accepting/.style={double distance=1.5pt, double=white},
+        every edge/.style={draw=black,thin}
+      ]
+        \begin{scope}[
+          every node/.style={rectangle,rounded corners,draw=black,fill=white,inner sep=1mm}
+        ]    
+          \node (S11)                                   {$\{q_0,q_1\}$};
+          \node (S12) [below left =4mm and -2mm of S11] {$\emptyset$};
+          \node (S13) [below right=4mm and -2mm of S11] {$\emptyset$};
+          \node (S14) [below=4mm of S12]                {$\emptyset$};
+        \end{scope}
+    
+        \node (S11l)  [right=0mm of S11] {1};
+        \node (S12l)  [right=0mm of S12] {2};
+        \node (S13l)  [right=0mm of S13] {3};
+        \node (S14l)  [right=0mm of S14] {4};
+      
+        \path[-] (S11) edge (S12)
+                 (S11) edge (S13)
+                 (S12) edge (S14);
+      \end{tikzpicture}
+    \end{center}
+  \item
+    Schritt 4 ist nicht anwendbar, da alle Makrozsutände außer dem von Knoten 1 leer sind.
+  \item
+    In Schritt 5 werden Knoten $2,3,4$ gelöscht.
+  \item
+    Schritt 6 ist nicht anwendbar, da Knoten 1 nun kein Kind mehr hat.
+\end{itemize}
+%
+\enlargethispage*{20mm}
+Damit ist der $b$-Folgezustand von $S_1$ wieder der Safrabaum $S_0$:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=40mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={ellipse,draw=black,thin,fill=black!5,inner sep=.7mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \begin{scope}[
+      every node/.style={rectangle,rounded corners,draw=black,fill=white,inner sep=1mm}
+    ]    
+      \node (S01)                      {$\{q_0\}$};
+      \node (S11) [right=of S01]       {$\{q_0,q_1\}$};
+      \node (S21) [below=26mm of S11]  {$\{q_0,q_1\}$};
+      \node (S22) [below=4mm of S21]   {$\{q_1\}$};
+      \node (S31) [left=of S21]        {$\{q_0,q_1\}$};
+      \node (S32) [below=4mm of S31]   {$\{q_1\}$};
+    \end{scope}
+
+    \node (S01l)  [right=0mm of S01] {1};
+    \node (S11l)  [right=0mm of S11] {1};
+    \node (S21l)  [right=0mm of S21] {1};
+    \node (S22l)  [right=0mm of S22] {2};
+    \node (S31l)  [right=0mm of S31] {1};
+    \node (S32l)  [right=0mm of S32] {2};
+    \node (S32m)  [left =0mm of S32] {\circled{!}};
+  
+    \begin{scope}[
+      every node/.style={rectangle,rounded corners,draw=none,fill=none,inner sep=1mm}
+    ]    
+      \node (S02)   [below=4mm of S01] {$\phantom{\{q_1\}}$};
+      \node (S12)   [below=4mm of S11] {$\phantom{\{q_1\}}$};
+    \end{scope}
+  
+    \begin{pgfonlayer}{background}
+      \node[state,initial] (S0) [fit=(S01) (S01l) (S02)] {};
+      \node[state]         (S1) [fit=(S11) (S11l) (S12)] {};
+      \node[state]         (S2) [fit=(S21) (S21l) (S22) (S22l)] {};
+      \node[state]         (S3) [fit=(S31) (S31l) (S32) (S32l) (S32m)] {};
+    \end{pgfonlayer}  
+    
+    \node [below right=-1mm and -1mm of S0] {$S_0$};
+    \node [below right=-1mm and -1mm of S1] {$S_1$};
+    \node [below right=-1mm and -1mm of S2] {$S_2$};
+    \node [below right=-1mm and -1mm of S3] {$S_3$};
+
+    \path[->] (S0) edge [bend left=10]      node [above] {$a$}  (S1)
+              (S1) edge [bend left=10]      node [below] {$b$}  (S0)
+              (S1) edge                     node [right] {$a$}  (S2)
+              (S0) edge [out=98,in=82,loop] node [right] {~$b$} ()
+              (S2) edge                     node [above] {$a$}  (S3)
+              (S2) edge                     node [above,near start] {$b$}  (S0);
+              
+    \path[-] (S21) edge (S22)
+             (S31) edge (S32);
+  \end{tikzpicture}
+\end{center}
+
+\paragraph*{{\boldmath Folgezustände von $S_3$}}
+%
+~\par
+Da sich der Safrabaum $S_3$ von $S_2$ nur durch die Markierung des Knotens 2 unterscheidet,
+laufen die Schritte 2--6 genauso ab, nachdem in Schritt 1 die Markierung entfernt wurde.
+Damit hat $S_3$ dieselben Folgezustände wie $S_2$ (nämlich $S_3$ für $a$ und $S_1$ für $b$):
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=40mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={ellipse,draw=black,thin,fill=black!5,inner sep=.7mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \begin{scope}[
+      every node/.style={rectangle,rounded corners,draw=black,fill=white,inner sep=1mm}
+    ]    
+      \node (S01)                      {$\{q_0\}$};
+      \node (S11) [right=of S01]       {$\{q_0,q_1\}$};
+      \node (S21) [below=26mm of S11]  {$\{q_0,q_1\}$};
+      \node (S22) [below=4mm of S21]   {$\{q_1\}$};
+      \node (S31) [left=of S21]        {$\{q_0,q_1\}$};
+      \node (S32) [below=4mm of S31]   {$\{q_1\}$};
+    \end{scope}
+
+    \node (S01l)  [right=0mm of S01] {1};
+    \node (S11l)  [right=0mm of S11] {1};
+    \node (S21l)  [right=0mm of S21] {1};
+    \node (S22l)  [right=0mm of S22] {2};
+    \node (S31l)  [right=0mm of S31] {1};
+    \node (S32l)  [right=0mm of S32] {2};
+    \node (S32m)  [left =0mm of S32] {\circled{!}};
+  
+    \begin{scope}[
+      every node/.style={rectangle,rounded corners,draw=none,fill=none,inner sep=1mm}
+    ]    
+      \node (S02)   [below=4mm of S01] {$\phantom{\{q_1\}}$};
+      \node (S12)   [below=4mm of S11] {$\phantom{\{q_1\}}$};
+    \end{scope}
+  
+    \begin{pgfonlayer}{background}
+      \node[state,initial] (S0) [fit=(S01) (S01l) (S02)] {};
+      \node[state]         (S1) [fit=(S11) (S11l) (S12)] {};
+      \node[state]         (S2) [fit=(S21) (S21l) (S22) (S22l)] {};
+      \node[state]         (S3) [fit=(S31) (S31l) (S32) (S32l) (S32m)] {};
+    \end{pgfonlayer}  
+    
+    \node [below right=-1mm and -1mm of S0] {$S_0$};
+    \node [below right=-1mm and -1mm of S1] {$S_1$};
+    \node [below right=-1mm and -1mm of S2] {$S_2$};
+    \node [below right=-1mm and -1mm of S3] {$S_3$};
+
+    \path[->] (S0) edge [bend left=10]        node [above] {$a$}  (S1)
+              (S1) edge [bend left=10]        node [below] {$b$}  (S0)
+              (S1) edge                       node [right] {$a$}  (S2)
+              (S0) edge [out=98,in=82,loop]   node [right] {~$b$} ()
+              (S2) edge                       node [above] {$a$}  (S3)
+              (S2) edge                       node [above,near start] {$b$} (S0)
+              (S3) edge                       node [left]  {$a$}  (S0)
+              (S3) edge [out=186,in=174,loop] node [left] {~$b$} ();
+              
+    \path[-] (S21) edge (S22)
+             (S31) edge (S32);
+  \end{tikzpicture}
+\end{center}
+%
+Damit sind alle erreichbaren Zustände (Safrabäume) erzeugt.
+
+\paragraph*{{\boldmath Akzeptanzkomponente}}
+%
+~\par
+Laut Folie~72 ist $\Pmc = \{(E_1,F_1),\,(E_2,F_2)\}
+= \{(\emptyset,\emptyset),\,(\{S_1,S_1\},\{S_3\})\}$.
+
+% ===================================================================
+\section*{T3.16~ Korrektheitsbeweis der Safra-Konstruktion, Details}
+
+\textsfbf{Hilfsaussage [HA].}~
+Für alle $T_i$ und alle Zustände $p$ im Makrozustand \textsfbf{(MZ)} von $v$ in $T_{i+1}$
+gibt es einen Zustand $q$ im Makrozustand von $v$ in $T_{i}$
+und einen endlichen Run $q\dots p$ von $\Amc$ auf dem zugehörigen Teilwort von $\alpha$,
+der einen akzeptierenden Zustand enthält.
+
+\par\medskip\noindent
+\textsfbf{Skizze:}~
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=40mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={ellipse,draw=black,thin,fill=black!5,inner sep=.7mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \begin{scope}[
+      every node/.style={rectangle,rounded corners,draw=black,fill=white,inner sep=1mm}
+    ]    
+      \node (vi)                {\strut$\cdots q\cdots$};
+      \node (vi1) [right=of vi] {\strut$\cdots p\cdots$};
+    \end{scope}
+
+    \node (vil)  [above right=-3.5mm and 0mm of vi]  {$v$};
+    \node (vi1l) [above right=-3.5mm and 0mm of vi1] {$v$};
+
+    \node (vim)  [below right=-3.5mm and 0mm of vi]  {\circled{!}};
+    \node (vi1m) [below right=-3.5mm and 0mm of vi1] {\circled{!}};
+  
+    \begin{pgfonlayer}{background}
+      \node[state] (Ti)  [fit=(vi) (vil) (vim)] {};
+      \node[state] (Ti1) [fit=(vi1) (vi1l) (vi1m)] {};
+    \end{pgfonlayer}  
+    
+    \node [below right=-1mm and -1mm of Ti]  {$T_i$};
+    \node [below right=-1mm and -1mm of Ti1] {$T_{i+1}$};
+    
+    \node (q) [below=5mm of Ti]  {$q$};
+    \node (p) [below=5mm of Ti1] {$p$};
+    \node [left=5mm of q]  {\strut Teilrun:};
+    \node [right=10mm of q] {\strut $\cdots\qquad f\qquad \cdots$};
+  \end{tikzpicture}
+\end{center}
+
+\par\medskip\noindent
+\textsfbf{Beweis der HA.}~
+Damit $v$ überhaupt mit \circled{!} markiert werden kann,
+muss $v$ direkt vor der entsprechenden Anwendung des Schrittes~6
+Kinder haben.
+Diese wurden in irgendeiner vorigen Anwendung von Schritt~2 erzeugt.
+Damit dieser Schritt angewendet worden sein kann,
+muss gelten:
+%
+\begin{itemize}
+  \item[$(*)$]
+    Zwischen $T_i$ und $T_{i+1}$ gibt es einen Zeitpunkt,
+    zu dem der Makrozustand von $v$ einen akzeptierenden Zustand $f \in F$
+    enthält.
+\end{itemize}
+%
+Wir betrachten nun den Teilrun $T_i \ldots T_{i+1}$ von $s$.
+Sei $U$ ein Safra-Baum zwischen $T_i$ und $T_{i+1}$, so dass
+Knoten $v$ in $U$ Bedingung $(*)$ erfüllt,
+und seien $T_i = S_k$, $U = S_\ell$ und $T_{i+1} = S_m$
+für entsprechende $k,\ell,m$ mit $0 \leq k \leq \ell < m$
+(die Zeitpunkte des Vorkommens von $T_i,U,T_{i+1}$ auf dem Run $s$;
+mit $k \leq \ell$ ist also auch $U = T_i$ erlaubt).
+
+Seien $M,N,P$ die Makrozustände des Knotens $v$ in $T_i,U,T_{i+1}$:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=25mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={ellipse,draw=black,thin,fill=black!5,inner sep=.7mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \begin{scope}[
+      every node/.style={rectangle,rounded corners,draw=black,fill=white,inner sep=1mm}
+    ]    
+      \node (vi)                {\strut$M$};
+      \node (vu)  [right=of vi] {\strut$N$};
+      \node (vi1) [right=of vu] {\strut$P$};
+    \end{scope}
+
+    \node (vil)  [above right=-3.5mm and 0mm of vi]  {$v$};
+    \node (vul)  [above right=-3.5mm and 0mm of vu]  {$v$};
+    \node (vi1l) [above right=-3.5mm and 0mm of vi1] {$v$};
+
+    \node (vim)  [below right=-3.5mm and 0mm of vi]  {\circled{!}};
+    \node (vum)  [below right=-3.5mm and 0mm of vu]  {\phantom{\circled{!}}};
+    \node (vi1m) [below right=-3.5mm and 0mm of vi1] {\circled{!}};
+  
+    \begin{pgfonlayer}{background}
+      \node[state] (Ti)  [fit=(vi) (vil) (vim)] {};
+      \node[state] (U)   [fit=(vu) (vul) (vum)] {};
+      \node[state] (Ti1) [fit=(vi1) (vi1l) (vi1m)] {};
+    \end{pgfonlayer}  
+    
+    \node [below right=-1mm and -1mm of Ti]  {$T_i$};
+    \node [below right=-1mm and -1mm of U]   {$U$};
+    \node [below right=-1mm and -1mm of Ti1] {$T_{i+1}$};
+  \end{tikzpicture}
+\end{center}
+%
+Mit den eingeführten Bezeichnungen lässt sich die zu zeigende HA nun so formulieren:
+%
+\begin{itemize}
+  \item[$(**)$]
+    Für alle $p \in P$ gibt es ein $q \in M$ und einen endlichen Run $q\ldots p$
+    von $\Amc$ auf $\alpha[k,m-1]$, der einen akzeptierenden Zustand enthält.
+\end{itemize}
+%
+Um $(**)$ zu beweisen, betrachten wir zunächst den Spezialfall, dass $U$
+der einzige Safra-Baum zwischen $T_i$ und $T_{i+1}$ ist, der $(*)$ erfüllt.
+Im nächsten Schritt argumentieren wir dann für den allgemeinen Fall.
+
+Im Spezialfall betrachten wir die endlichen Teilruns $T\ldots U$ und $U\ldots T_{i+1}$
+von $s$ auf den Teilwörtern $\alpha[k,\ell-1]$ bzw.\ $\alpha[\ell,m-1]$.
+Wir schauen uns dazu genauer [1] die Berechnung des Nachfolger-Baums von $U$
+und [2] die Berechnung von $T_{i+1}$ aus seinem Vorgängerbaum $X$ (evtl.\ ist $X=U$)
+an je einer bestimmten Stelle der Safra-Konstruktion von $\Delta^d$ an:
+%
+\begin{itemize}
+  \item[{[1]}]
+    Während der Berechnung des Übergangs $(U,\alpha_\ell,\cdot) \in \Delta^d$
+    wird in \emph{Schritt~2} ein Kind $v'$ von $v$ mit Makrozustand $N \cap F$ erzeugt.
+    Dieser Knoten $v'$ bleibt in allen Safrabäumen vor $T_{i+1}$ erhalten,
+    weil kein Schritt~6 angewendet wird, denn $v$ ist bis $T_{i+1}$ nicht mit \circled{!} markiert.
+  \item[{[2]}]
+    Während der Berechnung des Übergangs $(X,\alpha_{m-1},T_{i+1}) \in \Delta^d$
+    muss die Bedingung in \emph{Schritt~6} erfüllt sein, da $v$ in $T_{i+1}$ markiert ist.
+    Folglich haben direkt vorher die Knoten $v$ und $v'$ denselben Makrozustand
+    (denn wir sind im Spezialfall; also werden keine weiteren Kinder von $v$ erzeugt).
+\end{itemize}
+%
+Mit diesen Erkenntnissen kann man den Teilrun $T_i \ldots T_{i+1}$ schematisch so veranschaulichen:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=40mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={ellipse,draw=black,thin,fill=black!5,inner sep=.7mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \begin{scope}[
+      every node/.style={rectangle,rounded corners,draw=black,fill=white,inner sep=1mm}
+    ]    
+      \node (M)                    {\strut$M$};
+      \node (N)  [right=of M]      {\strut$N$};
+      \node (P)  [right=of N]      {\strut$P$};
+      \node (NF) [below= 5mm of N] {\strut$N \cap F$};
+      \node (P') [below= 5mm of P] {\strut$\cdots p \cdots$};
+    \end{scope}
+
+    \node (Ml)  [above right=-3.5mm and 0mm of M]  {$v$};
+    \node (Nl)  [above right=-3.5mm and 0mm of N]  {$v$};
+    \node (Pl)  [above right=-3.5mm and 0mm of P]  {$v$};
+    \node (NFl) [above right=-3.5mm and 0mm of NF] {$v'$};
+    \node (P'l) [above right=-3.5mm and 0mm of P'] {$v'$};
+
+    \node (Mm)  [below right=-3.5mm and 0mm of M]  {\circled{!}};
+  
+%    \begin{pgfonlayer}{background}
+%      \node[state] (Ti)  [fit=(vi) (vil) (vim)] {};
+%      \node[state] (U)   [fit=(vu) (vul) (vum)] {};
+%      \node[state] (Ti1) [fit=(vi1) (vi1l) (vi1m)] {};
+%    \end{pgfonlayer}  
+%    
+%    \node [below right=-1mm and -1mm of Ti]  {$T_i$};
+%    \node [below right=-1mm and -1mm of U]   {$U$};
+%    \node [below right=-1mm and -1mm of Ti1] {$T_{i+1}$};
+
+    \node [above=3mm of M] {$T_i$};
+    \node [above=3mm of N] {\begin{tabular}{@{}l@{~~}l@{}}[1] & $U$ nach \\ & Schritt 2\end{tabular}};
+    \node [above=3mm of P] {\begin{tabular}{@{}l@{~~}l@{}}[2] & $T_{i+1}$ vor \\ & Schritt 6\end{tabular}};
+    
+    \node [right=10mm of M] {$\stackrel{\text{{\normalsize $\alpha[k,\ell-1]$}}}{=\!=\!=\!=\!=\!=\!\Longrightarrow}$};
+    \node [right=9mm of N] {$\stackrel{\text{{\normalsize $\alpha[\ell,m-1]$}}}{=\!=\!=\!=\!=\!=\!\Longrightarrow}$};
+    \node [right=6mm of NF] {$\stackrel{\text{{\normalsize $\alpha[\ell,m-1]$}}}{=\!=\!=\!=\!=\!=\!\Longrightarrow}$};
+
+    \path[-] (N) edge (NF)
+             (P) edge (P');
+  \end{tikzpicture}
+\end{center}
+%
+Da neue Makrozustände in Schritt~3 (knotenweise Potenzmengenkonstruktion) erzeugt werden,
+bedeutet die "`untere Zeile"' des Schemas:
+%
+\begin{quote}
+  Für alle $p \in P$ gibt es ein $p' \in N \cap F$ und einen endlichen Run $p'\dots p$
+  von \Amc auf $\alpha[\ell,m-1]$.
+\end{quote}
+%
+Diesen Run kann man durch die "`obere Zeile"' ergänzen:
+%
+\begin{quote}
+  Für alle $p' \in N \cap F$ gibt es ein $q \in M$ und einen endlichen Run $q\dots p'$
+  von \Amc auf $\alpha[k,\ell-1]$.
+\end{quote}
+%
+Aus diesen beiden Aussagen erhält man wie gewünscht $(**)$.
+
+Es kann natürlich mehrere solche Runs geben kann;
+es genügt aber zu wissen, dass es mindestens einen gibt.
+Es ist außerdem zu beachten, dass die "`Leserichtung"'
+von $(**)$ "`rückwärts"' ist, also "`für alle $p \in P$ existiert ein $q \in M$ \dots"'
+und \emph{nicht} umgekehrt.
+
+\par\smallskip
+Nun betrachten wir den allgemeinen Fall, dass es mehrere Zwischenzustände
+der Art $U$ mit Eigenschaft $(*)$ gibt.
+Dann gibt es auch mehrere Situationen [1], und in [2] werden
+die Makrozustände \emph{aller} zugehörigen Kinder vereinigt.
+Um nun den gesuchten Run $q\ldots p$ auf $\alpha[k,m-1]$ zu erhalten,
+muss man nach der ersten "`passenden"' Situation [1]
+von der unteren zur oberen Zeile übergehen,
+d.\,h.\ wir erhalten $(**)$, indem wir für $p \in P$
+in derjenigen Kopie von [1] in die obere Zeile gehen,
+in der dasjenige Kind $v'$ von $v$ erzeugt wird, das zu $p \in P$ führt.
+%
+\begin{center}
+  \small
+  \begin{tikzpicture}[%
+    node distance=30mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={ellipse,draw=black,thin,fill=black!5,inner sep=.7mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin},
+    skip loop/.style={to path={-- ++(0,#1) -| (\tikztotarget)},rounded corners}
+  ]
+    \begin{scope}[
+      every node/.style={rectangle,rounded corners,draw=black,fill=white,inner sep=1mm}
+    ]    
+      \node[thick] (M)                            {\strut{\boldmath $M$}};
+      \node        (N1)     [right=12mm of M]     {\strut$N_1$};
+      \node[thick] (N2)     [right=27mm of N1]    {\strut{\boldmath $N_2$}};
+      \node        (N3)     [right=24mm of N2]    {\strut$N_3$};
+      \node        (P)      [right=46mm of N3]    {\strut$P$};
+      \node        (N1F)    [below=5mm of N1]     {\strut$N_1\cap F$};
+      \node[thick] (N2F)    [below=5mm of N2]     {\strut{\boldmath $N_2\cap F$}};
+      \node        (v1'1')  [left= 7mm of N2F]    {\strut\phantom{$N$}};
+      \node        (v2'1'') [below=5mm of N3]     {\strut\phantom{$N$}};
+      \node        (v1'1'') [left= 7mm of v2'1''] {\strut\phantom{$N$}};
+      \node        (N3F)    [right=7mm of v2'1''] {\strut$N_3\cap F$};
+      \node[thick] (v2'2)   [below=5mm of P]      {\strut$\cdots \text{{\boldmath $p$}}\cdots$};
+      \node        (v1'2)   [left= 7mm of v2'2]   {\strut\phantom{$N$}};
+      \node        (v3'2)   [right=7mm of v2'2]   {\strut\phantom{$N$}};
+    \end{scope}
+
+    \node (Ml)      [above right=-3.5mm and 0mm of M] {{\boldmath $v$}};
+    \node (N1l)     [right=0mm of N1]                 {$v$};
+    \node (N2l)     [right=0mm of N2]                 {{\boldmath $v$}};
+    \node (N3l)     [right=0mm of N3]                 {$v$};
+    \node (Pl)      [right=0mm of P]                  {$v$};
+    \node (N1Fl)    [right=0mm of N1F]                {$v_1'$};
+    \node (v1'1'l)  [right=0mm of v1'1']              {$v_1'$};
+    \node (N2Fl)    [right=0mm of N2F]                {{\boldmath $v_2'$}};
+    \node (v1'1''l) [right=0mm of v1'1'']             {$v_1'$};
+    \node (v2'1''l) [right=0mm of v2'1'']             {$v_2'$};
+    \node (N3Fl)    [right=0mm of N3F]                {$v_3'$};
+    \node (v1'2l)   [right=0mm of v1'2]               {$v_1'$};
+    \node (v2'2l)   [right=0mm of v2'2]               {{\boldmath $v_2'$}};
+    \node (v3'2l)   [right=0mm of v3'2]               {$v_3'$};
+
+    \node (Mm) [below right=-3.5mm and 0mm of M]  {\circled{!}};
+  
+%    \begin{pgfonlayer}{background}
+%      \node[state] (Ti)  [fit=(vi) (vil) (vim)] {};
+%      \node[state] (U)   [fit=(vu) (vul) (vum)] {};
+%      \node[state] (Ti1) [fit=(vi1) (vi1l) (vi1m)] {};
+%    \end{pgfonlayer}  
+%    
+%    \node [below right=-1mm and -1mm of Ti]  {$T_i$};
+%    \node [below right=-1mm and -1mm of U]   {$U$};
+%    \node [below right=-1mm and -1mm of Ti1] {$T_{i+1}$};
+
+    \node [above=13mm of M]  {\normalsize $T_i$};
+    \node [above=13mm of N1] {\normalsize $[1]$};
+    \node [above=13mm of N2] {\normalsize $[1']$};
+    \node [above=13mm of N3] {\normalsize $[1'']$};
+    \node [above=13mm of P]  {\normalsize $[2]$};
+    
+%    \node [right=10mm of M] {$\stackrel{\text{{\normalsize $\alpha[k,\ell-1]$}}}{=\!=\!=\!=\!=\!=\!\Longrightarrow}$};
+%    \node [right=9mm of N] {$\stackrel{\text{{\normalsize $\alpha[\ell,m-1]$}}}{=\!=\!=\!=\!=\!=\!\Longrightarrow}$};
+%    \node [right=6mm of NF] {$\stackrel{\text{{\normalsize $\alpha[\ell,m-1]$}}}{=\!=\!=\!=\!=\!=\!\Longrightarrow}$};
+
+    \path[-] (N1) edge (N1F)
+             (N2) edge (v1'1')
+             (N2) edge[thick] (N2F)
+             (N3) edge (v1'1'')
+             (N3) edge (v2'1'')
+             (N3) edge (N3F)
+             (P)  edge (v1'2)
+             (P)  edge (v2'2)
+             (P)  edge (v3'2);
+
+     \path[-,skip loop=-7mm,densely dashed,very thick]
+             (N2F) edge[thick] (v2'2);
+             
+     \path[-,skip loop=7mm,densely dashed,very thick]
+             (M) edge[thick] (N2);
+
+     \node [below right=5mm and 1mm of v2'1''] {$\stackrel{\text{{\small $\alpha[\ell',m-1]$}}}{=\!=\!=\!=\!=\!=\!\Longrightarrow}$};
+     
+     \node [above right=5mm and -3mm of N1] {$\stackrel{\text{{\small $\alpha[k,\ell'-1]$}}}{=\!=\!=\!=\!=\!=\!\Longrightarrow}$};
+  \end{tikzpicture}
+\end{center}
+%
+\qedhere
+
+% ===================================================================
+\section*{T3.17~ Vollständigkeitsbeweis der Safra-Konstruktion, Details}
+
+\textsfbf{Hilfsaussage [HA].}~
+Es gibt einen Knotennamen $v$, für den gilt:
+\begin{itemize}
+  \item[(a)]
+    $\exists m \geqslant 0$ : 
+    $S_i$ enthält Knoten $v$ für alle $i \geqslant m$
+  \item[(b)]
+    $v$ ist in $\infty$ vielen $S_i$ mit $\circled{!}$ markiert
+\end{itemize}
+
+\par\medskip\noindent
+(Diese Aussage entspricht genau der Akzeptanzbedingung $\Pmc^d$.)
+
+\par\medskip\noindent
+\textsfbf{Skizze:}~
+$S_0,S_1,\dots,\underbrace{S_m,S_{m+1},S_{m+2},\dots}_{%
+  \text{%
+    \begin{tabular}{@{}l@{}}
+      $v$ in allen $S_i$ enthalten \\
+      und unendlich oft markiert
+    \end{tabular}
+  }
+}$
+
+\par\medskip\noindent
+\textsfbf{Beweis der HA.}~
+Nach Konstruktion enthält der Makrozustand, der im Safrabaum $S_i$ zu Knoten~1 gehört,
+alle Zustände von \Amc, die von einem Anfangszustand $q \in I$ aus erreicht werden können,
+indem die ersten $i$ Zeichen von $\alpha$ gelesen werden (Potenzmengen\-konstruktion).
+Deshalb enthält Knoten~1 in $S_i$ immer den Zustand $q_i$ aus dem Run $r$;
+somit hat Knoten~1 immer einen nichtleeren Makrozustand
+und wird nie in Schritt~5 entfernt.
+Damit erfüllt Knoten~1 die Bedingung~(a) aus der Hilfsaussage.
+Wenn er auch Bedingung~(b) erfüllt, ist der Beweis erbracht.
+
+Anderenfalls gibt es einen Zeitpunkt $m' \geq 0$, % (o.\,B.\,d.\,A.\ $m' \geq m$),
+so dass Knoten~1 in allen $S_i$ \emph{nicht} mit \circled{!} markiert ist:
+%
+\begin{center}
+  $S_0,S_1,\dots,S_m,S_{m+1},\dots,\!\!\!\!\!\!\underbrace{S_m',S_{m'+1},\dots,S_p,\dots}_{%
+    \text{%
+      \begin{tabular}{@{}l@{}}
+        Knoten 1 ist in keinem $S_i$ markiert % \\
+%        und unendlich oft markiert
+      \end{tabular}
+    }
+  }$
+\end{center}
+%
+Da der Run $r$ erfolgreich ist, gibt es einen Zustand $f \in \textsf{Inf}(r) \cap F$.
+Sei $p$ der erste Zeitpunkt des Auftretens von $f$ in $r$ hinter $m'$
+(d.\,h.\ $q_p = f$ und $q_i \neq f$ für alle $i$ mit $m < i < p$).
+Da $q_p = f$, tritt $f$ im Makrozustand des Knotens~1 in $S_p$ auf.
+Folglich wird in Schritt~2 der Berechnung von $S_{p+1}$ ein neues jüngstes Kind
+zu Knoten~1 hinzugefügt, dessen Makrozustand $f$ enthält.
+Da Knoten~1 für den Rest des Runs unmarkiert bleibt,
+wird $q_i$ aus dem Run $r$ für alle $i \geq p+1$ in einem \emph{Kind} von 1 auftreten.
+Nach endlich vielen Anwendungen von Schritt~4 muss $q_i$ dauerhaft
+in einem \emph{festen} Kind $c$ von 1 bleiben.
+Dieses Kind erfüllt also Bedingung~(a) der HA.
+
+Nun kann man das bisherige Argument von 1 auf $c$ übertragen:
+entweder erfüllt $c$ auch Bedingung~(b),
+oder es gibt ein Kind $c'$, das~(a) erfüllt.
+Diese Iteration kann man nicht beliebig oft fortsetzen,
+weil die Tiefe eines Safrabaums durch $|Q|$ beschränkt ist.
+Folglich muss es einen Nachfahren von 1 geben, der Bedingungen~(a)
+und~(b) erfüllt.
+\qedhere
+
+% ===================================================================
+\section*{T3.18~ NBA für eine Kripke-Struktur}
+
+\begin{center}
+  \begin{tabular}{@{}l@{\hspace*{20mm}}l@{}}
+    Kripke-Struktur $\Smc$ &
+    zugehöriger NBA $\Amc_\Smc$ \\[\baselineskip]
+    %
+    \begin{tikzpicture}[%
+      node distance=25mm,>=Latex,
+      initial text="", initial where=above,
+      every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+      accepting/.style={double distance=1.5pt, double=white},
+      every edge/.style={draw=black,thin}
+    ]
+      \node[state,initial] (s0)                                  {$s_0$};
+      \node[state,initial] (s1) [right of=s0]                    {$s_1$};
+      \node[state]         (s2) [below right=10mm and 9mm of s0] {$s_2$};
+      
+      \node[left =0mm of s0] {$\{p,q\}$};
+      \node[right=0mm of s1] {$\{p\}$};
+      \node[right=0mm of s2] {$\{q\}$};
+      
+%      \node[above left=2mm and 12mm of s0] {$\Smc$};
+      
+      \path[->] (s0) edge [bend left=15] (s1)
+                (s1) edge [bend left=15] (s0)
+                (s1) edge                (s2)
+                (s2) edge                (s0);
+    \end{tikzpicture}
+    &
+    \begin{tikzpicture}[%
+      node distance=32mm,>=Latex,
+      initial text="", initial where=above,
+      every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+      accepting/.style={double distance=1.5pt, double=white},
+      every edge/.style={draw=black,thin}
+    ]
+      \node[state,initial,accepting] (q0)                                  {$q_0$};
+      \node[state,accepting]         (s0) [below left =10mm and 9mm of q0] {$s_0$};
+      \node[state,accepting]         (s1) [right of=s0]                    {$s_1$};
+      \node[state,accepting]         (s2) [below right=10mm and 9mm of s0] {$s_2$};
+      
+%      \node[above left=2mm and 12mm of s0] {$\Amc_\Smc$};
+      
+      \path[->] (q0) edge                node [pos=.2,left =1mm]    {$\{p,q\}$} (s0)
+                (q0) edge                node [pos=.2,right=1mm]    {$\{p\}$}   (s1)
+                (s0) edge [bend left=10] node [above=-.2mm]         {$\{p\}$}   (s1)
+                (s1) edge [bend left=10] node [below=-.2mm]         {$\{p,q\}$} (s0)
+                (s1) edge                node [pos=.75,right=1.5mm] {$\{q\}$}   (s2)
+                (s2) edge                node [pos=.2,left=1mm]     {$\{p,q\}$} (s0);
+    \end{tikzpicture}
+  \end{tabular}
+\end{center}
+
+% ===================================================================
+\section*{T3.19~ NBAs für Beispiel-Eigenschaften}
+
+\subsection*{(1) Mikrowellen-Beispiel}
+
+Hier ist das Alphabet $\Sigma = 2^{\{\textsf{S},\textsf{C},\textsf{H},\textsf{E}\}}$.
+
+\begin{itemize}
+  \item[(a)]
+    "`Wenn ein Fehler auftritt, dann ist er nach endlicher Zeit behoben."'
+    
+    Schematisch muss der Automat so aussehen:
+    %
+    \begin{center}
+      \begin{tikzpicture}[%
+        node distance=45mm,>=Latex,
+        initial text="", initial where=below left,
+        every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+        accepting/.style={double distance=1.5pt, double=white},
+        every edge/.style={draw=black,thin}
+      ]
+        \node[state,initial,accepting] (q0) {};
+        \node[state]                   (q1) [right of=q0] {};
+        
+        \path[->] (q0) edge [bend left=10] node [above] {"`$E$"'}       (q1)
+                  (q1) edge [bend left=10] node [below] {"`kein $E$"'}  (q0)
+                  (q0) edge [loop below]   node [below] {"`kein $E$"'}  ()
+                  (q1) edge [loop below]   node [below] {"`irgendwas"'} ();
+      \end{tikzpicture}
+    \end{center}
+    %
+    Dabei steht z.\,B.\ die Beschriftung "`$E$"' für alle Alphabetzeichen
+    (Teilmengen von $\{\textsf{S},\textsf{C},\textsf{H},\textsf{E}\}$), die $E$ enthalten,
+    und "`kein $E$"' für alle Alphabetzeichen, die $E$ nicht enthalten.
+    Sei also $M = \{\{E\}, \{S,E\}, \{C,E\}, \dots, \{S,C,H,E\}\}$
+    und $M' = \Sigma \setminus M$. Dann sind die korrekten Kantenbeschriftungen
+    im Automaten wie folgt.
+    %
+    \begin{center}
+      \begin{tikzpicture}[%
+        node distance=45mm,>=Latex,
+        initial text="", initial where=below left,
+        every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+        accepting/.style={double distance=1.5pt, double=white},
+        every edge/.style={draw=black,thin}
+      ]
+        \node[state,initial,accepting] (q0) {};
+        \node[state]                   (q1) [right of=q0] {};
+        
+        \path[->] (q0) edge [bend left=10] node [above] {$M$}      (q1)
+                  (q1) edge [bend left=10] node [below] {$M'$}     (q0)
+                  (q0) edge [loop below]   node [below] {$M'$}     ()
+                  (q1) edge [loop below]   node [below] {$\Sigma$} ();
+      \end{tikzpicture}
+    \end{center}
+  \item[(b)]
+    "`Wenn die Mikrowelle gestartet wird,
+    fängt sie nach endlicher Zeit an zu heizen."'
+    
+    Hier nur die schematische Repräsentation des Automaten;
+    die korrekten Kanten\-beschriftungen erhält man wie in~(a).
+    %
+    \begin{center}
+      \begin{tikzpicture}[%
+        node distance=45mm,>=Latex,
+        initial text="", initial where=below left,
+        every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+        accepting/.style={double distance=1.5pt, double=white},
+        every edge/.style={draw=black,thin}
+      ]
+        \node[state,initial,accepting] (q0) {};
+        \node[state]                   (q1) [right of=q0] {};
+        
+        \path[->] (q0) edge [bend left=10] node [above] {"`$S$"'}       (q1)
+                  (q1) edge [bend left=10] node [below] {"`$H$"'}       (q0)
+                  (q0) edge [loop below]   node [below] {"`kein $S$"'}  ()
+                  (q1) edge [loop below]   node [below] {"`irgendwas"'} ();
+      \end{tikzpicture}
+    \end{center}
+  \item[(c)]
+    "`Wenn die Mikrowelle gestartet wird,
+    ist es \emph{möglich}, danach zu heizen."'
+    
+    Der Automat ist derselbe wie in~(b),
+    nur muss man hier existenzielles Model-Checking
+    statt universellem verwenden.
+    
+\end{itemize}
+
+\subsection*{(2) Nebenläufige Programme}
+
+Hier ist das Alphabet $\Sigma = 2^{\{0,1,10,11,\dots,23\}}$.
+%
+\begin{itemize}
+  \item[(d)]
+    "`Es kommt nie vor,
+    dass beide Teilprogramme zugleich im kritischen Bereich sind."'
+
+    Schematisch muss der Automat so aussehen:
+    %
+    \begin{center}
+      \begin{tikzpicture}[%
+        node distance=45mm,>=Latex,
+        initial text="", initial where=below left,
+        every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+        accepting/.style={double distance=1.5pt, double=white},
+        every edge/.style={draw=black,thin}
+      ]
+        \node[state,initial,accepting] (q0) {};
+        
+        \path[->] (q0) edge [loop below]   node [below] {"`nicht 12 oder nicht 22"'}  ();
+      \end{tikzpicture}
+    \end{center}
+    %
+    Dabei steht die Beschriftung "`nicht 12 oder nicht 22"' der Schleife für alle Alphabet\-zeichen
+    (Teilmengen von $\{0,1,10,11,\dots,23\}$), die nicht gleichzeitig 12 und 22 enthalten.
+    Damit ist die korrekte Kantenbeschriftung für die Schleife
+    die Menge $\{X \subseteq \{0,1,10,11,\dots,23\} \mid \{12,22\} \nsubseteq X\}$.
+    %
+  \item[(e)]
+    "`Jedes Teilprogramm kommt beliebig oft in seinen kritischen Bereich."'
+    
+    Der Automat $\Amc_1$, der beschreibt, dass $P_1$ beliebig oft in seinen kritischen Bereich kommt,
+    ist dem in (a) sehr ähnlich (hier wieder nur die schematische Darstellung):
+    %
+    \begin{center}
+      \begin{tikzpicture}[%
+        node distance=45mm,>=Latex,
+        initial text="", initial where=below left,
+        every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+        accepting/.style={double distance=1.5pt, double=white},
+        every edge/.style={draw=black,thin}
+      ]
+        \node[state,initial,accepting] (q0) {};
+        \node[state]                   (q1) [right of=q0] {};
+        
+        \path[->] (q0) edge [bend left=10] node [above] {"`nicht 12"'}  (q1)
+                  (q1) edge [bend left=10] node [below] {"`12"'}        (q0)
+                  (q0) edge [loop below]   node [below] {"`12"'}        ()
+                  (q1) edge [loop below]   node [below] {"`irgendwas"'} ();
+      \end{tikzpicture}
+    \end{center}
+    %
+    Der Automat $\Amc_2$ für $P_2$ ist analog.
+    Um zu beschreiben, dass \emph{beide} Programme beliebig oft in den
+    jeweiligen kritischen Bereich kommen, muss man den Produktautomaten von $\Amc_1$ und $\Amc_2$ bilden.
+    
+  \item[(e)]
+    "`Jedes Teilprogramm \emph{kann} beliebig oft in seinen kritischen Bereich gelangen."'
+    
+    Wie (d), aber mit existenziellem Model-Checking.
+\end{itemize}
+
+\goodbreak
+% ===================================================================
+\section*{T3.20~ Beispiele für LTL-Syntax und Semantik}
+
+Betrachte folgenden Pfad $\pi$.
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=15mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state] (q0)               {0};
+    \node[state] (q1) [right of=q0] {1};
+    \node[state] (q2) [right of=q1] {2};
+    \node[state] (q3) [right of=q2] {3};
+    \node[state] (q4) [right of=q3] {4};
+    \node[state] (q5) [right of=q4] {5};
+    \node[state] (q6) [right of=q5] {6};
+    \node[state] (q7) [right of=q6] {7};
+    \node        (q8) [right of=q7] {$\cdots$};
+    
+    \node         [below=-.5mm of q1]    {\strut $a$};
+    \node         [below=-.5mm of q2]    {\strut $a$};
+    \node         [below=-.5mm of q3]    {\strut $a$};
+    \node         [below=-.5mm of q4]    {\strut $b$};
+    \node         [below=-.5mm of q6]    {\strut $b$};
+    \node         [below=-.5mm of q7]    {\strut $a$};
+    \node (lastb) [below=0mm of q8]    {\strut $b$};
+    \node         [right=2mm of lastb] {\strut $a$~~~$\cdots$};
+    
+    \path[->] (q0) edge (q1)
+              (q1) edge (q2)
+              (q2) edge (q3)
+              (q3) edge (q4)
+              (q4) edge (q5)
+              (q5) edge (q6)
+              (q6) edge (q7)
+              (q7) edge (q8);
+  \end{tikzpicture}
+\end{center}
+%
+Das heißt also, $\pi(0) = \emptyset$, $\pi(1) = \{a\}$ usw.
+Die Beschriftung "`$b~a~\cdots$"' am rechten Rand bedeutet,
+dass für alle $i \geq 4$ gilt: $\pi(2i) = \{b\}$ und $\pi(2i+1) = \{a\}$.
+Dann gilt:
+%
+\begin{xalignat*}{4}
+  \pi,0 & \not\models a         & \pi,0 & \models \F a             & \pi,0 & \not\models \G(a \lor b) & \pi,1 & \models a \U b \\
+  \pi,0 & \models \lnot a       & \pi,0 & \models \F b             & \pi,6 & \models \G(a \lor b)     & \pi,0 & \not\models a \U b \\
+  \pi,0 & \models \X a          & \pi,4 & \models \F a             & \pi,5 & \not\models \G(a \lor b) & \\
+  \pi,0 & \not\models \X\lnot a & \pi,0 & \models \X(a \land \F b) & \pi,0 & \models \G\F a           &
+\end{xalignat*}
+%
+Dabei ist $\G\F\varphi$ laut Semantik gleichbedeutend mit "`unendlich oft $\varphi$"'.
+
+\par\medskip
+Betrachte nun den folgenden Pfad $\pi'$.
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=15mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state] (q0)               {0};
+    \node[state] (q1) [right of=q0] {1};
+    \node[state] (q2) [right of=q1] {2};
+    \node[state] (q3) [right of=q2] {3};
+    \node[state] (q4) [right of=q3] {4};
+    \node[state] (q5) [right of=q4] {5};
+    \node[state] (q6) [right of=q5] {6};
+    \node[state] (q7) [right of=q6] {7};
+    \node        (q8) [right of=q7] {$\cdots$};
+    
+    \node [below=-.5mm of q1] {\strut $a$};
+    \node [below=-.5mm of q3] {\strut $a$};
+    \node [below=-.5mm of q5] {\strut $a$};
+    \node [below=-.5mm of q6] {\strut $b$};
+    
+    \path[->] (q0) edge (q1)
+              (q1) edge (q2)
+              (q2) edge (q3)
+              (q3) edge (q4)
+              (q4) edge (q5)
+              (q5) edge (q6)
+              (q6) edge (q7)
+              (q7) edge (q8);
+  \end{tikzpicture}
+\end{center}
+%
+Dann gilt $\pi',0 \not\models a \U b$, aber $\pi',0 \models (\X a \lor \X\X a) \U (\X b)$.
+
+% ===================================================================
+\section*{T3.21~ Beispiele für die Erweiterung von Pfaden}
+
+Sei z.\,B. $\varphi_E = \X(a\U b)$ und der Pfad $\pi=s_0s_1s_2\cdots$
+wie folgt gegeben:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=18mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state] (q0)               {0};
+    \node[state] (q1) [right of=q0] {1};
+    \node[state] (q2) [right of=q1] {2};
+    \node[state] (q3) [right of=q2] {3};
+    \node[state] (q4) [right of=q3] {4};
+    \node[state] (q5) [right of=q4] {5};
+    \node[state] (q6) [right of=q5] {6};
+    \node        (q7) [right of=q6] {$\cdots$};
+    
+    \node [below=-.5mm of q0] {\strut $a$};
+    \node [below=-.5mm of q1] {\strut $a$};
+    \node [below=-.5mm of q2] {\strut $b$};
+    \node [below=-.5mm of q4] {\strut $a$};
+    \node [below=-.5mm of q5] {\strut $a$};
+    \node [below=-.5mm of q6] {\strut $b$};
+    
+    \path[->] (q0) edge (q1)
+              (q1) edge (q2)
+              (q2) edge (q3)
+              (q3) edge (q4)
+              (q4) edge (q5)
+              (q5) edge (q6)
+              (q6) edge (q7);
+  \end{tikzpicture}
+\end{center}
+%
+Das heißt also $s_0 = s_1 = \{a\}$, $s_2 = \{b\}$, $s_3 = \emptyset$ usw.;
+dieser Pfad entspricht somit dem Eingabewort, das aus den Zeichen
+$\{a\},\{b\},\emptyset,\{a\},\{b\},\emptyset,\dots$ besteht
+(jede Teilmenge von \textsf{AV} ist ein Zeichen!).
+
+Der zugehörige erweiterte Pfad $\overline{\pi}=t_0t_1t_2\cdots$ ist der folgende.
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=18mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state] (q0)               {0};
+    \node[state] (q1) [right of=q0] {1};
+    \node[state] (q2) [right of=q1] {2};
+    \node[state] (q3) [right of=q2] {3};
+    \node[state] (q4) [right of=q3] {4};
+    \node[state] (q5) [right of=q4] {5};
+    \node[state] (q6) [right of=q5] {6};
+    \node        (q7) [right of=q6] {$\cdots$};
+    
+    \node [below=-.5mm of q0] {\begin{tabular}{@{}ccc@{}}\strut $a$\\$a\U b$\\$\X(a\U b)$\\$\lnot b$\end{tabular}};
+    \node [below=-.5mm of q1] {\begin{tabular}{@{}ccc@{}}\strut $a$\\$a\U b$\\$\X(a\U b)$\\$\lnot b$\\$\vdots$\end{tabular}};
+    \node [below=-.5mm of q2] {\begin{tabular}{@{}ccc@{}}\strut $b$\\$a\U b$\\$\lnot\X(a\U b)$\\$\lnot a$\\$\vdots$\end{tabular}};
+    \node [below=-.5mm of q3] {\begin{tabular}{@{}ccc@{}}\strut~\\$\lnot(a\U b)$\\$\X(a\U b)$\\$\lnot a,\lnot b$\\$\vdots$\end{tabular}};
+    \node [below=-.5mm of q4] {\begin{tabular}{@{}ccc@{}}\strut $a$\\$a\U b$\\$\X(a\U b)$\\$\lnot b$\\$\vdots$\end{tabular}};
+    \node [below=-.5mm of q5] {\begin{tabular}{@{}ccc@{}}\strut $a$\\$a\U b$\\$\X(a\U b)$\\$\lnot b$\\$\vdots$\end{tabular}};
+    \node [below=-.5mm of q6] {\begin{tabular}{@{}ccc@{}}\strut $b$\\$a\U b$\\$\lnot\X(a\U b)$\\$\lnot a$\\$\vdots$\end{tabular}};
+    
+    \path[->] (q0) edge (q1)
+              (q1) edge (q2)
+              (q2) edge (q3)
+              (q3) edge (q4)
+              (q4) edge (q5)
+              (q5) edge (q6)
+              (q6) edge (q7);
+  \end{tikzpicture}
+\end{center}
+%
+Das heißt also, dass z.\,B.\ $t_0$ die elementare Formelmenge $\{a,\,a\U b,\,\X(a\U b),\,\lnot b\} \subseteq \textsf{cl}(\varphi_E)$ ist.
+
+
+% ===================================================================
+\section*{T3.22~ Beispiele für elementare Formelmengen}
+
+Sei $\varphi_E = a\U(\lnot a \land b)$.
+Dann ist $\textsf{cl}(\varphi_E) = \{a,\, \lnot a,\, b,\, \lnot b,\, \lnot a \land b,\, \lnot(\lnot a \land b),\, \varphi_E,\, \lnot \varphi_E\}$.
+%
+\begin{itemize}
+  \item
+    $\{a,b,\varphi_E\}$ ist konsistent bezüglich der Aussagenlogik und lokal konsistent bezüglich des \U-Operators,
+    aber nicht maximal, weil weder $\lnot a \land b$ noch $\lnot(\lnot a \land b)$ enthalten ist.
+  \item
+    Fügt man $\lnot a \land b$ hinzu, so ist die resultierende Menge $\{a,\,b,\,\lnot a \land b,\,\varphi_E\}$ 
+    zwar maximal, aber nicht mehr konsistent bezüglich der Aussagenlogik,
+    da wegen $\lnot a \land b$ auch $\lnot a$ enthalten sein müsste.
+  \item
+    Fügt man stattdessen $\lnot(\lnot a \land b)$ hinzu, 
+    so ist die resultierende Menge \mbox{$\{a,\,b,\,\lnot(\lnot a \land b),\,\varphi_E\}$}
+    maximal und konsistent bezüglich der Aussagenlogik,
+    aber nicht mehr konsistent bezüglich \U,
+    weil nun zwar $\varphi_E = a \U (\lnot a \land b)$ enthalten
+    aber weder $\lnot a \land b$ noch $a$ enthalten sind.
+  \item
+    Die elementaren Formelmengen sind folgende.
+    %
+    \[
+      \begin{array}{@{\{}r@{,~}r@{,~}r@{,~}r@{\}}}
+        a       & b       & \lnot(\lnot a \land b) & \varphi_E      \\
+        a       & b       & \lnot(\lnot a \land b) & \lnot\varphi_E \\
+        a       & \lnot b & \lnot(\lnot a \land b) & \varphi_E      \\
+        a       & \lnot b & \lnot(\lnot a \land b) & \lnot\varphi_E \\
+        \lnot a & \lnot b & \lnot(\lnot a \land b) & \lnot\varphi_E \\
+        \lnot a & b       & \lnot a \land b        & \varphi_E
+      \end{array}
+    \]
+\end{itemize}
+
+% ===================================================================
+\section*{T3.23~ Skizzen zur Def.\ der Überführungsrelation des GNBA}
+
+Bedingung \circled{1} besagt, dass im Beispiel in T3.21 \emph{höchstens}
+die Transitionen $(t_0,\{a\},t_1)$, $(t_1,\{a\},t_2)$, $(t_2,\{b\},t_3)$, $(t_3,\emptyset,t_4)$ usw.\
+erlaubt sind (sofern jeweils Bedingungen \circled{2} und \circled{3} auch erfüllt sind).
+
+\par\medskip
+Bedingung \circled{2} kann man so veranschaulichen:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=27mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state] (q0)               {0};
+    \node        (q1)         [right of=q0] {$\cdots$};
+    \node[state] (q2)         [right of=q1] {$i$};
+    \node[state,ellipse] (q3) [right of=q2] {$i+1$};
+    \node        (q4)         [right of=q3] {$\cdots$};
+    
+    \node (ilabel)  [below=0 of q2] {\begin{tabular}{@{}ccc@{}}\strut $t_i$ \\ enthält \\ $\X\psi$\end{tabular}};
+    \node (i1label) [below=0 of q3] {\begin{tabular}{@{}ccc@{}}\strut $t_{i+1}$ \\ enthält \\ $\psi$\end{tabular}};
+    \node           [right=-1mm of ilabel] {\emph{gdw.}};
+    
+    \path[->] (q0) edge (q1)
+              (q1) edge (q2)
+              (q2) edge (q3)
+              (q3) edge (q4);
+  \end{tikzpicture}
+\end{center}
+
+\par\medskip
+Bedingung \circled{3} kann man so veranschaulichen:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=27mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state] (q0)               {0};
+    \node        (q1)         [right of=q0] {$\cdots$};
+    \node[state] (q2)         [right of=q1] {$i$};
+    \node[state,ellipse] (q3) [right of=q2] {$i+1$};
+    \node        (q4)         [right of=q3] {$\cdots$};
+    
+    \node (ilabel)   [below=0 of q2]         {\begin{tabular}{@{}ccc@{}}\strut $t_i$ \\ enthält \\ $\psi_1\U\psi_2$\end{tabular}};
+    \node            [right=-1mm of ilabel]  {\emph{gdw.:}};
+    \node (i1label)  [below=0 of q3] {\strut $t_{i+1}$};
+    
+    \node (ilabel1)  [below=3mm of ilabel]   {\begin{tabular}{@{}ccc@{}}\strut enthält \\ $\psi_2$\end{tabular}};
+    \node            [right=-1mm of ilabel1] {\emph{oder}};
+    \node (ilabel2)  [below=3mm of ilabel1]  {\begin{tabular}{@{}ccc@{}}\strut enthält \\ $\psi_1$\end{tabular}};
+    \node            [right=-1mm of ilabel2] {\emph{und}};
+    \node (i1label2) [right of=ilabel2]      {\begin{tabular}{@{}ccc@{}}\strut enthält \\ $\psi_1\U\psi_2$\end{tabular}};
+    
+    \path[->] (q0) edge (q1)
+              (q1) edge (q2)
+              (q2) edge (q3)
+              (q3) edge (q4);
+  \end{tikzpicture}
+\end{center}
+%
+Diese Bedingung nutzt die semantische Äquivalenz
+$\psi_1 \U \psi_2 \equiv \psi_2 \lor (\psi_1 \land \X(\psi_1 \U \psi_2))$
+(weist diese selbst nach :--)).
+
+% ===================================================================
+\section*{{\boldmath T3.24~ GNBA für die Beispiel-Formel $\X a$}}
+
+\begin{itemize}
+  \item
+    $\varphi = \X a$
+  \item
+    $\textsf{cl}(\varphi) = \{a, \lnot a, \X a, \lnot \X a\}$
+  \item
+    Zustände (elementare Formelmengen): da keine $\land$- oder $\U$-Teilformel vorhanden ist,
+    sind nur Konsistenz bezüglich $\lnot$ und Maximalität relevant.
+    Es gibt also folgende vier elementare Formelmengen:
+    %
+    \begin{align*}
+      t_1 & = \{a,\X a\} \\
+      t_2 & = \{a,\lnot\X a\} \\
+      t_3 & = \{\lnot a,\X a\} \\
+      t_4 & = \{\lnot a,\lnot\X a\}
+    \end{align*}
+  \item
+    Übergänge: es genügt, Bedingung \circled{2} für \X zu überprüfen,
+    also gibt es Übergange
+    %
+    \begin{itemize}
+      \item
+        von $t_1$ mit $\{a\}$ zu $t_1$ und $t_2$
+      \item
+        von $t_2$ mit $\{a\}$ zu $t_3$ und $t_4$
+      \item
+        von $t_3$ mit $\emptyset$ zu $t_1$ und $t_2$
+      \item
+        von $t_4$ mit $\emptyset$ zu $t_3$ und $t_4$
+    \end{itemize}
+  \item
+    Anfangszustände: $t_1,t_3$ (diese enthalten $\varphi$)
+  \item
+    Akzeptanzkomponente: $\Fmc = \emptyset$,
+    denn es gibt keine $\U$-Teilformeln
+    (intuitiv: also braucht auch kein unendlich langes "`Aufschieben"'
+    verhindert zu werden). Folglich sind \emph{alle} Runs erfolgreich
+    (vgl.\ Definition GNBA).
+\end{itemize}
+%
+Graphische Darstellung:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=40mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={ellipse,draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state,initial] (t1)                    {$\{a,\X a\}$};
+    \node[state]         (t2) [right=30mm of t1] {$\{a,\lnot \X a\}$};
+    \node[state,initial] (t3) [below=20mm of t1] {$\{\lnot a,\X a\}$};
+    \node[state]         (t4) [below=20mm of t2] {$\{\lnot a,\lnot \X a\}$};
+    
+    \path[->] (t1) edge                 node [above] {$\{a\}$} (t2)
+              (t2) edge                 node [right] {$\{a\}$} (t4)
+              (t4) edge                 node [above] {$\emptyset$} (t3)
+              (t3) edge                 node [right] {$\emptyset$} (t1)
+              (t2) edge [bend right=10] node [above left=0mm and -1mm] {$\{a\}$} (t3)
+              (t3) edge [bend right=10] node [below right=0mm and -1mm] {$\emptyset$} (t2)
+              (t1) edge [loop above]    node [right] {$~\{a\}$} ()
+              (t4) edge [loop below]    node [right] {$~\emptyset$} ();
+              
+     \node [below right=-1mm and 0mm of t1] {$t_1$};
+     \node [below right=-1mm and 0mm of t2] {$t_2$};
+     \node [below right=-1mm and 0mm of t3] {$t_3$};
+     \node [below right=-1mm and 0mm of t4] {$t_4$};
+  \end{tikzpicture}
+\end{center}
+%
+
+
+% ===================================================================
+\section*{{\boldmath T3.25~ GNBA für die Beispiel-Formel $(\lnot a) \U b$}}
+
+\begin{itemize}
+  \item
+    $\varphi = (\lnot a) \U b$
+  \item
+    $\textsf{cl}(\varphi) = \{a, \lnot a, b, \lnot b, (\lnot a) \U b, \lnot((\lnot a) \U b)\}$
+  \item
+    Zustände (elementare Formelmengen):
+    Wegen Konsistenz bezgüglich $\lnot$ und Maximalität
+    muss von $a,\lnot a$ bzw.\ $b,\lnot b$ bzw.\
+    $(\lnot a) \U b, \lnot((\lnot a) \U b)$
+    jeweils genau eine Formel in der Menge enthalten sein.
+    Damit gibt es höchstens $2^3 = 8$ elementare Formelmengen.
+    Davon sind aber drei nicht konsistent
+    bzgl. \U:
+    %
+    \begin{itemize}
+      \item
+        $\{a,\,b,\,\lnot((\lnot a) \U b)\}$
+        und $\{\lnot a,\,b,\,\lnot((\lnot a) \U b)\}$ \\
+        (denn wenn $b \in t$, dann muss auch $\lnot((\lnot a) \U b) \in t$ sein);
+      \item
+        $\{a,\,\lnot b,\,(\lnot a) \U b\}$\quad
+        (denn wenn $(\lnot a) \U b \in t$ und $b \notin t$, dann muss $a \in t$ sein).
+    \end{itemize}
+    %
+    Die verbleibenden fünf Formelmengen sind elementar:
+    %
+    \begin{xalignat*}{2}
+      t_1 & = \{a,\,b,\,(\lnot a) \U b\}                     &
+      t_4 & = \{\lnot a,\,\lnot b,\,\lnot ((\lnot a) \U b)\} \\
+      t_2 & = \{\lnot a,\,b,\,(\lnot a) \U b\}               &
+      t_5 & = \{a,\,\lnot b,\,\lnot ((\lnot a) \U b)\} \\
+      t_3 & = \{\lnot a,\,\lnot b,\,(\lnot a) \U b\}
+    \end{xalignat*}
+  \item
+    Übergänge: Bedingung \circled{3} für \U muss eingehalten werden, d.\,h.:
+    %
+    \begin{center}
+     $(\lnot a) \U b \in t$ ~~gdw.~~
+     $b \in t$ ~oder~ ($\lnot a \in t$ ~und~ $(\lnot a) \U b \in t'$)
+     \qquad $(*)$
+    \end{center}
+    %
+    Nun kann man $(*)$ in folgende logisch äquivalente Aussage umformen,
+    die nicht mehr "`gdw."' benutzt:
+    %
+    \begin{center}
+      \begin{tabular}{@{}l@{~~}l@{~~}l@{~~}l@{~~}l@{~~}l@{\qquad}l@{}}
+             & $\Big((\lnot a)\U b\in t$    & und & $b \in t\Big)$ &     &                               & (a) \\
+        oder & $\Big((\lnot a)\U b\in t$    & und & $\lnot a\in t$ & und & $(\lnot a)\U b \in t'\Big)$   & (b) \\
+        oder & $\Big((\lnot a)\U b\notin t$ & und & $b \notin t$   & und & $\lnot a \notin t\Big)$       & (c) \\
+        oder & $\Big((\lnot a)\U b\notin t$ & und & $b \notin t$   & und & $(\lnot a)\U b\notin t'\Big)$ & (d)
+      \end{tabular}
+    \end{center}
+    %
+    Folglich gibt es Übergänge
+    %
+    \begin{itemize}
+      \item[(a)]
+        von $t_1$ mit $\{a,b\}$ zu $t_1,t_2,t_3,t_4,t_5$\quad und \\
+        von $t_2$ mit $\{b\}$ zu $t_1,t_2,t_3,t_4,t_5$;
+      \item[(b)]
+        von $t_3$ mit $\emptyset$ zu $t_1,t_2,t_3$;
+      \item[(c)]
+        von $t_5$ mit $\{a\}$ zu $t_1,t_2,t_3,t_4,t_5$;
+      \item[(d)]
+        von $t_4$ mit $\emptyset$ zu $t_4,t_5$.
+    \end{itemize}
+  \item
+    Anfangszustände: $t_1,t_2,t_3$ (diese enthalten $\varphi$)
+  \item
+    Akzeptanzkomponente:
+    %
+    \begin{align*}
+      \Fmc & = \Big\{\textsf{\textit{M}}_{(\lnot a)\U b}\Big\} \\
+           & = \Big\{ \{t \mid (\lnot a)\U b \notin t \text{~oder~} b \in t \} \Big\} \\
+           & = \Big\{\{t_1,t_2,t_4,t_5\}\Big\}
+    \end{align*}
+    %
+    Es werden also Runs ausgeschlossen, die irgendwann nur noch durch $t_3$ gehen.
+    Auf solchen Runs wird genau $(\lnot a)\U b$ unendlich lange "`aufgeschoben"',
+    denn $(\lnot a)\U b \in t_3$ und $b \notin t_3$.
+\end{itemize}
+%
+\enlargethispage*{20mm}
+Graphische Darstellung:
+%
+\vspace*{-2\baselineskip}
+\begin{center}
+  \begin{tikzpicture}[
+     >=Latex,
+    initial text="", initial where=above,
+    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state,initial,at={(162:40mm)}] (t1) {$t_1$};  
+    \node[state,initial,at={( 90:40mm)}] (t2) {$t_2$};  
+    \node[state,initial,at={( 18:40mm)}] (t3) {$t_3$};  
+    \node[state,at={(306:40mm)}]         (t4) {$t_4$};  
+    \node[state,at={(234:40mm)}]         (t5) {$t_5$};
+    
+    \path[->]
+      (t1) edge [loop left]         node [left=0mm]           {$\{a,b\}$}   ()
+      (t1) edge [bend left=10]      node [near end,left=2mm]  {$\{a,b\}$}   (t2)
+      (t1) edge [bend left=7]       node [pos=.23,above=-1mm] {$\{a,b\}$}   (t3)
+      (t1) edge                     node [pos=.45,right=1mm]  {$\{a,b\}$}   (t4)
+      (t1) edge [bend left=10]      node [pos=.35,right=-1mm] {$\{a,b\}$}   (t5)
+      
+      (t2) edge [bend left=10]      node [pos=.50,right=1mm]  {$\{b\}$}     (t1)
+      (t2) edge [out=60,in=30,loop] node [right=0mm]          {$\{b\}$}     ()
+      (t2) edge [bend left=10]      node [right=1mm]          {$\{b\}$}     (t3)
+      (t2) edge                     node [near end,right=0mm] {$\{b\}$}     (t4)
+      (t2) edge [bend left=7]       node [pos=.20,right=-1mm]  {$\{b\}$}     (t5)
+      
+      (t3) edge [bend left=7]       node [pos=.20,below]      {$\emptyset$} (t1)
+      (t3) edge [bend left=10]      node [pos=.35,left=2mm]   {$\emptyset$} (t2)
+      (t3) edge [loop right]        node [right=0mm]          {$\emptyset$} ()
+
+      (t4) edge [loop right]        node [right=0mm]          {$\emptyset$} ()
+      (t4) edge [bend left=10]      node [below]              {$\emptyset$} (t5)
+
+      (t5) edge [bend left=10]      node [pos=.50,left=0mm]   {$\{a\}$}     (t1)
+      (t5) edge [bend left=7]       node [pos=.25,left=-1mm]  {$\{a\}$}     (t2)
+      (t5) edge                     node [pos=.25,left=0mm]   {$\{a\}$}     (t3)
+      (t5) edge [bend left=7]       node [pos=.5,above=-1mm]  {$\{a\}$}     (t4)
+      (t5) edge [loop left]         node [left=0mm]           {$\{a\}$}     ()
+      ;  
+  \end{tikzpicture}
+\end{center}
+
+% ===================================================================
+% ===================================================================
+% ===================================================================
+\part[Endliche Automaten auf unendlichen Bäumen]{Endliche Automaten \\ auf unendlichen Bäumen}
+
+
+
+%% ===================================================================
+%% ===================================================================
+%% ===================================================================
+%\part*{Anhang}
+%\addcontentsline{toc}{part}{Anhang}
+%
+%% ===================================================================
+%\section*{Griechische Buchstaben}
+%
+%\paragraph*{Kleinbuchstaben}
+%~\par%\vspace*{-.2\baselineskip}
+%$\alpha$ \dotfill alpha \\
+%$\beta$ \dotfill beta \\
+%$\gamma$ \dotfill gamma \\
+%$\delta$ \dotfill delta \\
+%$\epsilon$ \dotfill epsilon \\
+%$\zeta$ \dotfill zeta \\
+%$\eta$ \dotfill eta \\
+%$\vartheta,\theta$ \dotfill theta \\
+%$\iota$ \dotfill iota \\
+%$\kappa$ \dotfill kappa \\
+%$\lambda$ \dotfill lambda\\
+%$\mu$ \dotfill my\\
+%$\nu$ \dotfill ny \\
+%$\xi$ \dotfill xi\\
+%$o$ \dotfill omikron\\
+%$\pi$ \dotfill pi\\
+%$\rho$ \dotfill rho\\
+%$\sigma,\varsigma$ \dotfill sigma\\
+%$\tau$ \dotfill tau\\
+%$\upsilon$ \dotfill ypsilon\\
+%$\varphi,\phi$ \dotfill phi\\
+%$\chi$ \dotfill chi\\
+%$\psi$ \dotfill psi\\
+%$\omega$ \dotfill omega
+%
+%% \newpage
+%
+%\paragraph*{Großbuchstaben}
+%~\par%\vspace*{-.2\baselineskip}
+%$\Gamma$ \dotfill Gamma \\
+%$\Delta$ \dotfill Delta \\
+%$\Theta$ \dotfill Theta \\
+%$\Lambda$ \dotfill Lambda \\
+%$\Pi$ \dotfill Pi \\
+%$\Xi$ \dotfill Xi \\
+%$\Sigma$ \dotfill Sigma \\
+%$\Upsilon$ \dotfill Ypsilon \\
+%$\Phi$ \dotfill Phi \\
+%$\Psi$ \dotfill Psi \\
+%$\Omega$ \dotfill Omega
+%
+%Die übrigen griechischen Großbuchstaben werden genauso geschrieben wie die entsprechenden lateinischen.
+
+%\pagebreak
+%\addcontentsline{toc}{part}{Literaturverzeichnis}
+%\bibliographystyle{babalpha}
+%\bibliography{biblio.bib}
+\end{document}
