@@ -1,11 +1,11 @@
 # automatenskript
 Hier findet Ihr die Tafelanschriebe für die Vorlesung „Automatentheorie und ihre Anwendungen“. Wer Fehler findet oder Verbesserungsvorschläge hat, legt bitte ein neues Issue an oder schreibt mir eine E-Mail.
 
-## Compilierung
+## PDF-Datei
 
+… findet Ihr im Ordner PDF. Wenn Ihr die Quellen selbst kompilieren möchtet, dann benutzt
 <code>make</code> oder
-
-<code>pdflatex automaten_tafelanschriebe</code>
+<code>pdflatex automaten_tafelanschriebe</code>.
 
 ## Versionsgeschichte
 
