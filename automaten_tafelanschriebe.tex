@@ -2643,6 +2643,250 @@ Graphische Darstellung:
 % ===================================================================
 \part[Endliche Automaten auf unendlichen Bäumen]{Endliche Automaten \\ auf unendlichen Bäumen}
 
+% ===================================================================
+\section*{T4.1~ LTL-Formeln "`zu stark/schwach"'}
+
+Sei $\varphi_1 := \G(e \to \F \neg e)$ und $\varphi_2 := \G\F\neg e$.
+
+\paragraph*{{\boldmath $\varphi_1,\varphi_2$ "`zu stark für universelles Model Checking"'.}}
+%Sei $\varphi_1 := \G(e \to \F \neg e)$ und $\varphi_2 := \G\F\neg e$.
+Wir betrachten folgende Kripke-Struktur $\Smc$:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state,initial] (s0)                   {$s_0$};
+    \node[state]         (s1) [right of=s0]     {$s_1$};
+    \node[state]         (s2) [below=8mm of s0] {$s_2$};
+    
+    \node [above=0mm of s0] {$e$};
+%    \node [right=0mm of s2] {$\lnot e$};
+    \node [above=0mm of s1] {$e$};
+    
+    \path[->] (s0) edge[bend left=15] (s1)
+              (s1) edge[bend left=15] (s0)
+              (s2) edge (s0)
+              (s1) edge (s2);
+  \end{tikzpicture}
+\end{center}
+%
+Intuitiv gesprochen, erfüllt $\Smc$ die Eigenschaft, die mit $\varphi_1$ bzw.\
+$\varphi_2$ ausgedrückt werden soll:
+es ist \emph{möglich}, nach Besuchen von $s_0$ bzw.\ $s_1$ den Pfad so fortzusetzen,
+dass nach endlich vielen Schritten $s_2$ besucht wird.
+
+Nach der Semantik von LTL wird jedoch ein Pfad "`festgehalten"'.
+Wenn wir also z.\,B.\ den Pfad $\pi = (s_0s_1)^\omega$ betrachten,
+dann gilt $\pi,0 \not\models \varphi_i$, $i=1,2$
+(aber für den Pfad $\pi' = (s_0s_1s_2)^\omega$ gilt
+$\pi',0 \models \varphi_i$, $i=1,2$).
+
+\paragraph*{{\boldmath $\varphi_1,\varphi_2$ "`zu schwach für existenzielles Model Checking"'.}}
+%Sei wieder $\varphi_1 := \G(e \to \F \neg e)$ und $\varphi_2 := \G\F\neg e$.
+Wir betrachten folgende Kripke-Struktur $\Smc'$:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state,initial] (s0)                   {$s_0$};
+    \node[state]         (s1) [right of=s0]     {$s_1$};
+    \node[state]         (s2) [right of=s1]     {$s_2$};
+    \node[state]         (s3) [below=8mm of s0] {$s_3$};
+    
+    \node [above=0mm of s1] {$e$};
+%    \node [right=0mm of s2] {$\lnot e$};
+    \node [below=0mm of s3] {$e$};
+    
+    \path[->] (s0) edge (s1)
+              (s1) edge (s2)
+              (s2) edge [loop right] ()
+              (s0) edge (s3)
+              (s3) edge [loop right] ();
+  \end{tikzpicture}
+\end{center}
+%
+Intuitiv gesprochen, erfüllt $\Smc'$ die gewünschte Eigenschaft
+\emph{nicht}: der Pfad $s_0s_3$ kann nicht mehr wie gewünscht fortgesetzt werden.
+
+Nach der Semantik von LTL genügt es jedoch, einen Pfad $\pi$ zu finden,
+für den $\pi,0 \models \varphi_i$ gilt,
+und das ist z.\,B. $\pi = s_1s_1s_2^\omega$.
+
+\pagebreak
+% ===================================================================
+\section*{T4.2~ Beispiel-Berechnungsbaum}
+
+Wenn man die Beispielstruktur Mikrowelle im Zustand 3 auf"|faltet,
+erhält man:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    level 1/.style = {sibling distance = 35mm, level distance =  6mm},
+    level 2/.style = {sibling distance = 20mm, level distance =  9mm},
+    level 3/.style = {sibling distance = 10mm, level distance =  9mm},
+    level 4/.style = {sibling distance = 10mm, level distance =  9mm},
+    edge from parent/.style = {draw=black, thin, -Latex}%
+  ]
+    \node {3}
+    child {
+      node {1}
+      child {
+        node {2}
+        child {
+          node {5}
+          child {
+            node (n1) {3}
+          }
+        }
+      }
+      child {node (n2) {3}}
+    }
+    child {
+      node {6}
+      child {
+        node {7}
+        child {
+          node {4}
+          child {
+            node (n3) {4}
+          }
+          child {
+            node (n4) {3}
+          }
+          child {
+            node (n5) {1}
+          }
+        }
+      }
+    }
+    ;
+    
+    \node [draw=none,fill=none,below=-1mm of n1] {$\vdots$};
+    \node [draw=none,fill=none,below=-1mm of n2] {$\vdots$};
+    \node [draw=none,fill=none,below=-1mm of n3] {$\vdots$};
+    \node [draw=none,fill=none,below=-1mm of n4] {$\vdots$};
+    \node [draw=none,fill=none,below=-1mm of n5] {$\vdots$};
+  \end{tikzpicture}
+\end{center}
+%
+Die gegebene Struktur $\Smc$ ist eine endliche Repräsentation dieses unendlichen Baums
+(und vieler weiterer Bäume).
+
+%\enlargethispage{10mm}
+% ===================================================================
+\section*{T4.3~ Beweis Teil 2 des Ausdrucksstärke-Lemmas}
+
+\textsfbf{Lemma 4.5~(2).}~
+Es gibt keine zu $\F\G p$ äquivalente CTL-Zustandsformel.
+
+\par\medskip\noindent
+\textsfbf{Beweis.}~
+Betrachte zwei \emph{Folgen} $\Smc_0,\Smc_1,\Smc_2,\dots$ und
+$\Smc'_0,\Smc'_1,\Smc'_2,\dots$ von Kripke-Strukturen, die wie folgt aufgebaut sind.
+Für $n \geq 0 $ ist
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=10mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={ellipse,draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state,initial]             (sn)                        {\rule{0pt}{7.5pt}$s_n$};
+    \node[state]                     (tn)   [right= 6mm of sn]   {\rule{0pt}{7.5pt}$t_n$};
+    \node[state]                     (sn-1) [right=12mm of tn]   {\rule{0pt}{7.5pt}$s_{n-1}$};
+    \node[state]                     (tn-1) [right= 6mm of sn-1] {\rule{0pt}{7.5pt}$t_{n-1}$};
+    \node[state,draw=none,fill=none] (dots) [right=12mm of tn-1] {$\cdots$};
+    \node[state]                     (s0)   [right=12mm of dots] {\rule{0pt}{7.5pt}$s_0$};
+    \node[state]                     (t0)   [right= 6mm of s0]   {\rule{0pt}{7.5pt}$t_0$};
+    
+    \node[state,initial]             (sn')   [below=15mm of sn]    {\rule{0pt}{7.5pt}$s_n$};
+    \node[state]                     (tn')   [right= 6mm of sn']   {\rule{0pt}{7.5pt}$t_n$};
+    \node[state]                     (sn-1') [right=12mm of tn']   {\rule{0pt}{7.5pt}$s_{n-1}$};
+    \node[state]                     (tn-1') [right= 6mm of sn-1'] {\rule{0pt}{7.5pt}$t_{n-1}$};
+    \node[state,draw=none,fill=none] (dots') [right=12mm of tn-1'] {$\cdots$};
+    \node[state]                     (s0')   [right=12mm of dots'] {\rule{0pt}{7.5pt}$s_0$};
+    \node[state]                     (t0')   [right= 6mm of s0']   {\rule{0pt}{7.5pt}$t_0$};
+    
+    \node [above=0mm of tn]   {$p$};
+    \node [above=0mm of tn-1] {$p$};
+    \node [above=0mm of t0]   {$p$};
+    
+    \node [above=0mm of tn']   {$p$};
+    \node [above=0mm of tn-1'] {$p$};
+    \node [above=0mm of t0']   {$p$};
+    
+    \node [above left=0mm and 5mm of sn]  {$\Smc_n$};
+    \node [above left=0mm and 5mm of sn'] {$\Smc'_n$};
+    
+    \path[->] (sn)   edge [bend left=15] (tn)
+              (tn)   edge [bend left=15] (sn)
+              (tn)   edge (sn-1)
+              (sn-1) edge (tn-1)
+              (tn-1) edge (dots)
+              (dots) edge (s0)
+              (s0)   edge (t0)
+              (tn)   edge [loop below] ()
+              (tn-1) edge [loop below] ()
+              (t0)   edge [loop below] ()
+              ;
+              
+    \path[->] (sn')   edge (tn')
+              (tn')   edge (sn-1')
+              (sn-1') edge (tn-1')
+              (tn-1') edge (dots')
+              (dots') edge (s0')
+              (s0')   edge (t0')
+              (tn')   edge [loop below] ()
+              (tn-1') edge [loop below] ()
+              (t0')   edge [loop below] ()
+              ;
+  \end{tikzpicture}
+\end{center}
+%
+Insbesondere unterscheidet sich $\Smc'_n$ von $\Smc_n$ nur durch die fehlende Kante von $t_n$ nach $s_n$.
+
+Nun gilt für alle $n \geq 0$:
+
+\par\medskip\noindent
+\begin{tabular}{@{\qquad}lll@{}}
+  (i)  & $\Smc_n  \not\models \F\G p$ & \text{(wegen Pfad $(s_nt_n)^\omega$ ab $s_n \in \S_0$)} \\
+  (ii) & $\Smc'_n \models \F\G p$     & \text{(weil jeder Pfad auf ein $(t_i)^\omega$ enden muss, für ein $i \leq n$)}
+\end{tabular}
+
+\par\medskip\noindent
+Außerdem zeigt man leicht per Induktion über $n$ die folgende Aussage:
+Für alle $n \geq 0$ und alle CTL-Zustandsformeln $\zeta$ der Länge $\leq n$ gilt:
+
+\par\medskip\noindent
+\begin{tabular}{@{\qquad}lll@{}}
+  (iii) & $\Smc_n \models \zeta$ ~gdw.~ $\Smc'_n \models \zeta$
+\end{tabular}
+
+\par\medskip\noindent
+Angenommen, es gebe eine CTL-Zustandsformel $\zeta$ mit $\zeta \equiv \F\G p$.
+Sei $n := |\zeta|$.
+Dann gilt wegen~(i) und~(ii): $\Smc_n \not\models \zeta$ und $\Smc'_n \models \zeta$.
+Das widerspricht aber~(iii).\qedhere
+
+\goodbreak
+% ===================================================================
+\section*{T4.4~ Beispiel für den Model-Checking-Algorithmus}
+
+\dots\ folgt \dots
 
 
 %% ===================================================================

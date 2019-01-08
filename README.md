@@ -7,6 +7,16 @@ Hier findet Ihr die Tafelanschriebe für die Vorlesung „Automatentheorie und i
 <code>make</code> oder
 <code>pdflatex automaten_tafelanschriebe</code>.
 
+## Aktueller Stand
+
+**Kapitel 1 und 2** TODO!
+
+**Kapitel 3** vollständig
+
+**Kapitel 4** T4.1--T4.3
+
 ## Versionsgeschichte
 
-3.&thinsp;1.&thinsp;2019:&nbsp;  alle Tafelanschriebe von Kapitel 3 (endliche Automaten auf unendlichen Wörtern)
+**8.&thinsp;1.&thinsp;2019**&nbsp; T4.1--T4.3
+
+**3.&thinsp;1.&thinsp;2019**&nbsp;  alle Tafelanschriebe von Kapitel 3 (endliche Automaten auf unendlichen Wörtern)
