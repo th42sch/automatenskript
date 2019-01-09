@@ -2747,11 +2747,14 @@ erhält man:
         child {
           node {5}
           child {
-            node (n1) {3}
+            node (n1) {2}
+          }
+          child {
+            node (n2) {3}
           }
         }
       }
-      child {node (n2) {3}}
+      child {node (n3) {3}}
     }
     child {
       node {6}
@@ -2760,24 +2763,22 @@ erhält man:
         child {
           node {4}
           child {
-            node (n3) {4}
+            node (n4) {4}
           }
           child {
-            node (n4) {3}
+            node (n5) {3}
           }
           child {
-            node (n5) {1}
+            node (n6) {1}
           }
         }
       }
     }
     ;
     
-    \node [draw=none,fill=none,below=-1mm of n1] {$\vdots$};
-    \node [draw=none,fill=none,below=-1mm of n2] {$\vdots$};
-    \node [draw=none,fill=none,below=-1mm of n3] {$\vdots$};
-    \node [draw=none,fill=none,below=-1mm of n4] {$\vdots$};
-    \node [draw=none,fill=none,below=-1mm of n5] {$\vdots$};
+    \foreach \x in {1,...,6}
+      \node [draw=none,fill=none,below=-1mm of n\x] {$\vdots$};
+    
   \end{tikzpicture}
 \end{center}
 %

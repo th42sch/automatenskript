@@ -9,7 +9,7 @@ Hier findet Ihr die Tafelanschriebe für die Vorlesung „Automatentheorie und i
 
 ## Aktueller Stand
 
-**Kapitel 1 und 2** TODO!
+**Kapitel 1 und 2** <font color="#ff0000">TODO!</font>
 
 **Kapitel 3** vollständig
 
@@ -17,6 +17,6 @@ Hier findet Ihr die Tafelanschriebe für die Vorlesung „Automatentheorie und i
 
 ## Versionsgeschichte
 
-**8.&thinsp;1.&thinsp;2019**&nbsp; T4.1--T4.3
+**9.&thinsp;1.&thinsp;2019**&nbsp; T4.1--T4.3
 
 **3.&thinsp;1.&thinsp;2019**&nbsp;  alle Tafelanschriebe von Kapitel 3 (endliche Automaten auf unendlichen Wörtern)
