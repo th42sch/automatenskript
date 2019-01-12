@@ -4,7 +4,7 @@ INFILES=automaten_tafelanschriebe.tex biblio.bib
 
 main.pdf: $(INFILES)
 	pdflatex $(FILENAME)
-	# bibtex $(FILENAME)
+	bibtex $(FILENAME)
 	pdflatex $(FILENAME)
 	pdflatex $(FILENAME)
 
