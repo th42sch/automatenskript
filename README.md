@@ -1,4 +1,4 @@
-# automatenskript
+# Automatenskript
 Hier findet Ihr die Tafelanschriebe für die Vorlesung „Automatentheorie und ihre Anwendungen“. Wer Fehler findet oder Verbesserungsvorschläge hat, legt bitte ein neues Issue an oder schreibt mir eine E-Mail.
 
 ## PDF-Datei
@@ -13,12 +13,14 @@ Hier findet Ihr die Tafelanschriebe für die Vorlesung „Automatentheorie und i
 
 **Kapitel 3** vollständig
 
-**Kapitel 4** T4.1--T4.4 (bis einschl. Sitzung vom 9.&thinsp;1.&thinsp;2019)
+**Kapitel 4** T4.1--T4.9 (bis einschl. Sitzung vom 15.&thinsp;1.&thinsp;2019; T4.9 ohne Bild)
 
 ## Versionsgeschichte
 
+**15.&thinsp;1.&thinsp;2019**&nbsp; T4.5–T4.9 (T4.9 ohne Bild)
+
 **12.&thinsp;1.&thinsp;2019**&nbsp; T4.4
 
-**9.&thinsp;1.&thinsp;2019**&nbsp; T4.1--T4.3
+**9.&thinsp;1.&thinsp;2019**&nbsp; T4.1–T4.3
 
 **3.&thinsp;1.&thinsp;2019**&nbsp;  alle Tafelanschriebe von Kapitel 3 (endliche Automaten auf unendlichen Wörtern)

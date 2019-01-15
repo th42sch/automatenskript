@@ -3076,6 +3076,335 @@ gilt $\Smc \models \zeta$.
 Der genaue Algorithmus kann z.\,B.\ in \cite[Abschnitt 6]{BK08}
 nachgelesen werden.
 
+\goodbreak
+% ===================================================================
+\section*{T4.5~ Veranschaulichung der Grundbegriffe}
+
+Die \textsfbf{Positionen} im unendlichen vollständigen Binärbaum sehen so aus:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=8mm},
+    level 1/.style = {sibling distance = 40mm, level distance =  6mm},
+    level 2/.style = {sibling distance = 22mm, level distance =  9mm},
+    level 3/.style = {sibling distance = 12mm, level distance = 11mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node {$\varepsilon$}
+    child {
+      node {0}
+      child {
+        node (00) {00}
+      }
+      child {
+        node (01) {01}
+      }
+    }
+    child {
+      node {1}
+      child {
+        node {10}
+        child {
+          node (100) {100}
+        }
+        child {
+          node (101) {101}
+        }
+      }
+      child {
+        node (11) {11}
+      }
+    }
+    ;
+    
+    \foreach \x in {00,01,100,101,11}
+      \node [draw=none,fill=none,below=-1mm of \x] {$\vdots$};
+    
+  \end{tikzpicture}
+\end{center}
+%
+\begin{itemize}
+  \item
+    Knoten 1 hat als \textsfbf{linkes Kind} 10 und als \textsfbf{rechtes Kind} 11.
+  \item
+    Knoten 1 hat \textsfbf{Nachfolger} $10,11,100,101,110,111,1000,\dots$.
+  \item
+    Knoten 11 hat \textsfbf{Tiefe} 2.
+  \item 
+    Auf \textsfbf{Ebene 2} sind Knoten $00,01,10,11$.
+  \item
+    Ein \textsfbf{Pfad} ist z.\,B.\ $\{\varepsilon,1,10,101,\dots\}$.
+\end{itemize}
+%
+Wenn $\Sigma = \{a,b\}$, dann ist ein \textsfbf{{\boldmath $\Sigma$-Baum}} z.\,B.\ folgender:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=8mm},
+    level 1/.style = {sibling distance = 40mm, level distance =  6mm},
+    level 2/.style = {sibling distance = 22mm, level distance =  9mm},
+    level 3/.style = {sibling distance = 12mm, level distance = 11mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node {$a$}
+    child {
+      node {$a$}
+      child {
+        node (00) {$a$}
+      }
+      child {
+        node (01) {$b$}
+      }
+    }
+    child {
+      node {$b$}
+      child {
+        node {$b$}
+        child {
+          node (100) {$a$}
+        }
+        child {
+          node (101) {$a$}
+        }
+      }
+      child {
+        node (11) {$a$}
+      }
+    }
+    ;
+    
+    \foreach \x in {00,01,100,101,11}
+      \node [draw=none,fill=none,below=-1mm of \x] {$\vdots$};
+    
+  \end{tikzpicture}
+\end{center}
+%
+Das heißt also $t(\varepsilon) = a$, $t(0) = a$, $t(1) = b$ usw.
+
+% ===================================================================
+\section*{\scalebox{.96}[1]{T4.6~ Details des "`Pumpens"' in "`Büchi- vs.\ Muller-Erkennbarkeit"'}}
+
+Wie betrachten einen erfolgreichen Run $r$ auf $t$ (Existenz dieses Runs: siehe Ende von Folie~38).
+Auf dem Pfad $1^\omega$ wird ein $f \in F$ unendlich oft besucht.
+Insbesondere gibt es also ein $m_0 > 0$ mit $r(1^{m_0}) \in F$.
+Auf dem Pfad $1^{m_0}01^\omega$ wird ebenfalls ein $f \in F$ unendlich oft besucht;
+also gibt es ein $m_1 > 0$ mit $r(1^{m_0}01^{m_1}) \in F$.
+Diese Argumentation kann man jetzt noch weitere $(n-1)$ Mal iterieren,
+und man erhält:
+%
+\begin{center}
+  \begin{tabular}{@{}l@{}}
+    Es gibt $m_0,m_1,\dots,m_n > 0$, so dass\\[2pt]
+    $r(1^{m_0}),\, r(1^{m_0}01^{m_1}),\, \dots,\, r(1^{m_0}01^{m_1}0\cdots01^{m_n}) \,\in\, F$.
+  \end{tabular}
+\end{center}
+%
+Da $|F|=n$, gibt es laut Schubfachprinzip Indizes $i,j$ mit $0 \leq i < j \leq n$
+und
+\[
+  r(1^{m_0}0\cdots01^{m_i}) = r(1^{m_0}0\cdots01^{m_i}0\cdots01^{m_j}) \in F.
+\]
+Wir nennen die beiden Positionen $p_i,p_j$, d.\,h.\ $r(p_i) = r(p_j) \in F$.
+
+\par\smallskip
+Skizze:
+%
+\begin{center}
+  *** folgt ***
+\end{center}
+%
+Nun gibt es in $t$ auf dem Pfad von der Wurzel zur Position $p_i$ genau $i < n$
+"`Linksschritte"', also nach Definition von $t$ genau $i$ Positionen $p$ mit $t(p) = a$.
+Da $i < j$, gibt es auf dem Pfad von $p_i$ zu $p_j$ mindestens einen weiteren
+"`Linksschritt"', also mindestens eine Position $p$ mit $t(p)=a$.
+Da $r(p_i)=r(p_j) \in F$,
+können wir in $t$ (und $r$) den Teilbaum $t_{p_j}$ ($r_{p_j}$)
+durch $t_{p_i}$ ($r_{p_i}$) ersetzen%
+\footnote{%
+  Wie in Kapitel 2 bezeichnet $t_p$ den Teilbaum des Baums $t$,
+  dessen Wurzel $p$ ist.
+}
+und erhalten wieder einen erfolgreichen Run:
+%
+\begin{center}
+  $r[p_j \to r_{p_i}]$ ist ein erfolgreicher Run auf $t[p_j \to t_{p_i}]$.\qquad $(*)$
+\end{center}
+%
+Aussage $(*)$ gilt, weil
+(a)~wegen $r(p_i)=r(p_j)$ weiterhin die Übergangsrelation $\Delta$ respektiert wird und
+(b)~weiterhin auf allen Pfaden ein akzepzierender Zustand unendlich oft besucht werden muss.
+
+Dieses Ersetzen kann nun unendlich oft iteriert werden.
+Der auf diese Weise aus $r$ resultierende Baum ist ein erfolgreicher Run von \Amc
+auf dem aus $t$ resultierenden Baum.
+Letzterer hat jedoch einen Pfad mit unendlich vielen $a$'s,
+ist also gar nicht in $L$ enthalten; ein Widerspruch.
+\qedhere
+
+% ===================================================================
+\section*{{\boldmath T4.7~ Beispiel für die Konstruktion "`NMBA $\Rightarrow$ NPBA"'}}
+
+Seien $Q=\{1,2,3\}$ und $F=\{1,2\}$.
+Wir betrachten den Run $r=12131211\dots$ von \Amc auf einem Pfad $\pi$,
+bei dem ab der 5.\ Position nur noch Zustände aus $F$ vorkommen.
+Ein zugehöriger Run $r'$ von $\Amc'$ auf demselben Pfad ist:
+%
+\begin{center}
+  $\auf 231,1\zu$\,
+  $\auf 312,1\zu$\,
+  $\auf 321,2\zu$\,
+  $\auf 213,1\zu$\,
+  $\auf 231,2\zu$\,
+  $\auf 312,1\zu$\,
+  $\auf 321,2\zu$\,
+  $\auf 312,3\zu$
+\end{center}
+An der ersten Position sind alle Paare $\auf q_1q_2q_3,\ell\zu$ möglich,
+in denen $q_3 = q_0$ ist, denn es gibt noch keine "`Vergangenheit"',
+in der Zustände aufgetreten sein können.
+Das Paar $\auf 312,1\zu$ an der zweiten Position gibt durch seine zweite
+Komponente $\ell=1$ an, dass Zustand 2 (Ende der ersten Komponente 312)
+in der vorangehenden Permutation (231) an 1.\ Stelle aufgetreten ist.
+Ab Position 6 haben die Paare $\auf q_1q_2q_3,\ell\zu$
+an den Positionen $q_2,q_3$ immer die akzeptierenden Zustände $1,2$,
+und ab Position 7 ist $\ell > |Q|-|F| = 1$.
+
+\goodbreak
+% ===================================================================
+\section*{{\boldmath T4.8~ Beweis der Hilfsaussage für "`NMBA $\Rightarrow$ NPBA"'}}
+
+\begin{description}
+  \item[{\boldmath"`$\Rightarrow$"'}]
+    Wegen $\textsf{Inf}(q_0q_1q_2\cdots)=S$ gibt es Zeitpunkte
+    %
+    \begin{enumerate}
+      \item[(i)]
+        $m_1$, ab dem nur noch Zustände aus $S$ vorkommen,
+        d.\,h.\ $q_i \in S$ für alle $i \geq m_1$;
+      \item[(ii)]
+        $m_2 > m_1$ so, dass während der Zeitpunkte $m_1,m_1+1,\dots,m_2$
+        \emph{jeder} Zustand aus $S$ mindestens einmal vorkommt.
+    \end{enumerate}
+    %
+    Daraus folgt
+    %
+    \begin{enumerate}
+      \item[(i$'$)]
+        Für alle $i \geq m_1$ werden nur noch Zustände aus $S$ in die Endposition von
+        $\textsf{perm}_i$ gerückt
+      \item[(ii$'$)]
+        Bis $m_2$ wurde \emph{jeder} Zustand aus $S$ mindestens einmal in die 
+        Endposition von
+        $\textsf{perm}_i$ gerückt.
+    \end{enumerate}
+    %
+    Wegen (ii$'$) müssen die letzten $k$ Positionen von $\textsf{perm}_{m_2}$
+    genau die $k$ Zustände aus $S$ enthalten
+    (und die ersten $n-k$ Positionen die Zustände aus $Q\setminus S$).
+    In zukünftigen Zuständen $s_i$ mit $i > m_2$ wird
+    nie ein Zustand aus $Q\setminus S$ in die Endposition von $\textsf{perm}_i$ gerückt;
+    also ist $\ell_i  > n-k$ (was Teil~\circled{1} der Hilfsaussage beweist),
+    und die letzten $k$ Positionen in $\textsf{perm}_i$ sind aus $S$
+    (was Teil~\circled{2}\,(b) beweist).
+    
+    Um Teil~\circled{2}\,(a) zu zeigen, nehmen wir an, es sei $\ell_i = n-k+1$
+    für nur endlich viele $i$.
+    Dann müsste es aber einen Zustand aus $S$ geben, der nur endlich oft besucht wird
+    und deshalb dauerhaft in Position $n-k+1$ von $\textsf{perm}_i$ landet.
+    Dies ist aber ein Widerspruch zu $\textsf{Inf}(q_0q_1q_2\cdots)=S$.
+  \item[{\boldmath"`$\Leftarrow$"'}]
+    Kann mit einer ähnlichen Argumentation,
+    die die Konstruktion analysiert,
+    bewiesen werden.
+\end{description}
+
+% ===================================================================
+\section*{{\boldmath T4.9~ Beweis der Korrektheit, "`NMBA $\Rightarrow$ NPBA"'}}
+
+Es bleibt zu zeigen: $L_\omega(\Amc) = L_\omega(\Amc')$.
+%
+\begin{description}
+  \item[{\boldmath"`$\subseteq$"'}]
+    Sei $t \in L_\omega(\Amc)$.
+    Dann gibt es einen erfolgreichen Run $r$ von $\Amc$ auf $t$,
+    d.\,h.\ $\textsf{Inf}(r,\pi) = F$ für alle Pfade $\pi$ von $t$.
+    
+    Sei $s_0 = \auf t_1\cdots t_{n-1}q_0,1\zu \in I'$,
+    und sei $s$ der gemäß $\Delta'$ eindeutig bestimmte Run von $\Amc'$ auf $t$,
+    der folgende Eigenschaften erfüllt.
+    %
+    \begin{enumerate}
+      \item[(i)]
+        $s(\varepsilon) = s_0$
+      \item[(ii)]
+        Für alle $p \in \{0,1\}^*$ hat $s(p)$ die Form $\auf \textsf{perm}_p,\ell_p\zu$,
+        wobei $\textsf{perm}_p$ auf $r(p)$ endet.
+    \end{enumerate}
+    %
+    Wir müssen noch zeigen, dass $s$ erfolgreich ist.
+    Dazu betrachten wir einen beliebigen Pfad $\pi$
+    und die zugehörige Zustandsfolge $s_0s_1s_2\cdots$ von $s$
+    mit $s_i = \auf \textsf{perm}_i,\ell_i\zu$.
+    Da $r$ erfolgreich ist, gilt $\textsf{Inf}(r,\pi) = F$.
+    Wegen der Hilfsaussage folgt daraus:
+    %
+    \begin{enumerate}
+      \item[\circled{1}]
+        Für endlich viele $i$ ist $\ell_i \leq n - |F|$.
+      \item[\circled{2}]
+        Für unendlich viele $i$ gilt:
+        %
+        \begin{enumerate}
+          \item[(a)]
+            $\ell_i = n - |F| + 1$
+          \item[(b)]
+            Die Menge der Zustände an den Positionen $n - |F| + 1,\dots,n$ in $\textsf{perm}_i$ ist $F$.
+        \end{enumerate}
+    \end{enumerate}
+    %
+    Wegen \circled{2} muss $\textsf{Inf}(s,\pi)$ einen Zustand der Form 
+    $\auf q_1\cdots q_n, n-|F|+1\zu$ mit $\{q_{n-|F|+1},\dots,q_n\} = F$ enthalten,
+    aber wegen \circled{1} \emph{keinen} Zustand der Form
+    $\auf q_1\cdots q_n,\ell\zu$ für $\ell \leq n-|F|$.
+    Damit erfüllt der Pfad $\pi$ in $s$ die Akzeptanzbedingung von $\Amc'$;
+    also ist $t \in L_\omega(\Amc')$.
+    \par\medskip
+  \item[{\boldmath"`$\supseteq$"'}]
+    Sei $t \in L_\omega(\Amc')$.
+    Dann gibt es einen erfolgreichen Run $s$ von $\Amc'$ auf $t$.
+    Sei $s(p) = \auf \textsf{perm}_p,\ell_p\zu$ 
+    und $r(p)$ das letzte Element von $\textsf{perm}_p$,
+    für alle $p \in \{0,1\}^*$.
+    Nach Definition von $I'$ und $\Delta'$ ist dann
+    %
+    \begin{itemize}
+      \item
+        $r(\varepsilon) \in I'$\quad und
+      \item
+        $\Big(r(p),t(p),r(p0),r(p1)\Big) \in \Delta$ für alle $p \in \{0,1\}^*$.
+    \end{itemize}
+    %
+    Folglich ist $r$ ein Run von $\Amc$ auf $t$, und es bleibt zu zeigen,
+    dass $r$ erfolgreich ist.
+    Dazu betrachten wir einen beliebigen Pfad $\pi$.
+    Da $s$ erfolgreich ist und wegen der Akzeptanzbedingung von $\Amc'$
+    gibt es einen Zustand $\auf q_1\cdots q_n,\ell\zu$ mit $\{q_\ell,\dots,q_n\} = F$,
+    so dass
+    %
+    \begin{enumerate}
+      \item[(i)]
+        $\auf q_1\cdots q_n,\ell\zu$ unendlich oft in $s$ auftritt,\quad aber
+      \item[(ii)]
+        \emph{kein} $\auf \cdot,\ell'\zu$ mit $\ell' < \ell$ unendlich oft auftritt.
+    \end{enumerate}
+    %
+    Nach Hilfsaussage ist nun $\textsf{Inf}(r,\pi) = \{q_\ell,\dots,q_n\}=F$.
+    Also ist $t \in L_\omega(\Amc)$.
+\end{description}
+
+
 
 %% ===================================================================
 %% ===================================================================
