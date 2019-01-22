@@ -3704,8 +3704,53 @@ $\Lst \cap L_\omega(\Amc') = \emptyset$
     wie $\Amc$).
     In diesem Spielverlauf verliert also \PF, obwohl sie nach Strategie $s$ gespielt hat.
     Folglich ist $s$ kein \PF-Gewinnbaum für $t$.
+    \par\medskip
   \item[{\boldmath"`$\Leftarrow$"'}]
-    *** folgt ***
+    Gelte $\Lst \cap L_\omega(\Amc') = \emptyset$.
+    Wir betrachten einen beliebigen Spielverlauf von $\Game{A}{t}$ ab
+    $(\varepsilon,q_I)$, bei dem
+    \PF nach Strategie $s$ spielt, d.\,h.\
+    für alle $j \geq 0$
+    %
+    \begin{itemize}
+      \item
+        wählt \AUT in Spielposition $(\pi_1\cdots\pi_j,\,q_j)$
+        eine beliebige Transition 
+        \[
+          \delta_j = \Big(q_j,~ t(\pi_1\cdots \pi_j),~ q_{j0}, q_{j1}\Big) ~\in~ \Delta
+          \qquad\text{und}
+        \]
+      \item
+        \PF antwortet mit $q_{j+1}$ gemäß $s$:
+        \[
+          q_{j+1} = 
+          \begin{cases}
+            q_{j0} & \text{falls~} s(\pi_1\cdots\pi_j)(\delta_j) = 0 \\
+            q_{j1} & \text{sonst}
+          \end{cases}
+        \]
+    \end{itemize}
+    %
+    Wir betrachten nun die Folge $r'=q_0q_1q_2\cdots$ der während des Spielverlaufs
+    besuchten Zustände.
+    Nach Konstruktion von $\Delta'$ ist $r'$ ein Run von $\Amc'$ auf dem
+    zugehörigen $\omega$-Wort
+    \[
+      \alpha = 
+      \big\auf s(\varepsilon),t(\varepsilon),\pi_1\big\zu~
+      \big\auf s(\pi_1),t(\pi_1),\pi_2\big\zu~
+      \big\auf s(\pi_1\pi_2),t(\pi_1\pi_2),\pi_3\big\zu~
+      \cdots
+      \in \Lst.
+    \]
+    Da $\Lst \cap L_\omega(\Amc') = \emptyset$, ist $r'$ nicht erfolgreich.
+    Der Run $r'$ entspricht außerdem einem Pfad eines Runs des ursprünglichen $\Amc$ auf $t$,
+    nämlich desjenigen Runs $r$, der durch die Entscheidungen von \AUT bestimmt wird.
+    Deshalb kann $r$ nicht erfolgreich sein.
+    Wir haben also für eine \emph{beliebige} Zugfolge von \AUT gezeigt, 
+    dass der zugehörige Run von \Amc auf $t$ nicht erfolgreich sein kann.
+    Somit muss $s$ eine Gewinnstrategie für \PF kodieren,
+    ist also ein \PF-Gewinnbaum.
     \qedhere
 \end{description}
 
