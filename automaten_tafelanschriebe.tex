@@ -3754,6 +3754,92 @@ $\Lst \cap L_\omega(\Amc') = \emptyset$
     \qedhere
 \end{description}
 
+\goodbreak
+% ===================================================================
+\section*{T4.15~ Beweis von Lemma~4.23}
+
+\textsfbf{Lemma~4.23.}~
+$t \in L_\omega(\Bmc)$
+~gdw.~
+es gibt $F$-Baum $s$ mit $\Lst \subseteq L_\omega(\Amc'')$
+
+\par\medskip
+\textsfbf{Beweis.}~
+\begin{description}
+  \item[{\boldmath"`$\Rightarrow$"'}]
+    Sei $t \in L_\omega(\Bmc)$ und $r$ ein erfolgreicher Run von \Bmc auf $t$,
+    d.\,h.
+    %
+    \begin{itemize}
+      \item[(i)] 
+        für jede Baumposition $p \in \{0,1\}^*$ gibt es in $\Delta_{\textsf{neu}}$
+        einen entsprechenden Übergang $\big(r(p),t(p),r(p0),r(p1)\big)$ \qquad und
+      \item[(ii)]
+        $r$ erfüllt auf jedem Pfad die Akzeptanzbedingung
+        $c''$ von $\Amc''$ (diese hat ja $\Bmc$ von $\Amc''$ übernommen).
+    \end{itemize}
+    %
+    Aus (i) und der Konstruktion von $\Delta_{\textsf{neu}}$ folgt,
+    dass es für jedes $p$ eine Funktion $f_p \in F$ gibt mit
+    %
+    \begin{align*}
+      \Big(r(p),~ \big\auf f_p,t(p),0\zu,~ r(p0)\Big) & \in \Delta''\qquad\text{und} \tag{iii}\\
+      \Big(r(p),~ \big\auf f_p,t(p),1\zu,~ r(p1)\Big) & \in \Delta'' \tag{iv}.
+    \end{align*}
+    %
+    Sei nun $s$ der durch diese $f_p$ bestimmte $F$-Baum,
+    d.\,h.\ $s(p) = f_p$.
+    
+    Wir betrachten einen beliebigen Pfad $\pi = \pi_1\pi_2\pi_3\cdots$
+    und das zugehörige $\omega$-Wort
+    \[
+      \alpha_\pi = 
+      \big\auf s(\varepsilon),t(\varepsilon),\pi_1\big\zu~
+      \big\auf s(\pi_1),t(\pi_1),\pi_2\big\zu~
+      \big\auf s(\pi_1\pi_2),t(\pi_1\pi_2),\pi_3\big\zu~
+      \cdots
+      \tag{$*$}
+    \]
+    aus \Lst.
+    Es bleibt zu zeigen, dass $\alpha_\pi \in L_\omega(\Amc'')$ ist.
+    Dies folgt, weil (i), (iii) und (iv) "`bezeugen"', dass $r$
+    ein erfolgreicher Run von $\Amc''$ auf $\alpha_\pi$ ist.
+    \par\medskip
+  \item[{\boldmath"`$\Leftarrow$"'}]
+    Seien $t,s$ so, dass $\Lst \subseteq L_\omega(\Amc'')$.
+    Um zu zeigen, dass $t \in L_\omega(\Bmc)$, konstruieren wir einen
+    erfolgreichen Run aus allen Pfaden, die $\Amc''$ akzeptiert.
+    Dabei benutzen wir, dass $\Amc''$ deterministisch ist.
+    
+    Wegen $\Lst \subseteq L_\omega(\Amc'')$ gibt es für jeden Pfad $\pi$
+    einen erfolgreichen Run von $\Amc''$ auf dem Wort $\alpha_\pi$,
+    das gemäß $(*)$ definiert ist.
+    Da $\Amc''$ deterministisch ist, sind seine Runs auf Wörten aus \Lst
+    eindeutig bestimmt.
+    Insbesondere gilt: wenn zwei Pfade $\pi,\pi'$ dasselbe Präfix
+    $\pi_1\cdots\pi_k=\pi_1'\cdots\pi_k'$ haben,
+    dann weisen die beiden eindeutig bestimmten Runs von $\Amc''$
+    den ersten $k$ Positionen der zugehörigen Wörter aus \Lst
+    dieselben Zustände zu.
+    Das heißt, dass es für jede Position $p$ einen \emph{eindeutig bestimmten}
+    Zustand $q$ gibt, so dass für alle Pfade $\pi$ mit $p=\pi_1\cdots\pi_k$
+    der Run von $\Amc''$ "`auf $\pi$"' der Position $k$ den Zustand $q$ zuweist.
+    Mit dieser Erkenntnis können wir einen Run $r$ von $\Bmc$ auf $t$ wie folgt definieren:
+    %
+    \begin{center}
+      \parbox{.8\linewidth}{%
+        Für jede Position $p$ setze $r(p) := \text{der beschriebene Zustand}~ q$.
+      }
+    \end{center}
+    %
+    Dadurch entspricht jeder Pfad $\pi$ in $r$ dem Run $r''$ von $\Amc''$
+    auf dem zugehörigen Wort $\alpha_\pi \in \Lst$.
+    Da $r''$ erfolgreich ist (siehe oben) und $\Bmc$ die Akzeptanzkomponente $c''$
+    von $\Amc''$ übernimmt, ist auch $r$ erfolgreich;
+    somit ist $t \in L_\omega(\Bmc)$.
+    \qedhere
+\end{description}
+
 %% ===================================================================
 %% ===================================================================
 %% ===================================================================
