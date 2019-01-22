@@ -3318,6 +3318,7 @@ und ab Position 7 ist $\ell > |Q|-|F| = 1$.
     Kann mit einer ähnlichen Argumentation,
     die die Konstruktion analysiert,
     bewiesen werden.
+    \qedhere
 \end{description}
 
 % ===================================================================
@@ -3404,9 +3405,309 @@ Es bleibt zu zeigen: $L_\omega(\Amc) = L_\omega(\Amc')$.
     \circled{2} bzw.\ \circled{1} aus der Hilfsaussage,
     also gilt $\textsf{Inf}(r,\pi) = \{q_\ell,\dots,q_n\}=F$.
     Damit ist $t \in L_\omega(\Amc)$.
+    \qedhere
 \end{description}
 
+% ===================================================================
+\section*{{\boldmath T4.10~ Beispiel eines Spielverlaufs für \Game{A}{t}}}
 
+Sei 
+%
+%\begin{align*}
+%  \Amc & = (\{q_1,q_2\},~\{a,b\},~\Delta,~\{q_1\},~c)
+%  \intertext{ein NPBA mit}
+%  \Delta & = \{(q_1,a,q_1,q_2),~(q_2,a,q_2,q_1),~(q_1,b,q_2,q_1),~(q_2,b,q_1,q_2)\} \quad\text{und} \\
+%  c      & ~:~~ q_1 \mapsto 0,~ q_2 \mapsto 1.
+%\end{align*}
+$\Amc = (\{q_1,q_2\},~\{a,b\},~\Delta,~\{q_1\},~c)$
+ein NPBA mit
+%
+\begin{align*}
+  \Delta & = \{(q_1,a,q_1,q_2),~(q_2,a,q_2,q_1),~(q_1,b,q_2,q_1),~(q_2,b,q_1,q_2)\} \quad\text{und} \\
+  c      & ~:~~ q_1 \mapsto 0,~ q_2 \mapsto 1.
+\end{align*}
+%
+Die Übergangsrelation von \Amc sorgt also dafür, dass beim Lesen eines $a$
+der aktuelle Zustand ans linke Kind und der andere ans rechte Kind weitergegeben wird
+und umgekehrt beim Lesen eines $b$. Die Akzeptanzbedingung fordert,
+dass $q_1$ unendlich oft vorkommen muss, und entspricht der
+Büchi-Akzeptanzkomponente $F = \{q_1\}$.
+
+Wir betrachten folgenden Eingabebaum $t$.
+%
+\newcommand{\Baum}{%
+  \node (eps) {$a$}
+  child {
+    node (0) {$a$}
+    child {
+      node (00) {$a$}
+    }
+    child {
+      node (01) {$b$}
+    }
+  }
+  child {
+    node (1) {$b$}
+    child {
+      node (10) {$b$}
+    }
+    child {
+      node (11) {$a$}
+    }
+  }
+  ;
+  
+  \foreach \x in {00,01,10,11}
+    \node [draw=none,fill=none,below=-1mm of \x] {$\vdots$};
+}
+\newcommand{\labeleps}{%
+  \node [draw=none,fill=none,above right=-4mm and 2mm of eps] {$(\varepsilon,q_1)$};
+}
+\newcommand{\labelone}{%
+  \node [draw=none,fill=none,above right=-6mm and 2.5mm of 1] {$(1,q_2)$};
+  \path[-] (eps) edge[draw=black,line width=2mm,draw opacity=.4] (1);
+}
+\newcommand{\labelonezero}{%
+  \node [draw=none,fill=none,left=-.4mm of 10] {$(10,q_1)$};
+  \path[-] (1) edge[draw=black,line width=2mm,draw opacity=.4] (10);
+}
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    level 1/.style = {sibling distance = 32mm, level distance =  6mm},
+    level 2/.style = {sibling distance = 8.5mm, level distance =  9mm},
+%    level 3/.style = {sibling distance = 12mm, level distance = 11mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \Baum
+  \end{tikzpicture}
+\end{center}
+%
+In der anfänglichen Spielposition ist nur die Wurzel mit $q_1$ markiert,
+also ist der bisherige Spielverlauf die Folge, die nur aus dem Paar
+$(\varepsilon,q_1)$ besteht. Zur Veranschaulichung wird der Spielverlauf
+im Folgenden an den von \PF gewählten Pfad im Baum geschrieben, also
+zu Beginn so:
+%
+\par\vspace*{-2\baselineskip}
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    level 1/.style = {sibling distance = 32mm, level distance =  6mm},
+    level 2/.style = {sibling distance = 8.5mm, level distance =  9mm},
+%    level 3/.style = {sibling distance = 12mm, level distance = 11mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \Baum    
+    \labeleps
+  \end{tikzpicture}
+\end{center}
+%
+In der ersten Runde wählt \AUT die zum Zustand $q_1$ und Zeichen $a$
+passende Transition $(q_1,a,q_1,q_2)$,
+und \PF antwortet darauf mit der Wahl des rechten Kindknotens.
+Dadurch ist nun das rechte Kind der Wurzel mit $q_2$ markiert:
+%
+\par\vspace*{-\baselineskip}
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    level 1/.style = {sibling distance = 32mm, level distance =  6mm},
+    level 2/.style = {sibling distance = 8.5mm, level distance =  9mm},
+%    level 3/.style = {sibling distance = 12mm, level distance = 11mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \Baum    
+    \labeleps
+    \labelone
+  \end{tikzpicture}
+\end{center}
+%
+In der zweiten Runde wählt \AUT die zum Zustand $q_2$ und Zeichen $b$
+passende Transition $(q_2,b,q_1,q_2)$,
+und \PF antwortet darauf mit der Wahl des linken Kindknotens.
+Dadurch ist nun das linke Kind der zuletzt betrachteten Position mit $q_1$ markiert:
+%
+\par\vspace*{-\baselineskip}
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    level 1/.style = {sibling distance = 32mm, level distance =  6mm},
+    level 2/.style = {sibling distance = 8.5mm, level distance =  9mm},
+%    level 3/.style = {sibling distance = 12mm, level distance = 11mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \Baum    
+    \labeleps
+    \labelone
+    \labelonezero
+  \end{tikzpicture}
+\end{center}
+%
+\par\vspace*{-\baselineskip}
+usw.
+
+\goodbreak
+% ===================================================================
+\section*{T4.11~ Beispiel für Gewinnstrategie}
+
+Wir betrachten den NPBA \Amc aus dem letzten Beispiel.
+Eine Gewinnstrategie für \PF ab Spielposition $v$ ist folgende:
+%
+\begin{center}
+  \parbox{.8\linewidth}{%
+    In Spielposition $v'$, die durch die Zugfolge $v\cdots v'$ bestimmt ist,
+    wobei $v'=\big(q_i,t(p),q_j,q_k\big)$ mit $(i,j,k \in \{1,2\})$,
+    \par\smallskip
+    wähle das linke Kind, wenn $j=2$ und das rechte Kind, wenn $k=2$\\
+    (wegen $\Delta$ muss immer einer dieser beiden Fälle eintreten).%
+  }
+\end{center}
+%
+Diese Strategie stellt eine Funktion $f$ dar, die jeder Zugfolge $v\cdots v'$
+einen eindeutig bestimmten Zug von \PF (linkes/rechtes Kind) zuweist.
+Sie ist eine Gewinnstrategie, denn sie stellt sicher, dass unabhängig davon, wie \AUT spielt,
+auf dem gesamten gespielten Pfad nur $q_2$ auftritt; also ist die Akzeptanzbedingung
+von \Amc verletzt.
+
+\goodbreak
+In dieser Gewinnstrategie für den sehr einfachen Automaten $\Amc$ hängt
+$f(v\cdots v')$ nur von $v'$ ab und nicht von den vorhergehenden Spielpositionen
+in $v\cdots v'$. Die Strategie ist also \emph{gedächtnislos},
+was intuitiv so viel bedeutet wie: "`der bisherige Spielverlauf kann
+ignoriert/vergessen werden"'.
+Satz 4.18 und Folgerung 4.19 zeigen, dass dies nicht an der
+Einfachheit von $\Amc$ liegt.
+
+\goodbreak
+% ===================================================================
+\section*{T4.12~ Beweis der Rückrichtung von Lemma~4.17}
+
+\textsfbf{Behauptung.}~
+\AUT hat Gewinnstrategie in $\Game{A}{t}$ ab Position $(\varepsilon,q_I)$ ~$\Rightarrow$~ $t \in L_\omega(\Amc)$
+
+\par\medskip
+\textsfbf{Beweis.}~
+Habe \AUT eine Gewinnstrategie in $\Game{A}{t}$ ab Position $(\varepsilon,q_I)$.
+Wir konstruieren einen erfolgreichen Run $r$ von \Amc auf $t$
+induktiv über die Ebenen von $t$:
+%
+\begin{itemize}
+  \item
+    $r(\varepsilon) = q_I$
+  \item
+    Wenn $r(p)$ definiert ist,
+    dann betrachte die Transition $\big(r(p),t(p),q_0,q_1\big)$,
+    die durch die Gewinnstrategie der Position $\big(p,r(p)\big)$
+    zugewiesen wird.
+    Setze $r(p0) = q_0$ und $r(p1) = q_1$.
+\end{itemize}
+%
+Nach Definition der Spielzüge von \AUT ist $r$ ein Run von $\Amc$ auf $t$.
+Außerdem ist $r$ erfolgreich,
+denn sonst gäbe es einen Pfad in $t$, auf dem die Akzeptanzbedingung von $\Amc$
+nicht erfüllt wäre. Dann könnte aber \AUT verlieren, indem \PF diesen Pfad wählt,
+was ein Widerspruch zur Annahme wäre, dass \AUT eine Gewinnstrategie hat.
+\qedhere
+
+% ===================================================================
+\section*{T4.13~ {\boldmath Beispiel für die Sprache \Lst}}
+
+Ab jetzt bezeichnen wir Pfade im Baum als Wörter $\pi \in \{0,1\}^*$;
+beispielsweise steht $\pi = 0110\cdots$
+für den Pfad $\{\varepsilon,0,01,011,\dots\}$.
+
+Sei $t$ ein beliebiger Baum, $s$ ein Strategiebaum (der nach Definition
+für jede Position $p \in \{0,1\}^*$ eine Funktion $f_p : \Delta \to \{0,1\}$ enthält)
+und $\pi = 0110\cdots$.
+Dann wird durch $\pi$ folgendes $\omega$-Wort $\alpha \in \Lst$ bestimmt:
+%
+\begin{center}
+  $\alpha ~=~ {}$
+  \newcommand{\Tripel}[3]{
+    ~\begin{tabular}{@{}c@{}}#1\\[3pt]#2\\[3pt]#3\end{tabular}\,%
+  }%
+  \begin{tikzpicture}[
+    baseline=-2pt,
+    every node/.style={rectangle,rounded corners,draw=black,thin,inner sep=1mm}
+  ]
+    \node                 (0) {\Tripel{$f_\varepsilon$}{$t(\varepsilon)$}{0}};
+    \node[right=3mm of 0] (1) {\Tripel{$f_0$}{$t(0)$}{1}};
+    \node[right=3mm of 1] (2) {\Tripel{$f_{01}$}{$t(01)$}{1}};
+    \node[right=3mm of 2] (3) {\Tripel{$f_{011}$}{$t(011)$}{0}};
+    \node[right=3mm of 3] (4) {\Tripel{$f_{0110}$}{$t(0110)$}{0}};
+    \node[right=3mm of 4,draw=none] (5) {$\cdots$};
+  \end{tikzpicture}
+\end{center}
+%
+Dabei bezeichnet jede Box ein Symbol von $\alpha$, also gemäß Folie~55 ein Tripel,
+und jede erste Komponente $f_p$ eines Tripels
+steht wiederum für dasjenige $|\Delta|$-Tupel von Nullen und Einsen,
+welches $f_p$ repräsentiert.
+Das erste Zeichen von $\alpha$ ist also $\big\auf f_\varepsilon,t(\varepsilon),0\big\zu$.
+
+Mit anderen Worten: die Folge $f_\varepsilon,f_0,f_{01},\dots$
+aller ersten Komponenten der Zeichen von $\alpha$ gibt den Inhalt von $s$
+auf dem Pfad $\pi$ wieder und die Folge aller zweiten Komponenten 
+den Inhalt von $t$ auf $\pi$. Die Folge der dritten Komponenten
+ist $\pi$ selbst.
+
+\goodbreak
+% ===================================================================
+\section*{T4.14~ Beweis von Lemma~4.22}
+
+\textsfbf{Lemma~4.22.}~
+$s$ ist ein \PF-Gewinnbaum für $t$
+~gdw.~
+$\Lst \cap L_\omega(\Amc') = \emptyset$
+
+\par\medskip
+\textsfbf{Beweis.}~
+\begin{description}
+  \item[{\boldmath"`$\Rightarrow$"'}]
+%    Sei $s$ ein \PF-Gewinnbaum für $t$.
+%    Wir nehmen an, $\Lst \cap L_\omega(\Amc') \neq \emptyset$.
+    Wir beweisen die Kontraposition.
+    Gelte $\Lst \cap L_\omega(\Amc') \neq \emptyset$.
+    Dann gibt es einen Pfad $\pi$,
+    so dass das $\Sigma'$-Wort
+    \[
+      \alpha = 
+      \big\auf s(\varepsilon),t(\varepsilon),\pi_1\big\zu~
+      \big\auf s(\pi_1),t(\pi_1),\pi_2\big\zu~
+      \big\auf s(\pi_1\pi_2),t(\pi_1\pi_2),\pi_3\big\zu~
+      \cdots
+    \]
+    von $\Amc'$ akzeptiert wird.
+    Sei $r=q_0q_1q_2\cdots$ ein erfolgreicher Run von $\Amc'$ auf $\alpha$.
+    Dann gibt es für jede Position $j \geq 0$ in $\alpha$ eine Transition
+    \[
+      \Big(q_j,~\big\auf s(\pi_1\cdots\pi_j),t(\pi_1\cdots\pi_j),\pi_{j+1}\big\zu,~q_{j+1}\Big) ~\in~ \Delta'.
+    \]
+    Nach Konstruktion von $\Delta'$ gibt es dann in $\Amc$ eine entsprechende Transition
+    \[
+      \delta_j = \Big(q_j,~t(\pi_1\cdots\pi_j),~q_0',~q_1'\Big) ~\in~ \Delta
+    \]
+    mit $s(\pi_1\cdots\pi_j)(\delta_j) = \pi_{i+1}$,
+    wobei $s(\pi_1\cdots\pi_j)$ die Funktion $f_{\pi_1\cdots\pi_j} \in F$ ist.
+    
+    Wir betrachten nun denjenigen Spielverlauf von $\Game{A}{t}$,
+    in dem \AUT in Spielposition $\pi_1\cdots\pi_j$ jeweils $\delta_j$ wählt
+    und daraufhin \PF mit $s(\pi_1\cdots\pi_j) = \pi_{j+1}$ antwortet.
+    Die während dieses Spiels erzeugte Zustandsfolge ist genau der Run $r$,
+    also gewinnt \AUT (denn $\Amc'$ hat nach Konstruktion dieselbe Akzeptanzkomponente $c$
+    wie $\Amc$).
+    In diesem Spielverlauf verliert also \PF, obwohl sie nach Strategie $s$ gespielt hat.
+    Folglich ist $s$ kein \PF-Gewinnbaum für $t$.
+  \item[{\boldmath"`$\Leftarrow$"'}]
+    *** folgt ***
+    \qedhere
+\end{description}
 
 %% ===================================================================
 %% ===================================================================
