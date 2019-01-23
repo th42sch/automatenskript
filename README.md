@@ -17,7 +17,7 @@ Hier findet Ihr die Tafelanschriebe für die Vorlesung „Automatentheorie und i
 
 ## Versionsgeschichte
 
-**22.&thinsp;1.&thinsp;2019**&nbsp; T4.10–T4.15
+**22./23.&thinsp;1.&thinsp;2019**&nbsp; T4.10–T4.15
 
 **15.&thinsp;1.&thinsp;2019**&nbsp; T4.5–T4.9 (T4.9 ohne Bild)
 
