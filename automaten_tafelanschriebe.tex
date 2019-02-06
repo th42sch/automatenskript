@@ -3840,6 +3840,253 @@ es gibt $F$-Baum $s$ mit $\Lst \subseteq L_\omega(\Amc'')$
     \qedhere
 \end{description}
 
+% ===================================================================
+% ===================================================================
+% ===================================================================
+\part{Alternierung}
+
+% ===================================================================
+\section*{T5.1~ Beispiel Semantik positiver Boolescher Formeln}
+
+Wir betrachten die PBF $\varphi = (p \land q) \lor (r \land s)$
+über der Variablenmenge $X = \{p,q,r,s\}$
+und die Belegungen $Y_1 = \{p,q,r\}$ und $Y_2 = \{p,r\}$.
+Dann gilt $Y_1 \models \varphi$, aber $Y_2 \not\models \varphi$.
+
+% ===================================================================
+\section*{T5.2~ Beispiel eines Run-Baums}
+
+Ein möglicher Baum mit Verzweigungsgrad $n=2$ sieht so aus:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=8mm},
+    level 1/.style = {sibling distance = 40mm, level distance =  6mm},
+    level 2/.style = {sibling distance = 22mm, level distance = 11mm},
+    level 3/.style = {sibling distance = 12mm, level distance = 11mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node {$\varepsilon$}
+    child {
+      node {0}
+      child {
+        node (00) {00}
+        child {
+          node (000) {000}
+        }
+      }
+      child {
+        node (01) {01}
+      }
+    }
+    child {
+      node {1}
+      child {
+        node {10}
+      }
+    }
+    ;
+    
+    \foreach \x in {000}
+      \node [draw=none,fill=none,below=-1mm of \x] {$\vdots$};
+    
+  \end{tikzpicture}
+\end{center}
+%
+Ein möglicher Pfad ist $\pi = \varepsilon \cdot 1 \cdot 10$; dieser Pfad ist endlich.
+%
+Wenn $\Sigma = \{p,q\}$, dann ist ein $\Sigma$-Baum z.\,B.\ folgender:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=8mm},
+    level 1/.style = {sibling distance = 40mm, level distance =  6mm},
+    level 2/.style = {sibling distance = 22mm, level distance = 11mm},
+    level 3/.style = {sibling distance = 12mm, level distance = 11mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node {$p$}
+    child {
+      node {$p$}
+      child {
+        node (00) {$p$}
+        child {
+          node (000) {$p$}
+        }
+      }
+      child {
+        node (01) {$q$}
+      }
+    }
+    child {
+      node {$q$}
+      child {
+        node {$q$}
+      }
+    }
+    ;
+    
+    \foreach \x in {000}
+      \node [draw=none,fill=none,below=-1mm of \x] {$\vdots$};
+    
+  \end{tikzpicture}
+\end{center}
+
+% ===================================================================
+\section*{T5.3~ Beispiel eines alternierenden Büchi-Automaten}
+
+Sei $\Amc = (Q,\Sigma,\delta,\{q_I\},F)$ der ABA mit
+%
+\begin{align}
+  Q & = \{p,q\},\quad \Sigma = \{a,b\},\quad F = \{p\},\quad q_I = p, \notag \\[4pt]
+  \delta(p,a) & = p \land q   \label{eq:ueb1}\\
+  \delta(p,b) & = p           \label{eq:ueb2}\\
+  \delta(q,a) & = q           \label{eq:ueb3}\\
+  \delta(q,b) & = \texttt{1}. \label{eq:ueb4}
+\end{align}
+%
+Dabei bedeutet Übergang~\eqref{eq:ueb1} von $\delta$ intuitiv:
+"`schicke zwei Kopien von $\Amc$ in Zustand $p$ bzw.\ $q$ zum nächsten Zeichen"'.
+Übergänge~\eqref{eq:ueb2} und~\eqref{eq:ueb3} entsprechen den Übergängen eines DBA.
+Übergang~\eqref{eq:ueb4} bedeutet: "`schneide den Pfad ab; hier ist die Berechnung erfolgreich"'.
+Man beachte auch, dass der Fall $\delta(\cdot,\cdot)=\texttt{0}$
+einem erfolg\emph{losen} Abbruch der Berechnung entspricht.
+
+Diesen ABA kann man graphisch wie folgt darstellen:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=15mm,>=Latex,baseline=-2pt,
+    initial text="", initial where=below left,
+    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=7mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state,initial,accepting]                          (p)    {$p$};
+    \node[rectangle,fill=black,minimum size=1.6mm,inner sep=0mm,right of=p] (rect) {};
+    \node[state,right of=rect]                              (q)    {$q$};
+    
+    \path[->]
+      (p)    edge             node[near start, above] {$b$} (q)
+      (rect) edge[out=300,in=320]                                (p)
+      (p)    edge[loop above] node[right=1mm]             {$a$} ()
+      (q)    edge[loop above] node[right=1mm]             {$a,b$} ();
+      
+    \node () [below right=-1.5mm and -.5mm of rect] {\footnotesize $\land$};
+  \end{tikzpicture}
+\end{center}
+%
+Wir betrachten außerdem das Eingabewort $\alpha = (aab)^\omega$.
+Ein möglicher Run von $\Amc$ auf $\alpha$ ist der Baum aus dem vorigen Beispiel,
+wenn man ihn ab Position 000 so fortsetzt, dass sich der
+dargestellte Teilbaum unendlich oft wiederholt. Dies ist im folgenden Bild
+durch die gestrichelte Linie dargestellt; die zu jeder Ebene gehörigen Buchstaben
+von $\alpha$ stehen rechts daneben.
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=7mm},
+    level 1/.style = {sibling distance = 40mm, level distance = 9mm},
+    level 2/.style = {sibling distance = 22mm, level distance = 9mm},
+    level 3/.style = {sibling distance = 12mm, level distance = 9mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node (eps) {$p$}
+    child {
+      node (0) {$p$}
+      child {
+        node (00) {$p$}
+        child {
+          node (000) {$p$}
+        }
+      }
+      child {
+        node (01) {$q$}
+      }
+    }
+    child {
+      node (1) {$q$}
+      child {
+        node (10) {$q$}
+      }
+    }
+    ;
+    
+    \path[-,dashed] (000) edge[out=150,in=170] (eps);
+    
+    \begin{scope}[
+      every node/.style={circle,draw=none,fill=none,inner sep=.4mm,minimum size=7mm},
+    ]
+      \node[at=(1 |- eps)] (anchor1) {};
+      \node[at=(1 |- 000)] (anchor4) {};
+    \end{scope}
+        
+    \begin{scope}[
+      every node/.style={circle,draw=none,fill=none,inner sep=.4mm,minimum size=0mm},
+    ]
+      \node[right=10mm of anchor1]         {$a$};
+      \node[right=10mm of 1]               {$a$};
+      \node[right=10mm of 10]              {$b$};
+      \node[right=10mm of anchor4] (lasta) {$a$};
+      \node[below= 2mm of lasta]           {$\vdots$};
+    \end{scope}
+  \end{tikzpicture}
+\end{center}
+%
+Dieser Run ist erfolgreich, denn der einzige unendliche Pfad
+ist $\pi = \varepsilon \cdot 0 \cdot 00 \cdot 000 \cdots$,
+welcher unendlich oft $p$ enthält und damit der Büchi-Akzeptanzbedingung
+$F=\{q\}$ entspricht.
+
+Die von $\Amc$ erkannte Sprache ist die Menge aller Wörter,
+die unendlich oft $b$ enthalten,
+also $L_\omega(\Amc) = L(((a+b)^*b)^\omega)$.
+Dies lässt sich präzise so zeigen:
+%
+\begin{description}
+  \item[{\boldmath"`$\supseteq$"'}]
+    Enthalte $\alpha \in \{a,b\}^\omega$ unendlich oft $b$.
+    Um zu zeigen, dass $\alpha$ von $\Amc$ akzeptiert wird,
+    betrachten wir den "`minimalen"' Run $(P,t)$ von $\Amc$ auf $\alpha$,
+    also denjenigen Run, der bei Übergängen~\eqref{eq:ueb2} und~\eqref{eq:ueb3}
+    nur ein Kind mit $p$ bzw.\ $q$ enthält
+    und bei Übergang~\eqref{eq:ueb4} keine Kinder.%
+    \footnote{Hier ist von einem "`minimalen Run"' die Rede,
+    weil prinzipiell immer auch mehr Kinder erlaubt sind,
+    denn wenn eine Belegung eine PBF erfüllt,
+    dann auch jede Erweiterung (d.\,h.\ Obermenge).
+    Deshalb nennt man PBFs auch manchmal \emph{monotone} Boolesche Formeln.}
+    Jeder Pfad $\pi$ dieses Runs kann
+    wegen $\delta(q,b) = \texttt{1}$ nicht in einer Folge $q^\omega$ enden.
+    Da außerdem $\delta$ keinen Übergang von $q$ nach $p$ erlaubt,
+    kann $\pi$ also nur entweder endlich sein oder aus nur $p$'s bestehen.
+    Im letzteren Fall ist die Akzeptanzbedingung erfüllt.
+    \par\smallskip
+  \item[{\boldmath"`$\subseteq$"'}]
+    Per Kontraposition:
+    enthalte $\alpha \in \{a,b\}^\omega$ endlich oft $b$.
+    Dann gibt es eine Position $m$,
+    ab der $\alpha$ nur noch aus $a$'s besteht.
+    Sei $(P,t)$ ein beliebiger Run von $\Amc$ auf $\alpha$.
+    Wir müssen zeigen, dass dieser einen unendlichen Pfad $\pi$
+    enthält, der nicht die Akzeptanzbedingung von \Amc erfüllt,
+    der also nur endlich oft $p$ enthält.
+    Da der Anfangszustand $p$ ist,
+    gibt es wegen Übergängen~\eqref{eq:ueb1} und~\eqref{eq:ueb2} einen
+    unendlichen Pfad in $(P,t)$, der nur aus $p$'s besteht.
+    Die Position in Tiefe $m$ auf diesem Pfad 
+    hat aber wegen Übergang~\eqref{eq:ueb1} ein mit $q$ markiertes Kind.
+    In diesem Kind entspringt nun wegen Übergang~\eqref{eq:ueb3}
+    ein unendlicher Pfad, der nur noch aus $q$'s besteht.
+    Damit ist der gewünschte Pfad $\pi$ gefunden.
+\end{description}
+
+
+
+
 %% ===================================================================
 %% ===================================================================
 %% ===================================================================
