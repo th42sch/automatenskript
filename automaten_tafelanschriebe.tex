@@ -4084,7 +4084,72 @@ Dies lässt sich präzise so zeigen:
     Damit ist der gewünschte Pfad $\pi$ gefunden.
 \end{description}
 
+% ===================================================================
+\section*{T5.4~ Beispiele für die Übersetzung {\boldmath LTL $\to$ ABA}}
 
+\paragraph*{Beispiel 1.}
+Sei $\varphi = a \U b$.
+
+Dann ist $\textsf{cl}(\varphi) = \{a,\,\lnot a,\,b,\,\lnot b,\,a \U b,\,\lnot(a \U b)\}$,
+und der ABA $\Amc_\varphi = (Q,\Sigma,\delta,\{q_I\},F)$ hat folgende Bestandteile.
+%
+\begin{align*}
+  Q      & = \{q_a,\,q_{\lnot a},\,q_b,\,q_{\lnot b},\,q_{a \U b},\,q_{\lnot(a \U b)}\} \\
+  \Sigma & = \{\emptyset,\,\{a\},\,\{b\},\,\{a,b\}\} \\
+  q_I    & = q_{a \U b} \\
+  F      & = \{q_{\lnot(a \U b)}\}
+\end{align*}
+%
+Die Übergangsfunktion $\delta$ ist durch die folgende Tabelle gegeben.
+%
+\begin{center}
+  \begin{tabular}{l|cccc}
+    ~~~~~~~~~~~~Zeichen & $\emptyset$ & $\{a\}$            & $\{b\}$    & $\{a,b\}$  \\
+    Zustand             &             &                    &            &            \\
+    \hline\rule{0pt}{11pt}%
+    $q_a$               & \texttt{0}  & \texttt{1}         & \texttt{0} & \texttt{1} \\[2pt]
+    $q_{\lnot a}$       & \texttt{1}  & \texttt{0}         & \texttt{1} & \texttt{0} \\[2pt]
+    $q_b$               & \texttt{0}  & \texttt{0}         & \texttt{1} & \texttt{1} \\[2pt]
+    $q_{\lnot b}$       & \texttt{1}  & \texttt{1}         & \texttt{0} & \texttt{0} \\[2pt]
+    $q_{a\U b}$         & \texttt{0}  & $q_{a\U b}$        & \texttt{1} & \texttt{1} \\[2pt]
+    $q_{\lnot(a\U b)}$  & \texttt{1}  & $q_{\lnot(a\U b)}$ & \texttt{0} & \texttt{0}
+  \end{tabular}
+\end{center}
+%
+Die erste Zeile $(q_a)$ ist durch die erste Gleichung für $\delta$ auf Folie~15 gegeben
+(Fall $q_x$),
+die zweite Zeile durch die folgende Gleichung (Fall $q_{\mathord{\sim}\psi}$).
+Die nächsten beiden Zeilen $(q_b,q_{\lnot b})$ sind analog.
+Für die fünfte Zeile $(q_{a\U b})$ betrachten wir die Spalte $\{a\}$.
+Die letzte Gleichung für $\delta$ auf Folie~15 lautet
+%
+\begin{align*}
+  \delta(q_{\psi\U\vartheta}, a) & = \delta(q_\vartheta, a) \lor \big(\delta(q_\psi, a) \land q_{\psi\U\vartheta}\big),
+  \intertext{also hier}
+  \delta(q_{a\U b}, \{a\}) & = \delta(q_b, \{a\}) \lor \big(\delta(q_a, \{a\}) \land q_{a\U b}\big).
+  \tag{$*$}
+  \intertext{%
+    Die Teile $\delta(q_b, \{a\})$ und $\big(\delta(q_a, \{a\})$ der Formel auf der rechten Seite von $(*)$
+    kann man aus der Tabelle ablesen: sie haben die Werte \texttt{0} bzw.\ \texttt{1}.
+    Man erhält also 
+  }
+  \delta(q_{a\U b}, \{a\}) & = \texttt{0} \lor \big(\texttt{1} \land q_{a\U b}\big)
+  \intertext{und mit den standardmäßigen Äquivalenzen der Aussagenlogik wird daraus}
+  \delta(q_{a\U b}, \{a\}) & = q_{a\U b}.
+\end{align*}
+%
+Für die anderen Spalten der 5.\ Zeile ergibt sich durch die geänderten Werte von
+$\delta(q_b, \{a\})$ und $\delta(q_a, \{a\})$ der Wert \texttt{0} bzw.\ \texttt{1}.
+Die letzte Zeile ist wieder durch die vorhergehende Zeile und den Fall $q_{\mathord{\sim}\psi}$ bestimmt.
+
+Wegen der Form von $\delta$ benutzt dieser Automat nicht die "`volle Mächtigkeit"' der Alternierung,
+sondern nur die Möglichkeit, Pfade erfolgreich oder erfolglos "`abzubrechen"' (Werte \texttt{1} bzw.\ \texttt{0}).
+
+\textsfbf{*** TODO: Weiter auf Seite 2 der Notizen ***}
+\paragraph*{Beispiel 2.}
+Sei $\varphi = \G\F a$.
+
+\dots
 
 
 %% ===================================================================
