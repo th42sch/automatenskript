@@ -4142,14 +4142,235 @@ Für die anderen Spalten der 5.\ Zeile ergibt sich durch die geänderten Werte v
 $\delta(q_b, \{a\})$ und $\delta(q_a, \{a\})$ der Wert \texttt{0} bzw.\ \texttt{1}.
 Die letzte Zeile ist wieder durch die vorhergehende Zeile und den Fall $q_{\mathord{\sim}\psi}$ bestimmt.
 
-Wegen der Form von $\delta$ benutzt dieser Automat nicht die "`volle Mächtigkeit"' der Alternierung,
+Wegen der Form von $\delta$ benutzt $\Amc_\varphi$ nicht die "`volle Mächtigkeit"' der Alternierung,
 sondern nur die Möglichkeit, Pfade erfolgreich oder erfolglos "`abzubrechen"' (Werte \texttt{1} bzw.\ \texttt{0}).
 
-\textsfbf{*** TODO: Weiter auf Seite 2 der Notizen ***}
+\par\medskip
+\textsfbf{Läufe des Automaten auf einigen Eingaben.}~
+Sei $\alpha=\{a\}\,\{a\}\,\{a\}\,\{b\}\,\emptyset^\omega$ das Wort, das dem LTL-Pfad entspricht,
+auf dem in den ersten 3~Zuständen die Aussagenvariablen $a$, im 4.~Zustand $b$ und
+in den übrigen Zuständen keine Aussagenvariable "`gesetzt"' ist.
+Dieser Pfad erfüllt im Anfangszustand die Formel $a \U b$, also muss $\Amc_\varphi$
+auch $\alpha$ akzeptieren. Letzteres ist tatsächlich der Fall, und zwar mittels des Runs, 
+der aus einem einzigen endlichen Pfad der Länge~4 besteht,
+wobei alle Positionen mit $q_{a\U b}$ markiert sind
+(überprüft es selbst mit der obigen Tabelle).
+Analog wird das Wort $\{b\}\,\emptyset^\omega$ von $\Amc_\varphi$ akzeptiert,
+und zwar auf einem einelementigen Run mit der Markierung $q_{a\U b}$.
+Im Gegensatz dazu wird $\{a\}^\omega$ nicht akzeptiert,
+denn hier besteht der einzig mögliche Run aus einem \emph{unendlichen}
+mit $q_{a\U b}$ markierten Pfad, welcher die Akzeptanzbedingung
+$F = \{q_{\lnot(a \U b)}\}$ verletzt
+und genau der zu vermeidenden Situation entspricht,
+dass $\lnot(a \U b)$ unendlich lange hinausgezögert wird.
+
 \paragraph*{Beispiel 2.}
 Sei $\varphi = \G\F a$.
+Die Standardvorgehensweise gemäß der Folien ist,
+die Formel so umzuformen, dass sie nur noch \U verwendet
+(siehe Folie~12 in Teil~5).
+Die resultierende Formel wäre jedoch deutlich größer,
+was wiederum zu einer unhandlich großen Zustandsmenge und Übergangsfunktion von $\Amc_\varphi$ führen würde.
+Es bietet sich deshalb hier an, die Konstruktion von $\Amc_\varphi$ von Folie~15
+um die offensichtlichen Fälle für die Operatoren \G und \F zu erweitern,
+und zwar in der Übergangsfunktion und der Akzeptanzbedingung
+%
+\begin{align*}
+  \delta(q_{\F\psi},a) & = \delta(q_\psi,a) \lor q_{\F\psi}  \\
+  \delta(q_{\G\psi},a) & = \delta(q_\psi,a) \land q_{\G\psi} \tag{$*$}\\[.4\baselineskip]
+  F & = \{q_{\lnot(\psi\U \vartheta)} \mid \lnot(\psi\U \vartheta) \in \textsf{cl}(\varphi) \}
+        ~\cup~ \{q_{\lnot\F\psi} \mid \lnot\F\psi \in \textsf{cl}(\varphi) \}
+        ~\cup~ \{q_{\G\psi} \mid \G\psi \in \textsf{cl}(\varphi) \}
+\end{align*}
+%
+Dann bleibt der ABA überschaubar: $\textsf{cl}(\varphi) = \{a,\,\lnot a,\,\F a,\,\lnot \F a,\,\G\F a,\,\lnot\G\F a\}$,
+und $\Amc_\varphi = (Q,\Sigma,\delta,\{q_I\},F)$ hat folgende Bestandteile.
+%
+\begin{align*}
+  Q      & = \{q_a,\,q_{\lnot a},\,q_{\F a},\,q_{\lnot\F a},\,q_{\G\F a},\,q_{\lnot\G\F a}\} \\
+  \Sigma & = \{\emptyset,\,\{a\}\} \\
+  q_I    & = q_{\G\F a} \\
+  F      & = \{q_{\lnot\F a},q_{\G\F a}\}
+\end{align*}
+%
+Die Übergangsfunktion $\delta$ ist durch die folgende Tabelle gegeben.
+%
+\begin{center}
+  \begin{tabular}{l|cc}
+    ~~~~~~~~~~~~Zeichen & $\emptyset$                             & $\{a\}$            \\
+    Zustand             &                                         &                    \\
+    \hline\rule{0pt}{11pt}%
+    $q_a$               & \texttt{0}                              & \texttt{1}         \\[2pt]
+    $q_{\lnot a}$       & \texttt{1}                              & \texttt{0}         \\[2pt]
+    $q_{\F a}$          & $q_{\F a}$                              & \texttt{1}         \\[2pt]
+    $q_{\lnot \F a}$    & $q_{\lnot\F a}$                         & \texttt{0}         \\[2pt]
+    $q_{\G\F a}$        & $q_{\F a} \land q_{\G\F a}$             & $q_{\G\F a}$       \\[2pt]
+    $q_{\lnot\G\F a}$   & $q_{\lnot \F a} \lor q_{\lnot \G\F a}$  & $q_{\lnot \G\F a}$
+  \end{tabular}
+\end{center}
+%
+Die ersten 2 Zeilen werden wieder wie im vorigen Beispiel erzeugt; die dritte und vierte Zeile
+sind analog zu den Fällen $q_{a\U b}$ bzw. $q_{\lnot(a\U b)}$.
+Die letzten beiden Zeilen bringen "`echte"' Alternierung;
+Zeile~5 sie kann man direkt aus Gleichung $(*)$ für $\delta$ und der 3.\ Tabellenzeile ablesen;
+Zeile~6 erhält man wieder durch "`Negation"' (Fall $q_{\mathord{\sim}\psi}$ auf Folie~15).
 
-\dots
+\par\medskip
+\parbox[t]{.6\linewidth}{%
+  \textsfbf{Läufe des Automaten auf einigen Eingaben.}~
+  Sei $\alpha=(\{a\}\,\emptyset)^\omega$ das Wort, das dem LTL-Pfad entspricht,
+  auf dem die Aussagenvariable $a$ abwechselnd "`gesetzt"' und "`nicht gesetzt"' ist.
+  Dieser LTL-Pfad erfüllt im Anfangszustand die Formel $\G\F a$, also muss $\Amc_\varphi$
+  auch $\alpha$ akzeptieren. Letzteres ist tatsächlich der Fall, und zwar mittels des nebenstehenden Runs,
+  dessen einziger unendlicher Pfad nur mit $q_{\G\F a}$ markiert ist,
+  also die Akzeptanzbedingung $F$ erfüllt.
+}%
+\hspace*{\fill}
+\parbox[t]{.36\linewidth}{%
+  \begin{tikzpicture}[%
+    baseline=0pt,node distance=20mm,>=Latex,
+    every node/.style={ellipse,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=8mm},
+    level 1/.style = {sibling distance = 40mm, level distance = 10mm},
+    level 2/.style = {sibling distance = 20mm, level distance =  9mm},
+    level 3/.style = {sibling distance = 20mm, level distance = 10mm},
+    level 4/.style = {sibling distance = 20mm, level distance =  9mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node (eps) {$q_{\G\F a}$}
+    child {
+      node (0) {$q_{\G\F a}$}
+      child {
+        node (00) {$q_{\F a}$}
+      }
+      child {
+        node (01) {$q_{\G\F a}$}
+        child {
+          node (010) {$q_{\G\F a}$}
+          child {
+            node (0100) {$q_{\F a}$}
+          }
+          child {
+            node (0101) {$q_{\G\F a}$}
+          }
+        }
+      }
+    }
+    ;
+    
+    \begin{scope}[
+      every node/.style={circle,draw=none,fill=none,inner sep=.4mm,minimum size=7mm},
+    ]
+      \node[at=(0101 |- eps)] (anchor1) {\phantom{$q_{\G\F a}$}};
+      \node[at=(0101 |- 0)]   (anchor2) {\phantom{$q_{\G\F a}$}};
+      \node[at=(0101 |- 01)]  (anchor3) {\phantom{$q_{\G\F a}$}};
+      \node[at=(0101 |- 010)] (anchor4) {\phantom{$q_{\G\F a}$}};
+    \end{scope}
+        
+    \begin{scope}[
+      every node/.style={circle,draw=none,fill=none,inner sep=.4mm,minimum size=0mm},
+    ]
+      \node[right=5mm of anchor1]         {~$\{a\}$};
+      \node[right=5mm of anchor2]         {~~\,$\emptyset$};
+      \node[right=5mm of anchor3]         {~$\{a\}$};
+      \node[right=5mm of anchor4]         {~~\,$\emptyset$};
+      \node[right=5mm of 0101]    (lasta) {$\{a\}$};
+      \node[below=0mm of lasta]           {$\vdots$};
+
+      \node[below=0mm of 0101]            {$\vdots$};
+    \end{scope}
+  \end{tikzpicture}
+}
+
+\par\smallskip
+\parbox[t]{.6\linewidth}{%
+  Im Gegensatz dazu wird $\{a\}\,\emptyset\,\{a\}\,\emptyset^\omega$ nicht akzeptiert,
+  denn der einzig mögliche Run hat einen unendlichen
+  Pfad, der auf $q_{\F a}^\omega$ endet und somit die Akzeptanz\-bedingung verletzt,
+  siehe nebenstehendes Bild (besagter Pfad ist markiert).
+  Dieser Pfad entspricht genau der zu vermeidenden Situation,
+  dass $\F a$ unendlich lange hinausgezögert wird.
+  
+  \par\smallskip
+  Es gibt hier nur diesen einzigen Run, weil die 6.~Zeile der Tabelle nie zum Einsatz kommt.
+}
+\hspace*{\fill}
+\parbox[t]{.36\linewidth}{%
+  \begin{tikzpicture}[%
+    baseline=0pt,node distance=20mm,>=Latex,
+    every node/.style={ellipse,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=8mm},
+    level 1/.style = {sibling distance = 40mm, level distance = 10mm},
+    level 2/.style = {sibling distance = 20mm, level distance =  9mm},
+    level 3/.style = {sibling distance = 20mm, level distance = 10mm},
+    level 4/.style = {sibling distance = 20mm, level distance =  9mm},
+    level 5/.style = {sibling distance = 20mm, level distance = 10mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node (eps) {$q_{\G\F a}$}
+    child {
+      node (0) {$q_{\G\F a}$}
+      child {
+        node (00) {$q_{\F a}$}
+      }
+      child {
+        node (01) {$q_{\G\F a}$}
+        child {
+          node (010) {$q_{\G\F a}$}
+          child {
+            node (0100) {$q_{\F a}$}
+            child {
+              node (01000) {$q_{\F a}$}
+            }
+          }
+          child {
+            node (0101) {$q_{\G\F a}$}
+          }
+        }
+      }
+    }
+    ;
+    
+    \begin{scope}[
+      every node/.style={circle,draw=none,fill=none,inner sep=.4mm,minimum size=7mm},
+    ]
+      \node[at=(0101 |- eps)]   (anchor1) {\phantom{$q_{\G\F a}$}};
+      \node[at=(0101 |- 0)]     (anchor2) {\phantom{$q_{\G\F a}$}};
+      \node[at=(0101 |- 01)]    (anchor3) {\phantom{$q_{\G\F a}$}};
+      \node[at=(0101 |- 010)]   (anchor4) {\phantom{$q_{\G\F a}$}};
+      \node[at=(0101 |- 01000)] (anchor6) {\phantom{$q_{\G\F a}$}};
+      
+      \node[below=10mm of 01000] (anchor99) {};
+    \end{scope}
+        
+    \begin{scope}[
+      every node/.style={circle,draw=none,fill=none,inner sep=.4mm,minimum size=0mm},
+    ]
+      \node[right=5mm of anchor1]         {~$\{a\}$};
+      \node[right=5mm of anchor2]         {~~\,$\emptyset$};
+      \node[right=5mm of anchor3]         {~$\{a\}$};
+      \node[right=5mm of anchor4]         {~~\,$\emptyset$};
+      \node[right=5mm of 0101]            {~\,$\emptyset$};
+      \node[right=5mm of anchor6] (last0) {~~\,$\emptyset$};
+      \node[below=0mm of last0]           {~~$\vdots$};
+
+      \node[below=0mm of 01000]           {{\boldmath $\vdots$}};
+      \node[below=0mm of 0101]            {$\vdots$};
+    \end{scope}
+
+    \begin{scope}[
+      every edge/.style={draw=black,line width=2mm,draw opacity=.4}
+    ]
+    \path[-]
+      (eps)   edge (0)
+      (0)     edge (01)
+      (01)    edge (010)
+      (010)   edge (0100)
+      (0100)  edge (01000)
+      (01000) edge (anchor99)
+      ;
+    \end{scope}
+  \end{tikzpicture}
+}
+
 
 
 %% ===================================================================
