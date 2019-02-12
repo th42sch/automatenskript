@@ -11,19 +11,15 @@ Hier findet Ihr die Tafelanschriebe für die Vorlesung „Automatentheorie und i
 
 **Kapitel 1 und 2**&nbsp; <font color="#aa0000">TODO!</font>
 
-**Kapitel 3**&nbsp; <font color="#005500">vollständig</font>
-
-**Kapitel 4**&nbsp; vollständig bis auf Bild in T4.9
-
-**Kapitel 5**&nbsp; <font color="#005500">vollständig</font>
+**Kapitel 3–5**&nbsp; <font color="#005500">vollständig</font>
 
 ## Versionsgeschichte
 
-**6.–12.&thinsp;2.&thinsp;2019**&nbsp; T5.1–T5.5
+**6.–12.&thinsp;2.&thinsp;2019**&nbsp; T5.1–T5.5, Bild T4.6
 
 **22./23.&thinsp;1.&thinsp;2019**&nbsp; T4.10–T4.15
 
-**15.&thinsp;1.&thinsp;2019**&nbsp; T4.5–T4.9 (T4.9 ohne Bild)
+**15.&thinsp;1.&thinsp;2019**&nbsp; T4.5–T4.9 (T4.6 ohne Bild)
 
 **12.&thinsp;1.&thinsp;2019**&nbsp; T4.4
 
