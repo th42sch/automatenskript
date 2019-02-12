@@ -4371,7 +4371,41 @@ Zeile~6 erhält man wieder durch "`Negation"' (Fall $q_{\mathord{\sim}\psi}$ auf
   \end{tikzpicture}
 }
 
+\goodbreak
+% ===================================================================
+\section*{T5.5~ Beispiel für die Komplementierung}
 
+Wir betrachten den Automaten aus T5.3, aber mit einer Müller-Akzeptanzbedingung,
+also den AMA $\Amc = (Q,\Sigma,\delta,\{q_I\},\Fmc)$ mit
+%
+\begin{align*}
+  Q & = \{p,q\},\quad \Sigma = \{a,b\},\quad \Fmc = \{\{p\},\,\{p,q\}\},\quad q_I = p,\\[4pt]
+  \delta(p,a) & = p \land q   \\
+  \delta(p,b) & = p           \\
+  \delta(q,a) & = q           \\
+  \delta(q,b) & = \texttt{1},
+\end{align*}
+%
+also $L_\omega(\Amc) = L(((a+b)^*b)^\omega)$.
+
+Die Regeln zur Komplementierung auf Folie~19 liefern den AMA
+$\Amc' = (Q,\Sigma,\delta',\{q_I\},\Fmc')$ mit
+%
+\begin{align*}
+  \Fmc & = \{\emptyset,\,\{q\}\}\\[4pt]
+  \delta(p,a) & = p \lor q   \\
+  \delta(p,b) & = p           \\
+  \delta(q,a) & = q           \\
+  \delta(q,b) & = \texttt{0}.
+\end{align*}
+%
+Da in keinem $\delta(\cdot,\cdot)$ mehr eine Konjunktion auftritt,
+verhält sich $\Amc'$ genauso wie ein NMA, der im Fall $(p,a)$ (1.~Zeile von $\delta$) zwei mögliche
+Entscheidungen treffen kann und im Fall $(q,b)$ "`blockiert"', also keinen Übergang hat.
+Das heißt, man überzeugt sich also leicht, dass $\Amc'$ äquivalent zum NMA
+$\Amc'' = (Q,\Sigma,\Delta,\{q_I\},\Fmc')$ mit
+$\Delta = \{(p,a,p),\,(p,a,q),\,(p,b,p),\,(q,a,q)\}$ ist
+und dass $L_\omega(\Amc'') = \overline{L_\omega(\Amc)}$ gilt.
 
 %% ===================================================================
 %% ===================================================================
