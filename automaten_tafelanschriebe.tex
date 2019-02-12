@@ -4409,6 +4409,94 @@ $\Amc'' = (Q,\Sigma,\Delta,\{q_I\},\Fmc')$ mit
 $\Delta = \{(p,a,p),\,(p,a,q),\,(p,b,p),\,(q,a,q)\}$ ist
 und dass $L_\omega(\Amc'') = \overline{L_\omega(\Amc)}$ gilt.
 
+% ===================================================================
+\section*{Beweisskizze für die Komplementierung (fakultativ)}
+
+Wir haben für die Komplementierung von AMAs (Satz~5.5 auf Folie~19)
+nicht die Korrektheit bewiesen. Falls es euch interessiert,
+wie man vorgehen muss,
+ist hier eine grobe Skizze --
+allerdings für den Fall von Paritätsautomaten
+(aber wir wissen ja bereits,
+wie man die Muller- und Paritätsbedingung ineinander übersetzt).
+
+\begin{enumerate}
+  \item
+    Wir betrachten eine "`vereinfachte"' Variante der Alternierung,
+    bei der die Zustandsmenge $Q$ eines APA partitioniert ist 
+    in die Menge $Q_\exists$ der \emph{existentiellen Zustände}
+    und die Menge $Q_\forall$ der \emph{universellen Zustände}.
+    Für Zustände $q \in Q_\exists$ ist 
+    $\delta(q,a)$ für jedes Zeichen $a$ eine Disjunktion von Zuständen;
+    für Zustände $q \in Q_\forall$ ist 
+    $\delta(q,a)$ eine Konjunktion.
+    Diese Variante entspricht der ursprünglichen Definition
+    von Alternierung.
+    Wir nennen solche Automaten hier \emph{A${}^-$PAs}.
+ \item
+    Offensichtlich ist jeder A${}^-$PA auch ein APA.
+    Die Umkehrung gilt nicht; dennoch sind A${}^-$PAs und APAs
+    gleichmächtig: zum einen kann man jeden APA in einen äquivalenten NPA
+    umwandeln  (dieses nichttriviale Resultat basiert auf Spielen
+    und hat dieses Jahr nicht mehr in die Vorlesung gepasst);
+    zum anderen ist natürlich jeder NPA ein A${}^-$PA.
+ \item
+    Wenn man die "`Konstruktion"' zur Komplementierung auf Folie~19
+    auf einen A${}^-$PA anwendet, dann werden dadurch lediglich die Mengen
+    $Q_\exists$ und $Q_\forall$ miteinander vertauscht
+    (und die Akzeptanzkomponente komplementiert).
+    Sei $\Amc'$ der resultierende A${}^-$PA.
+  \item
+    Nun können wir wieder Spiele ähnlich zu denen aus Teil~4 betrachten:
+    für jeden A${}^-$PA $\Amc$ und jedes Eingabewort $\alpha$
+    ist das Spiel $G_{\Amc,\alpha}$ wie folgt definiert:
+    %
+    \begin{itemize}
+      \item
+        Die Spielpositionen sind Paare $(q_i,\alpha_i)$ mit $q_i \in Q$
+        und $\alpha_i$ der $i$-te Buchstabe von $\alpha$.
+      \item
+        Die Startposition ist $(q_0,\alpha_0)$ mit $q_0 = q_I$ (Startzustand von \Amc).
+      \item 
+        Wenn $q_i \in Q_\exists$, dann wählt \AUT einen Nachfolgerzustand $q_{i+1}$;
+        wenn $q_i \in Q_\forall$, dann wählt \PF ihn.
+      \item
+        \AUT gewinnt, wenn (a) das Spiel unendlich lange läuft
+        und die Akzeptanzbedingung von $\Amc$ erfüllt
+        oder (b) das Spiel endet, weil \PF keinen Zug machen kann
+        (d.\,h.\ in Position $(q_i,\alpha_i)$ ist $q_i \in Q_\forall$
+        und $\delta(q_i,\alpha_i)$ ist die leere Konjunktion).
+    \end{itemize}
+    %
+    Ähnlich wie in Teil~4 ist nun wieder einfach zu sehen,
+    dass $\alpha \in L_\omega(\Amc)$ genau dann, wenn \AUT eine
+    Gewinnstrategie in $G_{\Amc,\alpha}$ hat.
+    
+    Da es kein Unentschieden gibt, gilt auch:
+    \[
+      \alpha \notin L_\omega(\Amc)
+      \quad\text{gdw.}\quad
+      \PF \text{~hat Gewinnstrategie in~} G_{\Amc,\alpha}
+      \tag{$*$}
+    \]
+    Gedächntislose Gewinnstrategien werden hier allerdings nicht benötigt.
+  \item
+    Da sich durch die Konstruktion in Punkt 3 die Rollen von \AUT
+    und \PF genau vertauschen, erhält man mit $(*)$:
+    %
+    \begin{align*}
+      \alpha \notin L_\omega(\Amc)
+      & \quad\text{gdw.}\quad
+        \PF \text{~hat Gewinnstrategie in~} G_{\Amc,\alpha} \\
+      & \quad\text{gdw.}\quad
+        \AUT \text{~hat Gewinnstrategie in~} G_{\Amc',\alpha} \\
+      & \quad\text{gdw.}\quad
+        \alpha \in L_\omega(\Amc')
+    \end{align*}
+    
+\end{enumerate}
+
+
 %% ===================================================================
 %% ===================================================================
 %% ===================================================================
