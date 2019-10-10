@@ -4,8 +4,8 @@ Hier findet Ihr die Tafelanschriebe für die Vorlesung „Automatentheorie und i
 ## PDF-Datei
 
 … findet Ihr im Ordner PDF. Wenn Ihr die Quellen selbst kompilieren möchtet, dann benutzt
-<code>make</code> oder
-<code>pdflatex automaten_tafelanschriebe</code>.
+<code>make</code> (oder
+<code>pdflatex</code> und <code>bibtex</code>).
 
 ## Aktueller Stand
 
@@ -13,16 +13,6 @@ Hier findet Ihr die Tafelanschriebe für die Vorlesung „Automatentheorie und i
 
 **Kapitel 3–5**&nbsp; <font color="#005500">vollständig</font>
 
-## Versionsgeschichte
+## Versionsgeschichte (WiSe 2019/20)
 
-**6.–12.&thinsp;2.&thinsp;2019**&nbsp; T5.1–T5.5, Bild T4.6
-
-**22./23.&thinsp;1.&thinsp;2019**&nbsp; T4.10–T4.15
-
-**15.&thinsp;1.&thinsp;2019**&nbsp; T4.5–T4.9 (T4.6 ohne Bild)
-
-**12.&thinsp;1.&thinsp;2019**&nbsp; T4.4
-
-**9.&thinsp;1.&thinsp;2019**&nbsp; T4.1–T4.3
-
-**3.&thinsp;1.&thinsp;2019**&nbsp;  alle Tafelanschriebe von Kapitel 3 (endliche Automaten auf unendlichen Wörtern)
+**10.10.2019** Aktualisierung auf WiSe 2019/20.
