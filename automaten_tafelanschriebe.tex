@@ -31,7 +31,269 @@
 % ===================================================================
 \part[Endliche Automaten auf endlichen Wörtern]{Endliche Automaten \\ auf endlichen Wörtern}
 
-%\dots\ folgt \dots
+% ===================================================================
+\section*{T1.1~ Beispiel für Papierkorbzustand}
+
+Der NEA $\Amc_1$ von Folie 1.10
+%
+\vspace*{-.7\baselineskip}
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state,initial]                          (q0) {$q_0$};
+    \node[state,accepting]                        (q1) [right of=q0] {$q_1$};
+    \node[state,draw=white,fill=white,text=white] (m)  [right of=q1] {$m$};
+    \node[above left=-2mm and 6mm of q0] {$\Amc_1$};
+    
+    \path[->]
+      (q0) edge                    node [above]                {$b$} (q1)
+      (q0) edge [loop above]       node [right=1mm]            {$a$} ()
+      (q1) edge [loop above]       node [right=1mm]            {$b$} ()
+      (m)  edge [white,loop above] node [right=1mm,text=white] {$a,b$} ()
+      ;
+  \end{tikzpicture}
+\end{center}
+%
+ist nur deshalb kein DEA, weil Zustand $q_1$ keine ausgehende $b$-Kante besitzt.
+Durch Hinzufügen eines neuen Zustands $m$ (für "`Mülleimer"' oder "`Papierkorb"')
+wird $\Amc_1$ zu einem DEA $\Amc_1'$, ohne dass das Akzeptanzverhalten sich ändert:
+%
+\vspace*{-.2\baselineskip}
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state,initial]   (q0) {$q_0$};
+    \node[state,accepting] (q1) [right of=q0] {$q_1$};
+    \node[state]           (m)  [right of=q1] {$m$};
+    \node[above left=-2mm and 6mm of q0] {$\Amc_1'$};
+    
+    \path[->]
+      (q0) edge              node [above] {$b$} (q1)
+      (q1) edge              node [above] {$a$} (m)
+      (q0) edge [loop above] node [right=1mm] {$a$} ()
+      (q1) edge [loop above] node [right=1mm] {$b$} ()
+      (m)  edge [loop above] node [right=1mm] {$a,b$} ()
+      ;
+  \end{tikzpicture}
+\end{center}
+%
+Diese Konstruktion macht aber beispielsweise aus dem NEA $\Amc_3$ von Folie 1.10
+\emph{keinen} DEA, denn dabei behält $q_0$ seine \emph{zwei} $a$-Nachfolger.
+
+% ===================================================================
+\section*{T1.2~ Beispiel für die Potenzmengenkonstruktion}
+
+Wir betrachten den NEA $\Amc_3$ von Folie 1.10:
+%
+\vspace*{-.2\baselineskip}
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state,initial]   (q0) {$q_0$};
+    \node[state]           (q1) [right of=q0] {$q_1$};
+    \node[state,accepting] (q2) [right of=q1] {$q_2$};
+    \node[above left=-2mm and 6mm of q0] {$\Amc_3$};
+    
+    \path[->]
+      (q0) edge              node [above] {$a$} (q1)
+      (q1) edge              node [above] {$b$} (q2)
+      (q0) edge [loop above] node [right=1mm] {$a,b$} ()
+      ;
+  \end{tikzpicture}
+\end{center}
+%
+Wenn man die Potenzmengenkonstruktion (Folie 1.13) ausführt,
+und dabei die unerreichbaren Zustände ignoriert,
+dann erhält man folgenden DEA $\Amc_3^d$.
+%
+\vspace*{-.2\baselineskip}
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={ellipse,draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state,initial]   (q0)                                     {$\{q_0\}$};
+    \node[state]           (q0q1) [right=30mm of q0]                {$\{q_0,q_1\}$};
+    \node[state,accepting] (q0q2) [below right=5mm and 10mm of q0] {$\{q_0,q_2\}$};
+    \node[above left=-2mm and 6mm of q0] {$\Amc_3^d$};
+    
+    \path[->]
+      (q0)   edge [loop above]    node [right=1mm]        {$b$} ()
+      (q0)   edge                 node [above]            {$a$} (q0q1)
+      (q0q1) edge [loop above]    node [right=1mm]        {$a$} ()
+      (q0q1) edge [bend right=10] node [pos=.3,left=2mm]  {$b$} (q0q2)
+      (q0q2) edge [bend right=10] node [pos=.3,right=2mm] {$a$} (q0q1)
+      (q0q2) edge                 node [pos=.7,right=2mm] {$b$} (q0)
+      ;
+  \end{tikzpicture}
+\end{center}
+
+\enlargethispage*{20mm}
+\vspace*{-\baselineskip}
+% ===================================================================
+\section*{T1.3~ Beispiel-NEA für Stichwortsuche}
+
+Seien $w_1 = \texttt{web}$ und $w_2 = \texttt{ebay}$,
+und sei $\Sigma$ die Menge aller ASCII-Zeichen.
+Folgender NEA $\Amc$ akzeptiert genau die Dokumente (Zeichenketten),
+die $w_1$ oder $w_2$ als Teilwort enthalten.
+Dies gilt aber nur, wenn die leicht geänderte Akzeptanzbedingung von Folie~1.17
+zugrunde gelegt wird:
+$\Amc$ akzeptiert, sobald ein akzeptierender Zustand erreicht wird,
+auch wenn das Eingabewort zu diesem Zeitpunkt noch nicht zu Ende gelesen wurde.
+%
+\vspace*{-.2\baselineskip}
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state,initial]                       (0) {0};
+    \node[state,above right=1mm and 10mm of 0] (1) {1};
+    \node[state,right of=1]                    (2) {2};
+    \node[state,accepting,right of=2]          (3) {3};
+    \node[state,below right=1mm and 10mm of 0] (4) {4};
+    \node[state,right of=4]                    (5) {5};
+    \node[state,right of=5]                    (6) {6};
+    \node[state,accepting,right of=6]          (7) {7};
+    \node[above left=-2mm and 6mm of 0] {$\Amc$};
+    
+    \path[->]
+      (0) edge [loop below] node [below]            {$\Sigma$} ()
+      (0) edge              node [pos=.9,left=2mm]  {\texttt{w}} (1)
+      (1) edge              node [above]            {\texttt{e}} (2)
+      (2) edge              node [above]            {\texttt{b}} (3)
+      (0) edge              node [pos=.1,right=2mm] {\texttt{e}} (4)
+      (4) edge              node [above]            {\texttt{b}} (5)
+      (5) edge              node [above]            {\texttt{a}} (6)
+      (6) edge              node [above]            {\texttt{y}} (7)
+      ;
+  \end{tikzpicture}
+\end{center}
+%
+Die Beschriftung $\Sigma$ der Schleife am Zustand 0
+steht für die Folge aller Symbole aus $\Sigma$.
+
+\pagebreak
+% ===================================================================
+\section*{T1.4~ Beispiel-DEA für Stichwortsuche}
+
+Um die Determinisierung in diesem speziellen Fall zu demonstrieren,
+wählen wir ein einfacheres Beispiel der Stichwortsuche:
+wir beschränken uns auf das Alphabet $\Sigma=a,b,c$
+und die Stichwörter $w_1=ab$, $w_2=bc$ und $w_3=ca$.
+Analog zu T1.3 erhält man folgenden NEA \Amc.
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=30mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state,initial]              (0) {0};
+    \node[state,right of=0]           (3) {3};
+    \node[state,accepting,right of=3] (4) {4};
+    \node[state,above=4mm of 3]       (1) {1};
+    \node[state,accepting,right of=1] (2) {2};
+    \node[state,below=4mm of 3]       (5) {5};
+    \node[state,accepting,right of=5] (6) {6};
+    \node[above left=-2mm and 6mm of 0] {$\Amc$};
+    
+    \path[->]
+      (0) edge [loop below] node [below]            {$a,b,c$} ()
+      (0) edge              node [pos=.75,left=2mm]  {$a$}     (1)
+      (0) edge              node [pos=.6,above]     {$b$}     (3)
+      (0) edge              node [pos=.45,right=2mm] {$c$}     (5)
+      (1) edge              node [above]            {$b$}     (2)
+      (3) edge              node [above]            {$c$}     (4)
+      (5) edge              node [above]            {$a$}     (6)
+      ;
+  \end{tikzpicture}
+\end{center}
+%
+Wendet man die Potenzmengenkonstruktion an
+und beschränkt sich dabei wieder auf die erreichbaren Zustände,
+dann erhält man folgenden DEA $\Amc^d$.
+%
+\vspace*{-2\baselineskip}
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=30mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={draw=black,thin,fill=black!5,inner sep=.5mm,minimum size=8mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state,initial]               (0)   {0};
+    \node[state,right of=0]            (03)  {03};
+    \node[state,accepting,right of=03] (045) {045};
+    \node[state,above=9mm of 3]        (01)  {01};
+    \node[state,accepting,right of=01] (023) {023};
+    \node[state,below=9mm of 3]        (05)  {05};
+    \node[state,accepting,right of=05] (016) {016};
+    \node[above left=-2mm and 6mm of 0] {$\Amc^d$};
+    
+    \path[->]
+      (0)   edge                 node [pos=.7,left=2mm]  {$a$} (01)
+      (0)   edge                 node [above]            {$b$} (03)
+      (0)   edge                 node [pos=.3,right=2mm] {$c$} (05)
+      (01)  edge [loop above]    node [above]            {$a$} ()
+%      (03)  edge [loop above]    node [above]            {$b$} ()
+      (03) edge [out=75,in=45,loop] node [right=0mm]     {$b$} ()
+      (05)  edge [loop below]    node [below]            {$c$} ()
+      (01)  edge [bend right=45] node [pos=.3,left]      {$c$} (05)
+      (03)  edge                 node [left]             {$a$} (01)
+      (05)  edge                 node [left]             {$b$} (03)
+      (01)  edge [bend left=10]  node [above]            {$b$} (023)
+      (03)  edge [bend left=10]  node [above]            {$c$} (045)
+      (05)  edge [bend left=10]  node [above]            {$a$} (016)
+      (023) edge [bend left=10]  node [below]            {$a$} (01)
+      (045) edge [bend left=10]  node [below]            {$b$} (03)
+      (016) edge [bend left=10]  node [below]            {$c$} (05)
+      (023) edge                 node [right]            {$c$} (045)
+      (045) edge                 node [right]            {$a$} (016)
+      (016) edge [bend right=45] node [pos=.3,right]     {$b$} (023)
+      (023) edge                 node [pos=.4,right=3mm] {$b$} (03)
+      (045) edge                 node [pos=.4,right=3mm] {$c$} (05)
+      (016) edge [out=10,in=40,looseness=2]  node [pos=.2,right]     {$a$} (01)
+      ;
+  \end{tikzpicture}
+\end{center}
+%
+Dabei sind die Zustandsnamen wie 01, 023 usw.\
+Kurzschreibweisen für die Mengen $\{0,1\}$, $\{0,2,3\}$ usw.
+
+Die Anzahl der Zustände von $\Amc^d$ ist genauso groß wie die von $\Amc$,
+und man kann zeigen, dass dies für jeden NEA $\Amc$ der Fall ist,
+den man für die Stichwortsuche gemäß der Beispiele in T1.3 und T1.4 konstruiert.
+Der DEA hat also immer nur $|w_1| + \dots + |w_n|$ Zustände,
+wenn $w_1,\dots,w_n$ die Stichwörter sind.
+
+\parIII
+\section*{\dots\ wird fortgesetzt \dots}
 
 % ===================================================================
 % ===================================================================
