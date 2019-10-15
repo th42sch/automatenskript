@@ -292,13 +292,120 @@ den man für die Stichwortsuche gemäß der Beispiele in T1.3 und T1.4 konstruie
 Der DEA hat also immer nur $|w_1| + \dots + |w_n|$ Zustände,
 wenn $w_1,\dots,w_n$ die Stichwörter sind.
 
-\parIII
-\section*{\dots\ wird fortgesetzt \dots}
+%\goodbreak
+\pagebreak
+% ===================================================================
+\section*{T1.5~ Beispiel für die Anwendung des Pumping-Lemmas}
+
+Wir betrachten die Sprache $L = \{a^nb^n \mid n \geq 0\}$.
+
+\textsf{\textbf{Vorbetrachtung für Lesende, die mehr Hintergrundinfo benötigen.}}~
+Intuitiv kann diese Sprache nicht NEA-erkennbar sein,
+weil NEAs nicht unbeschränkt zählen können --
+insbesondere kann ein NEA nicht die Anzahl der gelesenen $a$'s
+speichern, um diese mit der Anzahl der $b$'s zu vergleichen.
+Dies bleibt aber ein intuitives Argument, denn es basiert auf der
+(schwer zu beweisenden) Annahme, dass die skizzierte Vorgehensweise
+die einzig mögliche ist.
+
+Um unanfechtbar zu beweisen, dass $L$ nicht NEA-erkennbar ist, verwenden wir
+die Kontraposition des Pumping-Lemmas. Wir müssen also zeigen:
+%
+\begin{enumerate}
+  \item
+    Für alle $p \geq 0$
+  \item
+    gibt es ein Wort $w \in L$ mit $|w| \geq p$, so dass gilt:
+  \item
+    für alle Zerlegungen $w=xyz$ mit $y \neq \varepsilon$ und $|xy| \leq p$
+  \item
+    gibt es ein $i \geq 0$ mit $xy^iz \notin L$.
+\end{enumerate}
+%
+In den Schritten 1 und 3 ("`für alle"') müssen wir
+für eine \emph{beliebige} Zahl $p$ bzw.\ Zerlegung $xyz$ argumentieren;
+in Schritten 2 und 4 ("`es gibt"') genügt es, ein Wort $w$ bzw.\ ein $i \geq 0$ zu wählen
+(in Abhängigkeit von $p$ bzw.\ $xyz$).
+
+\textsf{\textbf{Eigentlicher Beweis.}}~
+Sei $p \geq 0$ beliebig. Wir wählen $w=a^pb^p$, für das offensichtlich $w \in L$ mit $|w| \geq p$ gilt.
+Sei nun $w=xyz$ eine beliebige Zerlegung mit $y \neq \varepsilon$ und $|xy| \leq p$.
+Wegen $|xy| \leq p$ kann $y$ nur aus $a$'s bestehen.
+Wegen $y \neq \varepsilon$ muss $y$ mindestens ein $a$ enthalten.
+Wenn wir also nun $i=0$ wählen, dann hat das Wort $xy^0z = xz$ mindestens ein $a$ weniger als $w=xyz$,
+aber es hat dieselbe Anzahl $b$'s wie $w$. Deshalb kann $xy^0z$ nicht mehr von der Form $a^nb^n$ sein;
+also ist $xy^0z \notin L$.
+
+% ===================================================================
+\section*{T1.6~ Beispiel für die Anwendung des Satzes von Myhill-Nerode}
+
+Wir betrachten wieder die Sprache $L = \{a^nb^n \mid n \geq 0\}$.
+Es ist leicht zu sehen, dass für zwei beliebige Zahlen $k_1,k_2$
+mit $k_1 \neq k_2$ gilt: $a^{k_1} \not\sim_L a^{k_2}$.
+Dies ist so, weil beispielsweise für $w=b^{k_1}$ zwar das Wort $a^{k_1}w$
+in $L$ liegt, aber das Wort $a^{k_2}w$ nicht.
+Deshalb bilden alle $a^k$, $k \geq 0$, paarweise verschiedene Äquivalenzklassen,
+und somit ist der Index von $\sim_L$ unendlich.
+Mit dem Satz von Myhill-Nerode folgt, dass $L$ nicht NEA-erkennbar ist.
+
+\pagebreak
+% ===================================================================
+\section*{T1.7~ Beispiel einer Polynomialzeitreduktion}
+
+Wir betrachten die folgenden Mengen.
+%
+\begin{align*}
+  M  & = \{\Amc \mid \Amc \text{~ist NEA}\} \\
+  X  & = \{\Amc \mid \Amc \text{~ist NEA},~ L(\Amc) \neq \emptyset\} \\[4pt]
+  M' & = \{(G,s,t) \mid G = (V,E) \text{~ist gerichteter Graph und~} s,t \in V\} \\
+  X' & = \{(G,s,t) \mid (G,s,t) \in M' \text{~und es gibt Pfad von $s$ nach $t$ in $G$}\}
+\end{align*}
+%
+Also ist $X$ das Komplement des Leerheitsproblems für NEAs
+und $X'$ das Erreichbarkeitsproblem für gerichtete Graphen.
+
+%\goodbreak
+Es gilt $X \leq_{\text{p}} X'$, was durch folgende Polynomialzeitreduktion $\pi$ bezeugt wird.
+Gegeben $\Amc = (Q,\Sigma,\Delta,I,F) \in M$, definiere $\pi(\Amc) = (G_\Amc,s,t)$ so, dass
+die Knoten von $G_\Amc$ die Zustände von \Amc plus zwei neue Knoten $s,t$ sind
+und die Kanten genau den Übergängen von \Amc entsprechen (wenn man die Zeichen ignoriert);
+zusätzlich hat $G$ Kanten von $s$ zu allen Anfangszuständen sowie von allen akzeptierenden Zuständen
+zu $t$. Genauer:
+%
+\begin{align*}
+  G_\Amc & \,=\, (V,E)\qquad\text{mit} \\
+  V      & \,=\, Q \uplus \{s,t\} \\
+  E      & \,=\, \{(q,q') \mid (q,a,q') \in \Delta, a \in \Sigma\} \,\cup\, \{(s,q) \mid q \in I\} \,\cup\, \{(q,t) \mid q \in F\}
+\end{align*}
+%
+Nun ist leicht zu sehen, dass gilt:
+%
+\begin{itemize}
+  \item
+    Wenn $\Amc \in X$, dann $\pi(\Amc) \in X'$:
+    \par
+    Da $L(\Amc) \neq \emptyset$, gilt $q_0 \vdash_\Amc^w q_f$ für ein Wort $w \in \Sigma^*$
+    und Zustände $q_0 \in I$, $q_f \in F$. Wegen der Konstruktion von $G_\Amc$
+    gibt es somit einen Pfad von $q_0$ nach $q_f$ in $G_\Amc$ und damit auch von $s$ nach $t$.
+  \item
+    Wenn $\pi(\Amc) \in X'$, dann $\Amc \in X$:
+    \par
+    Ein Pfad von $s$ nach $t$ in $G_\Amc$ muss nach Konstruktion auch einen Pfad von einem
+    $q_0 \in I$ zu einen $q_f \in F$ enthalten; die Beschriftungen der entsprechenden Kanten in \Amc
+    liefern ein Wort $w \in L(\Amc)$, welches $L(\Amc) \neq \emptyset$ bezeugt.
+  \item
+    $\pi$ lässt sich in Polynomialzeit berechnen:
+    \par
+    $G_\Amc$ lässt sich in Polynomialzeit aus $\Amc$ konstruieren.
+\end{itemize}
 
 % ===================================================================
 % ===================================================================
 % ===================================================================
 \part[Endliche Automaten auf endlichen Bäumen]{Endliche Automaten \\ auf endlichen Bäumen}
+
+%\parIII
+%\section*{\dots\ wird fortgesetzt \dots}
 
 %\dots\ folgt \dots
 
