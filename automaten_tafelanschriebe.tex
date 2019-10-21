@@ -404,8 +404,300 @@ Nun ist leicht zu sehen, dass gilt:
 % ===================================================================
 \part[Endliche Automaten auf endlichen Bäumen]{Endliche Automaten \\ auf endlichen Bäumen}
 
-%\parIII
-%\section*{\dots\ wird fortgesetzt \dots}
+% ===================================================================
+\section*{T2.1~ Skizze zur Intuition der Übergänge im Baumautomaten}
+
+Der Übergang $a(q_1,\dots,q_m) \to q$ bedeutet:
+
+Wenn \Amc in Position $p$ Zeichen $a$ liest und in $p$'s Kindern Zustände $q_1,\dots,q_m$ eingenommen hat,
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=7mm},
+    level 1/.style = {sibling distance = 35mm, level distance =  12mm},
+    edge from parent/.style = {draw=black, thin, -Latex}%
+  ]
+    \node (a) {$a$}
+    child {
+      node (b1) {$b_1$}
+    }
+    child {
+      node (bm) {$b_m$}
+    }
+    ;
+    
+    \begin{scope}[
+      every node/.style={draw=none,fill=none}
+    ]
+      \node [below=8mm of a] {$\cdots$};
+      \node [right=.5mm of b1] {\rule{0pt}{10pt}$q_1$};
+      \node [right=.5mm of bm] {\rule{0pt}{10pt}$q_m$};
+    \end{scope}
+    
+  \end{tikzpicture}
+\end{center}
+%
+dann darf \Amc in $p$ Zustand $q$ einnehmen.
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=7mm},
+    level 1/.style = {sibling distance = 35mm, level distance =  12mm},
+    edge from parent/.style = {draw=black, thin, -Latex}%
+  ]
+    \node (a) {$a$}
+    child {
+      node (b1) {$b_1$}
+    }
+    child {
+      node (bm) {$b_m$}
+    }
+    ;
+    
+    \begin{scope}[
+      every node/.style={draw=none,fill=none}
+    ]
+      \node [below=8mm of a] {$\cdots$};
+      \node [right=.5mm of a] {\rule{0pt}{10pt}$q$};
+%      \node [right=.5mm of b1] {\rule{0pt}{10pt}$q_1$};
+      \node [right=.5mm of bm,text=white] {\rule{0pt}{10pt}$q_m$};
+    \end{scope}
+    
+  \end{tikzpicture}
+\end{center}
+
+% ===================================================================
+\section*{T2.2~ Beispiel-Run}
+
+Sei $\Sigma = \{a/2,~ b/1,~ c/0,~ d/0\}$
+und $\Amc = (\{q_c,q_d,q_f\},\Sigma,\Delta,\{q_f\})$ mit
+%
+\begin{alignat*}{4}
+  \Delta & = \{   ~& c          & \to q_c,  & \quad d    & \to q_d, & \quad d          & \to q_f, \\
+         & \qquad ~& a(q_c,q_d) & \to q_f,  &            &          &                  &          \\
+         & \qquad ~& a(q_f,q_f) & \to q_f,  &            &          &                  &          \\
+         & \qquad ~& b(q_f)     & \to q_f   & ~\}.       &          &                  & 
+\end{alignat*}
+%
+Dann gibt es folgenden Run von \Amc auf dem Baum $T = a(a(cd)a(b(a(dd))b(d)))$.
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=7mm},
+    level 1/.style = {sibling distance = 40mm, level distance =   9mm},
+    level 2/.style = {sibling distance = 20mm, level distance =   9mm},
+    level 3/.style = {sibling distance = 18mm, level distance =  12mm},
+    level 4/.style = {sibling distance = 18mm, level distance =  10mm},
+    edge from parent/.style = {draw=black, thin, -Latex}%
+  ]
+    \node (eps) {$a$}
+    child {
+      node (0) {$a$}
+      child {
+        node (00) {$c$}
+      }
+      child {
+        node (01) {$d$}
+      }
+    }
+    child {
+      node (1) {$a$}
+      child {
+        node (10) {$b$}
+        child {
+          node (100) {$a$}
+          child {
+            node (1000) {$d$}
+          }
+          child {
+            node (1001) {$d$}
+          }
+        }
+      }
+      child {
+        node (11) {$b$}
+        child {
+          node (110) {$d$}
+        }
+      }
+    };
+    
+    \begin{scope}[
+      every node/.style={draw=none,fill=none}
+    ]
+      \node [right=.5mm of eps]  {\rule{0pt}{10pt}$q_f$};
+      \node [right=.5mm of 0]    {\rule{0pt}{10pt}$q_f$};
+      \node [right=.5mm of 00]   {\rule{0pt}{10pt}$q_c$};
+      \node [right=.5mm of 01]   {\rule{0pt}{10pt}$q_d$};
+      \node [right=.5mm of 1]    {\rule{0pt}{10pt}$q_f$};
+      \node [right=.5mm of 10]   {\rule{0pt}{10pt}$q_f$};
+      \node [right=.5mm of 100]  {\rule{0pt}{10pt}$q_f$};
+      \node [right=.5mm of 1000] {\rule{0pt}{10pt}$q_f$};
+      \node [right=.5mm of 1001] {\rule{0pt}{10pt}$q_f$};
+      \node [right=.5mm of 11]   {\rule{0pt}{10pt}$q_f$};
+      \node [right=.5mm of 110]  {\rule{0pt}{10pt}$q_f$};
+    \end{scope}
+    
+  \end{tikzpicture}
+\end{center}
+
+\goodbreak
+% ===================================================================
+\section*{T2.3~ Korrektheit der Potenzmengenkonstruktion}
+
+Es ist noch zu zeigen: $L(\Amc^d) = L(\Amc)$.
+Dazu zeigen wir zunächst zwei Hilfsaussagen (HA).
+
+\parII
+\textsfbf{HA1.}~ Für jeden Baum $T=(P,t)$ gibt es \emph{genau einen} Run
+des DEBAs $\Amc^d$ auf $T$; wir nennen diesen Run $r_T^d$.
+
+\parII
+\textsfbf{Beweis von HA1.}~
+Dazu definieren wir $r_T^d(p)$ induktiv über die Höhe der Position $p$ in $T$
+(zur Erinnerung: "`Höhe"' ist so definiert, dass Blätter die Höhe~0 haben).
+Simultan zeigen wir, dass zu jedem Zeitpunkt für den bis dahin definierten Teilrun $r_T^d$
+gilt:
+%
+\begin{enumerate}
+  \item[(a)]
+    $r_T^d$ erfüllt die Eigenschaften eines Runs (Def.\,2.3).
+  \item[(b)]
+    Für alle Runs $r$ von $\Amc^d$ auf $T$ und alle Nachfolger $p'$ der Position $p$
+    (einschließlich $p$ selbst) gilt $r(p') = r_T^d(p')$.
+\end{enumerate}
+%
+\begin{description}
+  \item[Induktionsanfang.]
+    Sei $p$ eine Position der Höhe 0 (also ein Blatt) mit $t(p) = a \in \Sigma_0$.
+    Wir betrachten die \emph{eindeutig bestimmte} Menge $S \subseteq Q$ mit
+    \[
+      \tag{$*$}
+      a \to S \in \Delta^d
+    \]
+    und setzen $r_T^d(p) = S$.
+    Dann gilt~(a) wegen~$(*)$, und~(b) gilt, weil $S$ nach Definition von $\Delta^d$
+    eindeutig bestimmt ist.
+  \item[Induktionsschritt.]
+    Sei $p$ eine Position der Höhe $\geq 0$ mit Kindern $p1,\dots,pm$, $m > 0$,
+    und sei $t(p) = a \in \Sigma_m$.
+    Weil die Höhe der $pi$ geringer ist als die von $p$,
+    ist $S_i := r_T^d(pi)$ für alle $i \leq m$ definiert,
+    und nach Induktionsvoraussetzung (IV) erfüllt $r_T^d$ bis dahin~(a) und~(b).
+    Wir betrachten die \emph{eindeutig bestimmte} Menge $S \subseteq Q$ mit
+    \[
+      \tag{$**$}
+      a(S_1,\dots,S_m) \to S \in \Delta^d
+    \]
+    und setzen $r_T^d(p) = S$.
+    Dann gilt~(a) wegen IV und~$(*)$, und~(b) gilt wegen IV und weil $S$ nach Definition von $\Delta^d$
+    eindeutig bestimmt ist.
+\end{description}
+%
+Dies beendet den Beweis von HA1.
+
+\parII
+Wir benutzen ab jetzt $r_T^d$.
+
+\parII
+\textsfbf{HA2.}~ Für alle Bäume $T=(P,t)$ und alle Positionen $p \in P$ gilt:
+\[
+  r_T^d(p) = \{q \in Q \mid \text{es gibt Run $r$ von $\Amc$ auf $T_p$ mit $r(\varepsilon)=q$}\}
+\]
+HA2 gibt genau die Intuition der Potenzmengenkonstruktion wieder:
+der eindeutig bestimmte Run von $\Amc^d$ auf einem Baum $T$
+"`versammelt"' in allen Positionen $p$ genau diejenigen Zustände,
+die sämtliche Runs von \Amc dort annehmen können.
+Dazu gehören auch Teilruns, die sich oberhalb der Position $p$
+nicht mehr bis zur Wurzel fortsetzen lassen;
+deshalb muss man sich in der Formulierung auf den Teilbaum $T_p$ beschränken.
+
+\parII
+\goodbreak
+\textsfbf{Beweis von HA2.}~
+Wir gehen per Induktion über die Höhe von $p$ in $T$ vor.
+%
+\begin{description}
+  \item[Induktionsanfang.]
+    Sei $p$ Blattposition mit $t(p) = a \in \Sigma_0$.
+    Wegen der Definition eines Runs und des Beweises von HA1 ist
+    $r_T^d(p)$ diejenige Menge $S \subseteq Q$, für die $a \to S \in \Delta^d$ gilt.
+    Mit der Definition von $\Delta^d$ erhalten wir daraus
+    \[
+       r_T^d(p) = \{q \in Q \mid a \to q \in \Delta\}.
+    \]
+    Da die Bedingung $a \to q \in \Delta$ wegen der Definition eines Runs (für Blattpositionen)
+    genau dann gilt, wenn es einen Run $r$ von \Amc auf $T_p$ gibt mit $r(\varepsilon) = q$,
+    folgt die Behauptung.
+  \item[Induktionsschritt.]
+    Sei $p$ eine Position mit Kindern $p1,\dots,pm$, $m > 0$,
+    und sei $t(p) = a \in \Sigma_m$.
+    Weil die Höhe der $pi$ geringer ist als die von $p$,
+    ist die Induktionsvoraussetzung (IV) anwendbar
+    und liefert:
+    \[
+      \tag{$***$}
+      S_i := r_T^d(p) = \{q \in Q \mid \text{es gibt Run $r_i$ von \Amc auf $T_{pi}$ mit $r_i(\varepsilon)=q_i$}\}
+    \]
+    Wegen der Definition eines Runs und des Beweises von HA1 ist
+    $r_T^d(p)$ diejenige Menge $S \subseteq Q$, für die $a(S_1,\dots,S_m) \to S \in \Delta^d$ gilt.
+    Mit der Definition von $\Delta^d$ erhalten wir daraus
+    \[
+       r_T^d(p) = \{q \in Q \mid \underbrace{\exists q_1 \in S_1 \cdots \exists q_m \in S_m : \underbrace{a(q_1,\dots,q_m) \to q \in \Delta}_{(\times\times)}}_{(\times)}\}.
+    \]
+    Es bleibt zu zeigen, dass für alle $q \in Q$ die Bedingung $(\times)$
+    gilt gdw.\ es einen Run $r$ von \Amc auf $T_p$ gibt mit $r(\varepsilon)=q$.
+    %
+    \begin{description}
+      \item[{\boldmath "`$\Rightarrow$"'}]
+        Wir nehmen an, dass $(\times)$ gilt.
+        Wegen $(***)$ gibt es für jedes $q_i$ aus $(\times)$ einen Run $r_i$ von \Amc auf $T_{pi}$
+        mit $r(\varepsilon) = q_i$.
+        Daraus konstruieren wir einen Run $r$ auf $T_p$ wie folgt:
+        %
+        \begin{itemize}
+          \item
+            $r(\varepsilon) = q$
+          \item
+            $r(iw) = r_i(w)$ für alle $i \leq m$ und $w \in \mathbb{N}_+^*$
+        \end{itemize}
+        %
+        Da alle $r_i$ Runs sind und die Eigenschaft $(\times\times)$ gilt, ist auch $r$ ein Run
+        von \Amc auf $T_p$; außerdem gilt nach Konstruktion wie gewünscht $r(\varepsilon) = q$.
+      \item[{\boldmath "`$\Leftarrow$"'}]
+        Sei $r$ ein Run von \Amc auf $T_p$ mit $r(\varepsilon) = q$.
+        Um $(\times)$ zu zeigen, definieren wir $q_i := r(i)$ für alle $i \leq m$.
+        Da $r$ ein Run ist, gilt $(\times\times)$.
+        Es bleibt zu zeigen, dass $q_i \in S_i$ für alle $i \leq m$,
+        also wegen $(***)$: dass es Runs $r_i$ von \Amc auf $T_{pi}$ gibt mit $r_i(\varepsilon)=q_i$.
+        Diese Runs lassen sich nun leicht aus $r$ konstruieren, indem man
+        $r_i(w) = r(iw)$ für alle $i \leq m$ und $w \in \mathbb{N_+^*}$ setzt.
+        Offenbar sind das Runs, weil sie Einschränkungen von $r$ sind;
+        außerdem erfüllen sie $r_i(\varepsilon)=q_i$, weil die $q_i$ so gewählt wurden, dass $r(i) = q_i$ gilt.
+    \end{description}
+\end{description}
+Dies beendet den Beweis von HA2, und wir können nun die Hauptaussage beweisen.
+
+\parII
+\goodbreak
+\textsfbf{\boldmath{$L(\Amc^d) = L(\Amc)$.}}~
+Dazu beobachten wir:
+%
+\begin{center}
+  \begin{tabular}{@{}l@{~~}c@{~~}ll@{}}
+    $T \in L(\Amc^d)$
+    & gdw. & $r_T^d(\varepsilon) \in F^d$ & (Def.\ Akzeptanz, HA1) \\[4pt]
+    & gdw. & $r_T^d(\varepsilon) \cap F \neq \emptyset$ & (Def.\ $F^d$) \\[4pt]
+    & gdw. & es gibt Run $r$ von \Amc auf $T_\varepsilon$ mit $r(\varepsilon) \in F$ & (HA2) \\[4pt]
+    & gdw. & $T \in L(\Amc)$ & ($T_\varepsilon=T$, Def.\ Akzeptanz)
+  \end{tabular}
+\end{center}
+
+\parIII
+\section*{\dots\ wird fortgesetzt \dots}
 
 %\dots\ folgt \dots
 
