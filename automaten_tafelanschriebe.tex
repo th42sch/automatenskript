@@ -696,6 +696,464 @@ Dazu beobachten wir:
   \end{tabular}
 \end{center}
 
+% ===================================================================
+\section*{T2.4~ Vorbetrachtungen für Nicht-Erkennbarkeit}
+
+Für den NEBA \Amc auf Folie 2.29 gilt
+\[
+    L(\Amc) \neq \{T \mid \text{$T$ hat gerade Höhe}\},
+\]
+denn der Baum
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
+    level 1/.style = {sibling distance = 35mm, level distance =   8mm},
+    level 2/.style = {sibling distance = 18mm, level distance =  10mm},
+    edge from parent/.style = {draw=black, thin, -Latex}%
+  ]
+    \node (eps) {$a$}
+    child {
+      node (0) {$a$}
+      child {
+        node (00) {$c$}
+      }
+      child {
+        node (01) {$c$}
+      }
+    }
+    child {
+      node (1) {$c$}
+    }
+    ;
+  \end{tikzpicture}
+\end{center}
+%
+hat zwar gerade Höhe, wird aber nicht von \Amc akzeptiert,
+denn wenn es einen Run gäbe, dann müsste dieser wie folgt beginnen:
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
+    level 1/.style = {sibling distance = 35mm, level distance =   8mm},
+    level 2/.style = {sibling distance = 18mm, level distance =  10mm},
+    edge from parent/.style = {draw=black, thin, -Latex}%
+  ]
+    \node (eps) {$a$}
+    child {
+      node (0) {$a$}
+      child {
+        node (00) {$c$}
+      }
+      child {
+        node (01) {$c$}
+      }
+    }
+    child {
+      node (1) {$c$}
+    }
+    ;
+    
+    \begin{scope}[
+      every node/.style={draw=none,fill=none}
+    ]
+      \node [right=.5mm of 0]  {\rule{0pt}{10pt}$q_1$};
+      \node [right=.5mm of 1]  {\rule{0pt}{10pt}$q_0$};
+      \node [right=.5mm of 00] {\rule{0pt}{10pt}$q_0$};
+      \node [right=.5mm of 01] {\rule{0pt}{10pt}$q_0$};
+    \end{scope}
+    
+  \end{tikzpicture}
+\end{center}
+%
+Dieser Teilrun kann aber nicht mehr zu einem vollständigen Run fortgesetzt werden.
+
+% ===================================================================
+\section*{T2.5~ Intuitionen für Nicht-Erkennbarkeit}
+
+Wir betrachten $L_2 = \{T \mid \text{$T$ ist vollständiger Binärbaum}\}$,
+wobei "`vollständiger Binärbaum"' bedeutet, dass für jede Nicht-Blattposition $p$ in $T$ gilt:
+%
+\begin{itemize}
+  \item
+    $p$ hat genau 2 Kinder $p1,p2$ \quad und
+  \item
+    deren Teilbäume $T_{p1},T_{p2}$ haben gleiche Höhe.
+\end{itemize}
+%
+Ein intuitives, aber möglichst schlüssiges Argument dafür
+dass $L_2$ nicht NEBA-erkennbar ist, ist folgendes:
+
+Angenommen $L_2$ werde von einem NEBA \Amc erkannt; dieser habe $n$ Zustände.
+Dann hat \Amc einen erfolgreichen Run $r$ auf dem vollständigen Binärbaum $T$
+der Höhe $n$. Auf jedem Pfad hat $T$ aber $n+1$ Knoten,
+und damit muss auf jedem Pfad in $r$ irgendeinen Zustand doppelt vorkommen.
+Wenn wir einen Pfad festhalten
+und die Positionen des doppelten Vorkommens desselben Zustandes $p_1$ und $p_2$ sind
+(mit $p_1$ Vorgänger von $p_2$),
+dann können wir den Teilbaum $T_{p_2}$ durch den höheren Teilbaum $T_{p_1}$ ersetzen
+und erhalten einen nicht mehr vollständigen Binärbaum,
+auf dem \Amc trotzdem einen erfolgreichen Run hat
+(letzteren erhält man auf die offensichtliche Weise aus $r$)
+-- ein Widerspruch zur Annahme $L(\Amc) = L_2$.
+%
+\begin{center}
+  \dots\ Bild folgt \dots
+\end{center}
+
+% ===================================================================
+\section*{T2.6~ Beispiele für Kontexte}
+
+\begin{itemize}
+  \item
+    %\paragraph*{Unärer Kontext {\boldmath $C$}, schematisch:}
+    Unärer Kontext, schematisch:
+    %
+    \begin{center}
+      \begin{tikzpicture}[%
+        node distance=20mm,>=Latex,
+        every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
+        level 1/.style = {sibling distance = 18mm, level distance =  11mm},
+        level 2/.style = {sibling distance =  9mm, level distance =  11mm},
+        edge from parent/.style = {draw=black, thin, -Latex}%
+      ]
+        \node (eps) {}
+        child {
+          node (0) {}
+          child {
+            node (00) {}
+          }
+        }
+        child {
+          node[fill=black!15] (1) {$x$}
+        }
+        child {
+          node (2) {}
+          child {
+            node (20) {}
+          }
+        }
+        ;
+    
+        \node [draw=none,fill=none,left=3mm of 0]  {$C$};
+      \end{tikzpicture}
+    \end{center}
+    %
+  \item
+    Einsetzen:
+    %
+    \begin{center}
+      \begin{tikzpicture}[%
+        baseline=-1mm,
+        node distance=20mm,>=Latex,
+        every node/.style={circle,draw=black,thin,fill=black!2,inner sep=.4mm,minimum size=6mm},
+        level 1/.style = {sibling distance = 9mm, level distance =  11mm},
+        edge from parent/.style = {draw=black, thin, -Latex}%
+      ]
+        \node (eps) {}
+        child {
+          node (0) {}
+        }
+        child {
+          node (1) {}
+        }
+        ;
+    
+        \node [draw=none,fill=none,left=11mm of eps]  {Baum $T$};
+      \end{tikzpicture}
+      \qquad$\leadsto$\qquad
+      \begin{tikzpicture}[%
+        baseline=-12mm,
+        node distance=20mm,>=Latex,
+        every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
+        level 1/.style = {sibling distance = 18mm, level distance =  11mm},
+        level 2/.style = {sibling distance =  9mm, level distance =  11mm},
+        edge from parent/.style = {draw=black, thin, -Latex}%
+      ]
+        \node (eps) {}
+        child {
+          node (0) {}
+          child {
+            node (00) {}
+          }
+        }
+        child {
+          node[fill=black!2] (1) {}
+          child {
+            node[fill=black!2] (10) {}
+          }
+          child {
+            node[fill=black!2] (11) {}
+          }
+        }
+        child {
+          node (2) {}
+          child {
+            node (20) {}
+          }
+        }
+        ;
+    
+        \node [draw=none,fill=none,left=5mm of 0]  {Baum $C[T]$};
+      \end{tikzpicture}
+    \end{center}
+    %
+    \begin{center}
+      \begin{tikzpicture}[%
+        baseline=-1mm,
+        node distance=20mm,>=Latex,
+        every node/.style={circle,draw=black,thin,fill=black!2,inner sep=.4mm,minimum size=6mm},
+        level 1/.style = {sibling distance = 9mm, level distance =  11mm},
+        edge from parent/.style = {draw=black, thin, -Latex}%
+      ]
+        \node (eps) {}
+        child {
+          node[fill=black!15] (0) {$x$}
+        }
+        child {
+          node (1) {}
+        }
+        ;
+    
+        \node [draw=none,fill=none,left=11mm of eps]  {Kontext $C'$};
+      \end{tikzpicture}
+      \qquad$\leadsto$\qquad
+      \begin{tikzpicture}[%
+        baseline=-12mm,
+        node distance=20mm,>=Latex,
+        every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
+        level 1/.style = {sibling distance = 18mm, level distance =  11mm},
+        level 2/.style = {sibling distance =  9mm, level distance =  11mm},
+        edge from parent/.style = {draw=black, thin, -Latex}%
+      ]
+        \node (eps) {}
+        child {
+          node (0) {}
+          child {
+            node (00) {}
+          }
+        }
+        child {
+          node[fill=black!2] (1) {}
+          child {
+            node[fill=black!15] (10) {$x$}
+          }
+          child {
+            node[fill=black!2] (11) {}
+          }
+        }
+        child {
+          node (2) {}
+          child {
+            node (20) {}
+          }
+        }
+        ;
+    
+        \node [draw=none,fill=none,left=5mm of 0]  {Kontext $C[C']$};
+      \end{tikzpicture}
+    \end{center}
+    %
+    \parII
+  \item
+    Trivialer Kontext:
+    \qquad
+    \begin{tikzpicture}[%
+      baseline=-1mm,
+      node distance=20mm,>=Latex,
+      every node/.style={circle,draw=black,thin,fill=black!2,inner sep=.4mm,minimum size=6mm},
+      level 1/.style = {sibling distance = 9mm, level distance =  11mm},
+      edge from parent/.style = {draw=black, thin, -Latex}%
+    ]
+      \node[fill=black!15] (eps) {$x$}
+      ;
+  
+      \node [draw=none,fill=none,left=3mm of eps]  {$C_0$};
+    \end{tikzpicture}
+    \parII
+  \item
+    Iterierte Kontexte:
+    %
+    \begin{center}
+      \begin{tikzpicture}[%
+        baseline=-12mm,
+        node distance=20mm,>=Latex,
+        every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
+        level 1/.style = {sibling distance = 21mm, level distance =  11mm},
+        level 2/.style = {sibling distance =  9mm, level distance =  11mm},
+        edge from parent/.style = {draw=black, thin, -Latex}%
+      ]
+        \node (eps) {}
+        child {
+          node (0) {}
+          child {
+            node (00) {}
+          }
+        }
+        child {
+          node[fill=black!2] (1) {}
+          child {
+            node[fill=black!2] (10) {}
+            child {
+              node[fill=black!2] (100) {}
+            }
+          }
+          child {
+            node[fill=black!15] (11) {$x$}
+          }
+          child {
+            node[fill=black!2] (12) {}
+            child {
+              node[fill=black!2] (120) {}
+            }
+          }
+        }
+        child {
+          node (2) {}
+          child {
+            node (20) {}
+          }
+        }
+        ;
+    
+        \node [draw=none,fill=none,left=5mm of 0]  {$C^2$};
+      \end{tikzpicture}
+    \end{center}
+\end{itemize}
+
+% ===================================================================
+\section*{T2.7~ Illustrationen zum Beweis des Pumping-Lemmas}
+
+\begin{center}
+  \dots\ Bilder folgen \dots
+\end{center}
+
+% ===================================================================
+\section*{T2.8~ Anwendung des Pumping-Lemmas}
+
+Wir betrachten wieder $L_2 = \{T \mid \text{$T$ ist vollständiger Binärbaum}\}$,
+aber diesmal über dem r-Alphabet $\Sigma = \{a/2,\,b/0\}$,
+denn einstellige Symbole können in einem vollständigen Binärbaum sowieso nicht vorkommen.
+
+Sei $k \geq 0$ beliebig.
+Wir wählen als $T$ den vollständigen Binärbaum der Höhe $k$:
+%
+\begin{center}
+  \dots\ Bild folgt \dots
+\end{center}
+%
+Sei nun $T=C[D[V]]$ eine Zerlegung von $T$ in Kontexte
+$C,D$ und Baum $V$ mit $D$ nichttrivial.
+Seien weiterhin
+%
+\begin{itemize}
+  \item
+    $p_1$ die Position von $x$ im Kontext $C$;
+  \item
+    $d_1$ die Tiefe von $p_1$ in $C$, d.\,h.\ $d_1 = |p_1|$;
+  \item
+    $p_2$ die Position von $x$ im Kontext $D$;
+  \item
+    $d_2$ die Tiefe von $p_2$ in $D$, d.\,h.\ $d_2 = |p_2| > 0$, da $D$ nichttrivial;
+  \item
+    $p_3$ eine Blattposition in $V$;
+  \item
+    $d_3$ die Höhe von $V$ (und damit die Tiefe aller Blätter, denn $T$ ist vollständig).
+\end{itemize}
+%
+\begin{center}
+  \dots\ Bild folgt \dots
+\end{center}
+%
+Weil $T$ vollständig ist, haben alle Pfade in $T$ die Länge $k = d_1+d_2+d_3$.
+
+Wir wählen nun $i=2$ und betrachten den "`gepumpten"' Baum $C[D^2[V]]$:
+%
+\begin{center}
+  \dots\ Bild folgt \dots
+\end{center}
+%
+In diesem Baum gibt es einen Pfad der Länge $d_1+2d_2+d_3 > k$, nämlich zur Position $p_1p_2p_2p_3$.
+Da $T$ vollständig ist, hat $p_1$ ein Kind, das nicht auf diesem Pfad liegt und dessen Teilbaum
+also nicht vom Pumpen betroffen ist.
+Deshalb gibt es in $C[D^2[V]]$ auch einen Pfad der Länge $k$,
+woraus folgt, dass $C[D^2[V]]$ nicht vollständig ist und damit auch nicht zu $L_2$ gehören kann.
+
+\paragraph*{Anmerkung.} Abpumpen, d.\,h.\ die Wahl von $i=0$, funktioniert hier nicht,
+denn es ist nicht ausgeschlossen, dass $C$ der triviale Kontext ist.
+In diesem Fall ist $C[D^0[V]] = C[V] = V$ nach wie vor ein vollständiger Binärbaum,
+gehört also zu $L_2$.
+
+% ===================================================================
+\section*{T2.9~ Anwendung der Nerode-Rechtskongruenz für Baumsprachen}
+
+Wir betrachten $L_1 = \{T \mid \text{$T$ hat gerade Höhe}\}$
+über dem r-Alphabet $\Sigma = \{a/2,\,b/1\,c/0\}$.
+Um zu zeigen, dass $L_1$ nicht NEBA-erkennbar ist,
+müssen wir eine Folge $(T_n)_{n \geq 1}$ von Bäumen über $\Sigma$ finden,
+so dass $T_n \not\sim_{L_1} T_k$ für alle $1 \leq n < k$ gilt.
+
+Wir wählen diese Bäume so, dass $T_n$ der Pfad $b(b(b\cdots (b(c)) \cdots ))$ der Höhe $2n$ ist.
+Seien nun $n,k$ mit $1 \leq n < k$ beliebig.
+Um $T_n \not\sim_{L_1} T_k$ zu zeigen,
+betrachten wir den Kontext $C = a(b(x)T_k)$:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
+    level 1/.style = {sibling distance = 18mm, level distance =  8mm},
+    level 2/.style = {sibling distance =  9mm, level distance = 10mm},
+    edge from parent/.style = {draw=black, thin, -Latex}%
+  ]
+    \node (eps) {$a$}
+    child {
+      node (0) {$b$}
+      child {
+        node[fill=black!15] (00) {$x$}
+      }
+    }
+    child {
+      node (1) {$b$}
+      child {
+        node (10) {$b$}
+          child {
+            node[draw=none,fill=none,inner sep=1mm] (100) {$\vdots$}
+              child {
+                node (1000) {$b$}
+                  child {
+                    node (10000) {$c$}
+                  }
+              }
+          }
+      }
+    }
+    ;
+
+    \node [draw=none,fill=none,left=3mm of 0]  {$C$};
+    
+    \node [rectangle,rounded corners,fill=none,inner sep=1mm,fit=(1) (10000)] (Tk) {};
+    
+    \node [draw=none,fill=none,right=0mm of Tk] {$=T_k$~ (Höhe $2k$)};
+  \end{tikzpicture}
+\end{center}
+%
+Da $1 \leq n < k$, hat $C$ die Höhe $2k+1$. Nun gilt:
+%
+\begin{itemize}
+  \item
+    $C[T_n]$ hat ebenfalls Höhe $2k+1$, da die Höhe von $T_n$ um mindestens 2 kleiner ist
+    als die Höhe von $T_k$ und damit in $C[T_n]$ der linke Pfad nicht länger werden kann als der rechte.
+  \item 
+    $C[T_k]$ hat jedoch Höhe $2k+2$, da der linker Pfad um 1 länger ist als der rechte
+    (denn das linke Vorkommen von $T_k$ beginnt eine Ebene tiefer als das rechte).
+\end{itemize}
+%
+Damit ist $C[T_n] \notin L_1$ und $C[T_k] \in L_1$, woraus wie gewünscht $T_n \not\sim_{L_1} T_k$ folgt.
+
+
+% ===================================================================
 \parIII
 \section*{\dots\ wird fortgesetzt \dots}
 
