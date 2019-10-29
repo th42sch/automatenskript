@@ -1086,7 +1086,7 @@ In diesem Fall ist $C[D^0[V]] = C[V] = V$ nach wie vor ein vollständiger Binär
 gehört also zu $L_2$.
 
 % ===================================================================
-\section*{T2.9~ Anwendung der Nerode-Rechtskongruenz für Baumsprachen}
+\section*{T2.9~ Anwendung Nerode-Rechtskongruenz für Baumsprachen}
 
 Wir betrachten $L_1 = \{T \mid \text{$T$ hat gerade Höhe}\}$
 über dem r-Alphabet $\Sigma = \{a/2,\,b/1\,c/0\}$.
@@ -1099,6 +1099,7 @@ Seien nun $n,k$ mit $1 \leq n < k$ beliebig.
 Um $T_n \not\sim_{L_1} T_k$ zu zeigen,
 betrachten wir den Kontext $C = a(b(x)T_k)$:
 %
+\vspace*{-\baselineskip}
 \begin{center}
   \begin{tikzpicture}[%
     node distance=20mm,>=Latex,
@@ -1152,6 +1153,104 @@ Da $1 \leq n < k$, hat $C$ die Höhe $2k+1$. Nun gilt:
 %
 Damit ist $C[T_n] \notin L_1$ und $C[T_k] \in L_1$, woraus wie gewünscht $T_n \not\sim_{L_1} T_k$ folgt.
 
+% ===================================================================
+\section*{T2.10~ Mächtigkeit von DETDBAs}
+
+\textsfbf{Lemma~2.14.}~
+Die erkennbare Baumsprache $L=\{a(bc),a(cb)\}$ wird von keinem DETDBA erkannt.
+
+\parII
+\begin{beweis}
+  Angenommen, es gebe einen DETDBA $\Amc = (Q,\Sigma,\Delta,I)$ mit $L(\Amc) = L$.
+  Wegen des Determinismus gibt es nur einen einzigen Anfangszustand $q_I$
+  und genau einen Übergang $(a,q_I) \to (q_1,q_2)$ mit $(a,q_I)$ auf der linken Seite.
+%  ("`höchstens einen"' wegen Determinismus; "`mindestens einen"' wegen $a(bc) \in L$).
+  Da $a(bc),a(cb) \in L$, muss $\Delta$ auch die folgenden Übergänge enthalten:
+  %
+  \begin{xalignat*}{2}
+    (b,q_1) & \to () & (c,q_1) & \to () \\
+    (c,q_2) & \to () & (b,q_2) & \to ()
+  \end{xalignat*}
+  %
+  Also hat \Amc auch einen erfolgreichen Run auf $a(bb)$;
+  also $a(bb) \in L$, Widerspruch zur Definition von $L$.
+  \qedhere
+\end{beweis}
+
+\goodbreak
+% ===================================================================
+\section*{T2.11~ Korrektheit des Algorithmus fürs Leerheitsproblem}
+
+\textsfbf{Behauptung:}~ $L(\Amc) = \emptyset$ gdw.\ $R \cap F = \emptyset$.
+
+\parII
+\begin{beweis}
+  Wir zeigen beide Richtungen per Kontraposition.
+  %
+  \begin{description}
+    \item[{\boldmath "`$\Leftarrow$"'}]
+      Sei $L(\Amc) \neq \emptyset$.
+      Dann gibt es einen Baum $T=(P,t) \in L(\Amc)$.
+      Sei $r$ ein erfolgreicher Run von \Amc auf $T$.
+      Man zeigt leicht per Induktion über die Höhe,
+      dass für alle Positionen $p \in P$ gilt: $r(p) \in R$.
+      Also gilt insbesondere $r(\varepsilon) \in R$.
+      Da auch $r(\varepsilon) \in F$ gilt ($r$ ist erfolgreich),
+      ist $R \cap F \neq \emptyset$.
+    \item[{\boldmath "`$\Rightarrow$"'}]
+      Gelte $R \cap F \neq \emptyset$ und sei $q \in R \cap F$.
+      Um zu zeigen, dass $L(\Amc) \neq \emptyset$ gilt,
+      konstruieren wir einen Baum $T$
+      und einen Run $r$ von \Amc auf $T$
+      mit $r(\varepsilon) = q$ (woraus mit $q \in R \cap F$ folgt,
+      dass $r$ erfolgreich ist).
+      Wir definieren $P,t,r$ iterativ wie folgt.
+      %
+      \begin{enumerate}
+        \item[(1)]
+          Sei $a(q_1,\dots,q_m) \to q$ der eindeutig bestimmte Übergang,
+          der zu $q \in R$ geführt hat. Setze:
+          %
+          \begin{itemize}
+            \item
+              $P = \{\varepsilon,1,\dots,m\}$
+            \item
+              $t(\varepsilon)=a$
+            \item 
+              $r(\varepsilon) = q$, $r(1)=q_1$, \dots, $r(m) = q_m$
+          \end{itemize}
+        \item[(2)]
+          Solange es ein $p \neq \varepsilon$ gibt
+          mit $r(p) = q'$ definiert, aber $t(p)$ noch nicht definiert, tue folgendes:
+          
+          Sei $a'(q'_1,\dots,q'_n) \to q'$ der eindeutig bestimmte Übergang,
+          der zu $q' \in R$ geführt hat. Setze:
+          %
+          \begin{itemize}
+            \item
+              $P = P \cup \{pj \mid j = 1,\dots,n\}$
+            \item
+              $t(p)=a'$
+            \item 
+              $r(p_1)=q'_1$, \dots, $r(p_n) = q'_n$
+          \end{itemize}
+      \end{enumerate}
+      %
+      Dieser Prozess endet nach endlich vielen Anwendungen von~(2),
+      weil auf jedem Pfad von $r$ kein Zustand doppelt auftreten kann, denn nach Konstruktion gilt:
+      %
+      \begin{quote}
+        Wenn $r(p) = \widehat q$ und $r(pi) = \widehat q'$, dann ist $\widehat q$ später als $\widehat q'$
+        zu $R$ hinzugefügt worden.
+      \end{quote}
+      %
+      Also ist $T=(P,t)$ endlich.
+      Außerdem ist $r$ ein Run, denn die Übergangsrelation $\Delta$ wird nach Konstruktion respektiert.
+      (Erfolgreich ist $r$, weil $r(\varepsilon) = q \in R \cap F$.)
+      Folglich ist $L(\Amc) \neq \emptyset$.
+      \qedhere
+  \end{description}
+\end{beweis}
 
 % ===================================================================
 \parIII
