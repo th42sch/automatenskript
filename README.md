@@ -11,11 +11,13 @@ Hier findet ihr die Tafelanschriebe für die Vorlesung „Automatentheorie und i
 
 **Kapitel 1**&nbsp; <font color="#005500">vollständig</font>
 
-**Kapitel 2**&nbsp; T2.1–T2.11 (Bilder fehlen in T2.5, T2.7, T2.8 noch)
+**Kapitel 2**&nbsp; T2.1–T2.15 (Bilder fehlen in T2.5, T2.7, T2.8, T2.14 noch)
 
 **Kapitel 3–5**&nbsp; <font color="#005500">vollständig</font>
 
 ## Versionsgeschichte (WiSe 2019/20)
+
+**3.11.2019**&nbsp; T2.12–T2.15 hinzugefügt; in T2.14 fehlt noch ein Bild.
 
 **28./29.10.2019**&nbsp; T2.4–T2.11 hinzugefügt; Bilder fehlen in T2.5, T2.7, T2.8 noch.
 

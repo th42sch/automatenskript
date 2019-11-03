@@ -416,7 +416,7 @@ Wenn \Amc in Position $p$ Zeichen $a$ liest und in $p$'s Kindern Zustände $q_1,
     node distance=20mm,>=Latex,
     every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=7mm},
     level 1/.style = {sibling distance = 35mm, level distance =  12mm},
-    edge from parent/.style = {draw=black, thin, -Latex}%
+    edge from parent/.style = {draw=black, thin, -}%
   ]
     \node (a) {$a$}
     child {
@@ -445,7 +445,7 @@ dann darf \Amc in $p$ Zustand $q$ einnehmen.
     node distance=20mm,>=Latex,
     every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=7mm},
     level 1/.style = {sibling distance = 35mm, level distance =  12mm},
-    edge from parent/.style = {draw=black, thin, -Latex}%
+    edge from parent/.style = {draw=black, thin, -}%
   ]
     \node (a) {$a$}
     child {
@@ -491,7 +491,7 @@ Dann gibt es folgenden Run von \Amc auf dem Baum $T = a(a(cd)a(b(a(dd))b(d)))$.
     level 2/.style = {sibling distance = 20mm, level distance =   9mm},
     level 3/.style = {sibling distance = 18mm, level distance =  12mm},
     level 4/.style = {sibling distance = 18mm, level distance =  10mm},
-    edge from parent/.style = {draw=black, thin, -Latex}%
+    edge from parent/.style = {draw=black, thin, -}%
   ]
     \node (eps) {$a$}
     child {
@@ -711,7 +711,7 @@ denn der Baum
     every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
     level 1/.style = {sibling distance = 35mm, level distance =   8mm},
     level 2/.style = {sibling distance = 18mm, level distance =  10mm},
-    edge from parent/.style = {draw=black, thin, -Latex}%
+    edge from parent/.style = {draw=black, thin, -}%
   ]
     \node (eps) {$a$}
     child {
@@ -738,7 +738,7 @@ denn wenn es einen Run gäbe, dann müsste dieser wie folgt beginnen:
     every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
     level 1/.style = {sibling distance = 35mm, level distance =   8mm},
     level 2/.style = {sibling distance = 18mm, level distance =  10mm},
-    edge from parent/.style = {draw=black, thin, -Latex}%
+    edge from parent/.style = {draw=black, thin, -}%
   ]
     \node (eps) {$a$}
     child {
@@ -816,7 +816,7 @@ auf dem \Amc trotzdem einen erfolgreichen Run hat
         every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
         level 1/.style = {sibling distance = 18mm, level distance =  11mm},
         level 2/.style = {sibling distance =  9mm, level distance =  11mm},
-        edge from parent/.style = {draw=black, thin, -Latex}%
+        edge from parent/.style = {draw=black, thin, -}%
       ]
         \node (eps) {}
         child {
@@ -849,7 +849,7 @@ auf dem \Amc trotzdem einen erfolgreichen Run hat
         node distance=20mm,>=Latex,
         every node/.style={circle,draw=black,thin,fill=black!2,inner sep=.4mm,minimum size=6mm},
         level 1/.style = {sibling distance = 9mm, level distance =  11mm},
-        edge from parent/.style = {draw=black, thin, -Latex}%
+        edge from parent/.style = {draw=black, thin, -}%
       ]
         \node (eps) {}
         child {
@@ -869,7 +869,7 @@ auf dem \Amc trotzdem einen erfolgreichen Run hat
         every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
         level 1/.style = {sibling distance = 18mm, level distance =  11mm},
         level 2/.style = {sibling distance =  9mm, level distance =  11mm},
-        edge from parent/.style = {draw=black, thin, -Latex}%
+        edge from parent/.style = {draw=black, thin, -}%
       ]
         \node (eps) {}
         child {
@@ -905,7 +905,7 @@ auf dem \Amc trotzdem einen erfolgreichen Run hat
         node distance=20mm,>=Latex,
         every node/.style={circle,draw=black,thin,fill=black!2,inner sep=.4mm,minimum size=6mm},
         level 1/.style = {sibling distance = 9mm, level distance =  11mm},
-        edge from parent/.style = {draw=black, thin, -Latex}%
+        edge from parent/.style = {draw=black, thin, -}%
       ]
         \node (eps) {}
         child {
@@ -925,7 +925,7 @@ auf dem \Amc trotzdem einen erfolgreichen Run hat
         every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
         level 1/.style = {sibling distance = 18mm, level distance =  11mm},
         level 2/.style = {sibling distance =  9mm, level distance =  11mm},
-        edge from parent/.style = {draw=black, thin, -Latex}%
+        edge from parent/.style = {draw=black, thin, -}%
       ]
         \node (eps) {}
         child {
@@ -964,7 +964,7 @@ auf dem \Amc trotzdem einen erfolgreichen Run hat
       node distance=20mm,>=Latex,
       every node/.style={circle,draw=black,thin,fill=black!2,inner sep=.4mm,minimum size=6mm},
       level 1/.style = {sibling distance = 9mm, level distance =  11mm},
-      edge from parent/.style = {draw=black, thin, -Latex}%
+      edge from parent/.style = {draw=black, thin, -}%
     ]
       \node[fill=black!15] (eps) {$x$}
       ;
@@ -982,7 +982,7 @@ auf dem \Amc trotzdem einen erfolgreichen Run hat
         every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
         level 1/.style = {sibling distance = 21mm, level distance =  11mm},
         level 2/.style = {sibling distance =  9mm, level distance =  11mm},
-        edge from parent/.style = {draw=black, thin, -Latex}%
+        edge from parent/.style = {draw=black, thin, -}%
       ]
         \node (eps) {}
         child {
@@ -1106,7 +1106,7 @@ betrachten wir den Kontext $C = a(b(x)T_k)$:
     every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
     level 1/.style = {sibling distance = 18mm, level distance =  8mm},
     level 2/.style = {sibling distance =  9mm, level distance = 10mm},
-    edge from parent/.style = {draw=black, thin, -Latex}%
+    edge from parent/.style = {draw=black, thin, -}%
   ]
     \node (eps) {$a$}
     child {
@@ -1253,10 +1253,521 @@ Die erkennbare Baumsprache $L=\{a(bc),a(cb)\}$ wird von keinem DETDBA erkannt.
 \end{beweis}
 
 % ===================================================================
-\parIII
-\section*{\dots\ wird fortgesetzt \dots}
+\section*{T2.12~ Beispiele für Hecken und Bäume}
 
-%\dots\ folgt \dots
+Sei $\Sigma = \{a,b,c\}$.
+%
+\begin{itemize}
+  \item 
+    $\varepsilon$ ist eine Hecke.
+  \item
+    Dann ist auch $a = a()$ ein Baum:
+    \qquad
+    %
+    \begin{tikzpicture}[%
+      baseline=-2pt,
+      node distance=20mm,>=Latex,
+      every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
+    ]
+      \node (eps) {$a$};
+    \end{tikzpicture}
+    \parII
+  \item
+    Dann ist auch $aa$ eine Hecke:
+    \qquad
+    %
+    \begin{tikzpicture}[%
+      baseline=-2pt,
+      node distance=20mm,>=Latex,
+      every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
+    ]
+      \node (eps)  {$a$};
+      \node[right=4mm of eps] (eps2) {$a$};
+    \end{tikzpicture}
+    \parII
+  \item
+    Dann ist auch $b(aa)$ ein Baum:
+    \qquad
+    %
+    \begin{tikzpicture}[%
+      baseline=-2pt,
+      node distance=20mm,>=Latex,
+      every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
+      level 1/.style = {sibling distance = 10mm, level distance =  8mm},
+      edge from parent/.style = {draw=black, thin, -}%
+    ]
+      \node (eps) {$b$}
+        child {
+          node (0) {$a$}
+        }
+        child {
+          node (1) {$a$}
+        }
+      ;
+    \end{tikzpicture}
+    \parII
+  \item
+    Dann ist auch $ab(aa)c$ eine Hecke:
+    \qquad
+    %
+    \begin{tikzpicture}[%
+      baseline=-2pt,
+      node distance=20mm,>=Latex,
+      every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
+      level 1/.style = {sibling distance = 10mm, level distance =  8mm},
+      edge from parent/.style = {draw=black, thin, -}%
+    ]
+      \node (eps1) {$a$};
+      \node[right=6mm of eps1] (eps2) {$b$}
+        child {
+          node (0) {$a$}
+        }
+        child {
+          node (1) {$a$}
+        }
+      ;
+      \node[right=6mm of eps2] (eps3) {$c$};
+    \end{tikzpicture}
+    \parII
+  \item
+    Dann ist auch $a(ab(aa)c)$ ein Baum:
+    \qquad
+    %
+    \begin{tikzpicture}[%
+      baseline=-2pt,
+      node distance=20mm,>=Latex,
+      every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
+      level 1/.style = {sibling distance = 12mm, level distance = 10mm},
+      level 2/.style = {sibling distance = 10mm, level distance = 10mm},
+      edge from parent/.style = {draw=black, thin, -}%
+    ]
+      \node (eps) {$a$}
+        child {
+          node (0) {$a$}
+        }
+        child {
+          node (1) {$b$}
+          child {
+            node (10) {$a$}
+          }
+          child {
+            node (11) {$a$}
+          }
+        }
+        child {
+          node (2) {$c$}
+        }
+      ;
+    \end{tikzpicture}
+\end{itemize}
+
+\par\vspace*{\baselineskip}
+Auch $a(c(b)cb(ab))$ ist ein Baum:
+\qquad
+%
+\begin{tikzpicture}[%
+  baseline=-2pt,
+  node distance=20mm,>=Latex,
+  every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
+  level 1/.style = {sibling distance = 12mm, level distance = 10mm},
+  level 2/.style = {sibling distance = 10mm, level distance = 10mm},
+  edge from parent/.style = {draw=black, thin, -}%
+]
+  \node (eps) {$a$}
+    child {
+      node (0) {$c$}
+      child {
+        node (00) {$b$}
+      }
+    }
+    child {
+      node (1) {$c$}
+    }
+    child {
+      node (2) {$b$}
+      child {
+        node (20) {$a$}
+      }
+      child {
+        node (21) {$b$}
+      }
+    }
+  ;
+\end{tikzpicture}
+
+% ===================================================================
+\section*{T2.13~ Problem mit NEBAs auf Bäumen ohne Stelligkeit}
+
+Sei $\Sigma = \{a\}$, wobei $a$ ohne Stelligkeit ist.
+Wir betrachten die Sprache $L$ aller Bäume mit Höhe 1 über $\Sigma$,
+also $L = \{a(a), a(aa), a(aaa), \dots\}$.
+Wenn wir nun einen (Bottom-up-)Baumautomaten $\Amc = (Q,\Sigma,\Delta,F)$
+mit $L(\Amc)=L$ konstruieren wollen,
+dann sollte dieser zwei Zustände $q_0,q_1$ haben,
+um zwischen den zwei Ebenen zu unterscheiden;
+außerdem müsste er für jedes $k \geq 1$ einen Übergang
+\[
+   a(\underbrace{q_0,\dots,q_0}_{k\text{-mal}}) \to q_1
+\]
+haben -- damit wäre aber $\Delta$ nicht mehr endlich.
+
+Abhilfe kann man schaffen, indem man eine reguläre Sprache $R \subseteq Q^*$ benutzt,
+die genau die unendlich vielen Folgen $q_0,\dots,q_0$ beschreibt.
+Wenn man $R$ mittels eines regulären Ausdrucks beschreibt,
+erhält man hier einen einzigen Übergang, nämlich
+\[
+  a(q_0^+) \to q_1,
+\]
+wobei $q_0^+$ die übliche Abkürzung für $q_0q_0^*$ ist
+($q_0^*$ genügt nicht, denn oben ist $k = 0$ nicht erlaubt).
+
+% ===================================================================
+\section*{T2.14~ Beispiel-NEHA}
+
+Wir beginnen mit einem Beispiel für den tiefsten gemeinsamen Vorgänger (tgV)
+zweier Positionen $p_1,p_2$. Intuitiv gesprochen ist $\textsf{tgV}(p_1,p_2)$
+die Stelle, an der sich die zwei Pfade zu $p_1$ bzw.\ $p_2$ trennen:
+%
+\begin{center}
+  \dots\ Bild folgt \dots
+\end{center}
+%
+Eine solche Position existiert immer, denn je zwei Pfade haben mindestens
+die Position $\varepsilon$ gemeinsam.
+
+Wenn wir untenstehenden Baum betrachten (nur die Positionen),
+dann gilt Nebenstehendes.
+\parII
+\hspace*{10mm}
+\parbox{.5\linewidth}{%
+  \begin{tikzpicture}[%
+    baseline=-2pt,
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=7mm},
+    level 1/.style = {sibling distance = 30mm, level distance =  6mm},
+    level 2/.style = {sibling distance = 13mm, level distance = 10mm},
+    level 3/.style = {sibling distance = 10mm, level distance = 10mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node (eps) {$\varepsilon$}
+      child {
+        node (1) {$1$}
+        child {
+          node (11) {$11$}
+        }
+        child {
+          node (12) {$12$}
+        }
+        child {
+          node (13) {$13$}
+            child {
+              node (131) {$131$}
+            }
+            child {
+              node (132) {$132$}
+            }
+        }
+      }
+      child {
+        node (2) {$2$}
+      }
+    ;
+  \end{tikzpicture}%
+}%
+\parbox{.5\linewidth}{
+  \begin{alignat*}{2}
+    \textsf{tgV}(131,{}& 132) & & = 13 \\
+    \textsf{tgV}(132,{}& 12)  & & = 1 \\
+    \textsf{tgV}(132,{}& 2)   & & = \varepsilon
+  \end{alignat*}
+}
+
+\parIII
+Nun betrachten wir die Sprache
+\begin{align*}
+  L = \{T = (P,t) \mid{} & \text{es gibt~} p_1,p_2 \in P \text{~mit~} t(p_1) = t(p_2) = b \text{~und~} t(\text{tgV}(p_1,p_2)) = c\}
+\end{align*}
+und den folgenden Baum $L$ über dem Alphabet $\Sigma = \{a,b,c\}$ (ohne Stelligkeit).
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    baseline=-2pt,
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=7mm},
+    level 1/.style = {sibling distance = 34mm, level distance =  6mm},
+    level 2/.style = {sibling distance = 13mm, level distance = 10mm},
+    level 3/.style = {sibling distance = 10mm, level distance = 10mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node (eps) {$a$}
+      child {
+        node[fill=black!20] (0) {$c$}
+        child {
+          node (11) {$a$}
+        }
+        child {
+          node[fill=black!20] (12) {$b$}
+        }
+        child {
+          node (13) {$a$}
+            child {
+              node (131) {$c$}
+            }
+            child {
+              node[fill=black!20] (132) {$b$}
+            }
+        }
+      }
+      child {
+        node (2) {$b$}
+        child {
+          node (21) {$a$}
+          child {
+            node (211) {$a$}
+          }
+        }
+      }
+    ;
+  \end{tikzpicture}%
+\end{center}
+%
+An den hervorgehobenen Positionen erkennt man, dass $T \in L$.
+
+\parIII
+Der NEHA \Amc von Folie~2.79 hat folgenden erfolgreichen Run auf $T$:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    baseline=-2pt,
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=7mm},
+    level 1/.style = {sibling distance = 34mm, level distance =  6mm},
+    level 2/.style = {sibling distance = 13mm, level distance = 10mm},
+    level 3/.style = {sibling distance = 10mm, level distance = 10mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node (eps) {$q_c$}
+      child {
+        node[fill=black!20] (0) {$q_c$}
+        child {
+          node (11) {$q_0$}
+        }
+        child {
+          node[fill=black!20] (12) {$q_b$}
+        }
+        child {
+          node (13) {$q_b$}
+            child {
+              node (131) {$q_0$}
+            }
+            child {
+              node[fill=black!20] (132) {$q_b$}
+            }
+        }
+      }
+      child {
+        node (2) {$q_b$}
+        child {
+          node (21) {$q_0$}
+          child {
+            node (211) {$q_0$}
+          }
+        }
+      }
+    ;
+  \end{tikzpicture}%
+\end{center}
+
+% ===================================================================
+\section*{T2.15~ Beispielableitung in DTD}
+
+Wir betrachten die durch folgende erweiterte kontextfreie Grammatik
+gegebene DTD.
+%
+\begin{center}
+  \begin{tabular}{@{}lcl@{}}
+    \texttt{conference} & $\to$ & $\texttt{track}^+ + (\texttt{session}~(\texttt{break} + \varepsilon))^+$ \\
+    \texttt{track}      & $\to$ & $(\texttt{session}~(\texttt{break} + \varepsilon))^+$                    \\
+    \texttt{session}    & $\to$ & $\texttt{chair}~ \texttt{talk}^+$                                        \\
+    \texttt{talk}       & $\to$ & $(\texttt{title}~\texttt{authors}) + (\texttt{title}~\texttt{speaker})$  \\
+    \texttt{chair}      & $\to$ & $\texttt{DATA}$                                                          \\
+    \dots               &       &                                                                          \\
+    \texttt{title}      & $\to$ & $\texttt{DATA}$
+  \end{tabular}
+\end{center}
+%
+Eine mögliche Ableitung beginnt wie folgt.
+%
+\begin{itemize}
+  \item
+    Beginne mit dem Startsymbol:
+    %
+    \begin{center}
+      \begin{tikzpicture}[%
+        baseline=-2pt,
+        node distance=20mm,>=Latex,
+        every node/.style={ellipse,draw=black,thin,fill=black!5,inner sep=.6mm},
+      ]
+        \node (eps) {{\small \texttt{conference}}}
+        ;
+      \end{tikzpicture}
+    \end{center}
+    \parII
+  \item
+    Wende Regel 1 auf diesen Knoten an:
+    %
+    \begin{center}
+      \begin{tikzpicture}[%
+        baseline=-2pt,
+        node distance=20mm,>=Latex,
+        every node/.style={ellipse,draw=black,thin,fill=black!5,inner sep=.6mm},
+        level 1/.style = {sibling distance = 54mm, level distance = 10mm},
+        edge from parent/.style = {draw=black, thin, -}%
+      ]
+        \node (eps) {{\small \texttt{conference}}}
+          child {
+            node (1) {{\small \texttt{track}}}
+          }
+          child {
+            node (2) {{\small \texttt{track}}}
+          }
+        ;
+      \end{tikzpicture}
+    \end{center}
+    \parII
+  \item
+    Wende Regel 2 auf das linke \texttt{track}-Blatt an:
+    %
+    \begin{center}
+      \begin{tikzpicture}[%
+        baseline=-2pt,
+        node distance=20mm,>=Latex,
+        every node/.style={ellipse,draw=black,thin,fill=black!5,inner sep=1mm},
+        level 1/.style = {sibling distance = 54mm, level distance = 10mm},
+        level 2/.style = {sibling distance = 24mm, level distance = 10mm},
+        edge from parent/.style = {draw=black, thin, -}%
+      ]
+        \node (eps) {{\small \texttt{conference}}}
+          child {
+            node (1) {{\small \texttt{track}}}
+            child {
+              node (11) {{\small \texttt{session}}}
+            }
+            child {
+              node (12) {{\small \texttt{break}}}
+            }
+            child {
+              node (13) {{\small \texttt{session}}}
+            }
+          }
+          child {
+            node (2) {{\small \texttt{track}}}
+          }
+        ;
+      \end{tikzpicture}
+    \end{center}
+    \parII
+  \item
+    Wende Regel 6 auf das \texttt{break}-Blatt an:
+    %
+    \begin{center}
+      \begin{tikzpicture}[%
+        baseline=-2pt,
+        node distance=20mm,>=Latex,
+        every node/.style={ellipse,draw=black,thin,fill=black!5,inner sep=1mm},
+        level 1/.style = {sibling distance = 54mm, level distance = 10mm},
+        level 2/.style = {sibling distance = 24mm, level distance = 10mm},
+        edge from parent/.style = {draw=black, thin, -}%
+      ]
+        \node (eps) {{\small \texttt{conference}}}
+          child {
+            node (1) {{\small \texttt{track}}}
+            child {
+              node (11) {{\small \texttt{session}}}
+            }
+            child {
+              node (12) {{\small \texttt{break}}}
+              child {
+                node (121) {{\small \texttt{DATA}}}
+              }
+            }
+            child {
+              node (13) {{\small \texttt{session}}}
+            }
+          }
+          child {
+            node (2) {{\small \texttt{track}}}
+          }
+        ;
+      \end{tikzpicture}
+    \end{center}
+    %
+    \parII
+    Auf das neu entstandene \texttt{DATA}-Blatt ist nun keine Regel mehr anwendbar.
+    \parII
+    \goodbreak
+  \item
+    Wende Regel 3 auf das linke \texttt{session}-Blatt an:
+    %
+    \begin{center}
+      \begin{tikzpicture}[%
+        baseline=-2pt,
+        node distance=20mm,>=Latex,
+        every node/.style={ellipse,draw=black,thin,fill=black!5,inner sep=1mm},
+        level 1/.style = {sibling distance = 54mm, level distance = 10mm},
+        level 2/.style = {sibling distance = 34mm, level distance = 10mm},
+        level 3/.style = {sibling distance = 20mm, level distance = 10mm},
+        edge from parent/.style = {draw=black, thin, -}%
+      ]
+        \node (eps) {{\small \texttt{conference}}}
+          child {
+            node (1) {{\small \texttt{track}}}
+            child {
+              node (11) {{\small \texttt{session}}}
+              child {
+                node (111) {{\small \texttt{session}}}
+              }
+              child {
+                node (112) {{\small \texttt{talk}}}
+              }
+              child {
+                node [right=2mm of 112] (113) {{\small \texttt{talk}}}
+              }
+            }
+            child {
+              node (12) {{\small \texttt{break}}}
+              child {
+                node (121) {{\small \texttt{DATA}}}
+              }
+            }
+            child {
+              node [right=5mm of 12] (13) {{\small \texttt{session}}}
+            }
+          }
+          child {
+            node (2) {{\small \texttt{track}}}
+          }
+        ;
+      \end{tikzpicture}
+    \end{center}
+    \parII
+  \item
+    (usw.)
+\end{itemize}
+%
+\parIII
+Es wird solange jeweils eine Regel auf ein Blatt angewendet,
+bis keine Regel mehr anwendbar ist.
+
+% ===================================================================
+\section*{T2.16~ Beispiele nicht lokaler Sprachen}
+
+\dots\ folgen \dots
+
+% ===================================================================
+\section*{T2.17~ Beispiel eines nicht deterministischen RAs}
+
+\dots\ folgt \dots
 
 % ===================================================================
 % ===================================================================
