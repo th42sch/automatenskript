@@ -19,7 +19,7 @@
   \includegraphics[width=.4\linewidth]{logo_ub.jpg} \\[\baselineskip]~%
 }
 \date{Stand: \today}
-\publishers{{\large Dieses Dokument ist noch unvollständig und wird regelmäßig aktualisiert.}}
+%\publishers{{\large Dieses Dokument ist noch unvollständig und wird regelmäßig aktualisiert.}}
 
 \begin{document}
 
@@ -799,7 +799,7 @@ auf dem \Amc trotzdem einen erfolgreichen Run hat
 -- ein Widerspruch zur Annahme $L(\Amc) = L_2$.
 %
 \begin{center}
-  \dots\ Bild folgt \dots
+  \includegraphics[width=.95\linewidth]{img/t2_5.pdf}
 \end{center}
 
 % ===================================================================
@@ -1026,9 +1026,38 @@ auf dem \Amc trotzdem einen erfolgreichen Run hat
 \section*{T2.7~ Illustrationen zum Beweis des Pumping-Lemmas}
 
 \begin{center}
-  \dots\ Bilder folgen \dots
+  \parbox{.15\linewidth}{%
+    Folie~2.32:%
+  }%
+  \parbox{.35\linewidth}{%
+    \includegraphics[width=\linewidth]{img/t2_7a.pdf}%
+  }%
+  \parbox{.15\linewidth}{%
+    Folie~2.33:%
+  }%
+  \parbox{.35\linewidth}{%
+    \includegraphics[width=\linewidth]{img/t2_7b.pdf}%
+  }%
 \end{center}
+%
+\begin{center}
+  \parbox{.15\linewidth}{%
+    Folie~2.34:%
+  }%
+  \parbox{.35\linewidth}{%
+    \includegraphics[width=\linewidth]{img/t2_7c.pdf}%
+  }%
+  \parbox{.15\linewidth}{%
+    Folie~2.35:%
+  }%
+  \parbox{.35\linewidth}{%
+    \includegraphics[width=\linewidth]{img/t2_7d.pdf}%
+  }%
+\end{center}
+%
+%
 
+\pagebreak
 % ===================================================================
 \section*{T2.8~ Anwendung des Pumping-Lemmas}
 
@@ -1040,7 +1069,7 @@ Sei $k \geq 0$ beliebig.
 Wir wählen als $T$ den vollständigen Binärbaum der Höhe $k$:
 %
 \begin{center}
-  \dots\ Bild folgt \dots
+  \includegraphics[width=.5\linewidth]{img/t2_8a.pdf}%
 \end{center}
 %
 Sei nun $T=C[D[V]]$ eine Zerlegung von $T$ in Kontexte
@@ -1063,7 +1092,7 @@ Seien weiterhin
 \end{itemize}
 %
 \begin{center}
-  \dots\ Bild folgt \dots
+  \includegraphics[width=.5\linewidth]{img/t2_8b.pdf}%
 \end{center}
 %
 Weil $T$ vollständig ist, haben alle Pfade in $T$ die Länge $k = d_1+d_2+d_3$.
@@ -1071,7 +1100,7 @@ Weil $T$ vollständig ist, haben alle Pfade in $T$ die Länge $k = d_1+d_2+d_3$.
 Wir wählen nun $i=2$ und betrachten den "`gepumpten"' Baum $C[D^2[V]]$:
 %
 \begin{center}
-  \dots\ Bild folgt \dots
+  \includegraphics[width=.5\linewidth]{img/t2_8c.pdf}%
 \end{center}
 %
 In diesem Baum gibt es einen Pfad der Länge $d_1+2d_2+d_3 > k$, nämlich zur Position $p_1p_2p_2p_3$.
@@ -1429,7 +1458,7 @@ zweier Positionen $p_1,p_2$. Intuitiv gesprochen ist $\textsf{tgV}(p_1,p_2)$
 die Stelle, an der sich die zwei Pfade zu $p_1$ bzw.\ $p_2$ trennen:
 %
 \begin{center}
-  \dots\ Bild folgt \dots
+  \includegraphics[width=.4\linewidth]{img/t2_14.pdf}%
 \end{center}
 %
 Eine solche Position existiert immer, denn je zwei Pfade haben mindestens
@@ -1474,7 +1503,7 @@ dann gilt Nebenstehendes.
     ;
   \end{tikzpicture}%
 }%
-\parbox{.5\linewidth}{
+\parbox{.3\linewidth}{
   \begin{alignat*}{2}
     \textsf{tgV}(131,{}& 132) & & = 13 \\
     \textsf{tgV}(132,{}& 12)  & & = 1 \\
@@ -1578,6 +1607,7 @@ Der NEHA \Amc von Folie~2.79 hat folgenden erfolgreichen Run auf $T$:
   \end{tikzpicture}%
 \end{center}
 
+\pagebreak
 % ===================================================================
 \section*{T2.15~ Beispielableitung in DTD}
 
