@@ -1762,12 +1762,285 @@ bis keine Regel mehr anwendbar ist.
 % ===================================================================
 \section*{T2.16~ Beispiele nicht lokaler Sprachen}
 
-\dots\ folgen \dots
+\textsfbf{Beispiel 1.}
+\[
+  L_1 = \{a(b(ccc)b(cc)),\,a(b(cc)b(c))\},
+\]
+d.\,h.\ $L_1$ besteht genau aus den Bäumen
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    baseline=-2pt,
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
+    level 1/.style = {sibling distance = 32mm, level distance =  6mm},
+    level 2/.style = {sibling distance =  9mm, level distance = 10mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node (eps) {$a$}
+      child {
+        node (1) {$b$}
+        child {
+          node (11) {$c$}
+        }
+        child {
+          node (12) {$c$}
+        }
+        child {
+          node (13) {$c$}
+        }
+      }
+      child {
+        node (2) {$b$}
+        child {
+          node (21) {$c$}
+        }
+        child {
+          node (22) {$c$}
+        }
+      }
+    ;
+  \end{tikzpicture}%
+  \hspace*{20mm}%
+  \begin{tikzpicture}[%
+    baseline=-2pt,
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
+    level 1/.style = {sibling distance = 32mm, level distance =  6mm},
+    level 2/.style = {sibling distance =  9mm, level distance = 10mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node (eps) {$a$}
+      child {
+        node (1) {$b$}
+        child {
+          node (11) {$c$}
+        }
+        child {
+          node (12) {$c$}
+        }
+      }
+      child {
+        node (2) {$b$}
+        child {
+          node (21) {$c$}
+        }
+        child {
+          node (22) {$c$}
+        }
+        child {
+          node (23) {$c$}
+        }
+      }
+    ;
+  \end{tikzpicture}%
+\end{center}
+%
+$L_1$ ist nicht lokal, denn wenn $L_1$ von einer DTD erzeugt würde,
+dann müsste diese DTD auch die folgenden Bäume erzeugen:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    baseline=-2pt,
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
+    level 1/.style = {sibling distance = 32mm, level distance =  6mm},
+    level 2/.style = {sibling distance =  9mm, level distance = 10mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node (eps) {$a$}
+      child {
+        node (1) {$b$}
+        child {
+          node (11) {$c$}
+        }
+        child {
+          node (12) {$c$}
+        }
+      }
+      child {
+        node (2) {$b$}
+        child {
+          node (21) {$c$}
+        }
+        child {
+          node (22) {$c$}
+        }
+      }
+    ;
+  \end{tikzpicture}%
+  \hspace*{20mm}%
+  \begin{tikzpicture}[%
+    baseline=-2pt,
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
+    level 1/.style = {sibling distance = 32mm, level distance =  6mm},
+    level 2/.style = {sibling distance =  9mm, level distance = 10mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node (eps) {$a$}
+      child {
+        node (1) {$b$}
+        child {
+          node (11) {$c$}
+        }
+        child {
+          node (12) {$c$}
+        }
+        child {
+          node (13) {$c$}
+        }
+      }
+      child {
+        node (2) {$b$}
+        child {
+          node (21) {$c$}
+        }
+        child {
+          node (22) {$c$}
+        }
+        child {
+          node (23) {$c$}
+        }
+      }
+    ;
+  \end{tikzpicture}%
+\end{center}
+%
+Man kann also mit DTDs nicht in Tiefe $\geq 2$ zählen.
+Für unser Konferenz-Beispiel heißt das, dass man z.\,B.\ keine DTD schreiben kann,
+die erfordert, dass alle Konferenzen genau 5 Vorträge haben.
+
+\parII
+\textsfbf{Beispiel 2.}
+\[
+  L_2 = \{a(b(cd)),\,a'(b(dc))\},
+\]
+d.\,h.\ $L_2$ besteht genau aus den Bäumen
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    baseline=-2pt,
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
+    level 1/.style = {sibling distance = 32mm, level distance =  8mm},
+    level 2/.style = {sibling distance =  9mm, level distance =  8mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node (eps) {$a$}
+      child {
+        node (1) {$b$}
+        child {
+          node (11) {$c$}
+        }
+        child {
+          node (12) {$d$}
+        }
+      }
+    ;
+  \end{tikzpicture}%
+  \hspace*{20mm}%
+  \begin{tikzpicture}[%
+    baseline=-2pt,
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
+    level 1/.style = {sibling distance = 32mm, level distance =  8mm},
+    level 2/.style = {sibling distance =  9mm, level distance =  8mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node (eps) {$a'$}
+      child {
+        node (1) {$b$}
+        child {
+          node (11) {$d$}
+        }
+        child {
+          node (12) {$c$}
+        }
+      }
+    ;
+  \end{tikzpicture}%
+\end{center}
+%
+$L_2$ ist nicht lokal, denn wenn $L_2$ von einer DTD erzeugt würde, dann müsste diese DTD
+auch die folgenden Bäume erzeugen:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    baseline=-2pt,
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
+    level 1/.style = {sibling distance = 32mm, level distance =  8mm},
+    level 2/.style = {sibling distance =  9mm, level distance =  8mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node (eps) {$a$}
+      child {
+        node (1) {$b$}
+        child {
+          node (11) {$d$}
+        }
+        child {
+          node (12) {$c$}
+        }
+      }
+    ;
+  \end{tikzpicture}%
+  \hspace*{20mm}%
+  \begin{tikzpicture}[%
+    baseline=-2pt,
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
+    level 1/.style = {sibling distance = 32mm, level distance =  8mm},
+    level 2/.style = {sibling distance =  9mm, level distance =  8mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node (eps) {$a'$}
+      child {
+        node (1) {$b$}
+        child {
+          node (11) {$c$}
+        }
+        child {
+          node (12) {$d$}
+        }
+      }
+    ;
+  \end{tikzpicture}%
+\end{center}
+%
+Man kann also mit DTDs keine Abhängigkeiten modellieren, die sich über mehrere Ebenen erstrecken,
+wie hier z.\,B.: "`bei den Enkeln von $a$ kommt $c$ vor $d$, aber bei den Enkeln von $a'$ ist es anders herum."'
+Bezogen auf das Konferenzbeispiel kann man z.\,B.\ mit einer DTD nicht fordern,
+dass in Informatik-Konferenzen ($a$) die Publikation ($c$) vor dem Vortrag ($d$) erscheint,
+während die Reihenfolge bei Mathematik-Konferenzen ($a'$) umgekehrt ist.
 
 % ===================================================================
-\section*{T2.17~ Beispiel eines nicht deterministischen RAs}
+\section*{T2.17~ Beispiel für nicht deterministischen regulären Ausdruck}
 
-\dots\ folgt \dots
+Der reguläre Ausdruck (RA) $r = ab + ac$ ist nicht deterministisch:
+Mittels Nummerieren der Buchstaben erhalten wir $r' = a_1b_1 + a_2c_1$.
+Nun sind aber $a_1b_1,a_2c_1 \in L(r')$ (wenn man $u = \varepsilon$, $v=b_1$ und $w=c_1$ wählt),
+was Definition~2.28 verletzt.
+
+Es ist aber leicht zu sehen, dass der RA $a(b+c)$
+äquivalent zu $r$ ist. Dieser ist trivialerweise deterministisch,
+denn jedes Zeichen kommt darin nur einmal vor.
+
+Daraus folgt, dass die Zeile 
+%
+\begin{center}
+  \texttt{talk} ~$\to$~ $(\texttt{title}~\texttt{authors}) + (\texttt{title}~\texttt{speaker})$
+\end{center}
+%
+aus der Beispiel-DTD (Folie~2.86) zwar kein zulässiges Inhaltsmodell enthält,
+man sie aber äquivalent mit deterministischem RA so umschreiben kann, dass sie zulässig wird:
+%
+\begin{center}
+  \texttt{talk} ~$\to$~ $\texttt{title}~(\texttt{authors} + \texttt{speaker})$
+\end{center}
+%
+
 
 % ===================================================================
 % ===================================================================
