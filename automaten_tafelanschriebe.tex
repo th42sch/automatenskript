@@ -2325,7 +2325,7 @@ Zu zeigen ist:
 % ===================================================================
 \section*{T3.4~ Beweis Charakterisierung NBA-erkennbarer Sprachen}
 
-\textsfbf{Satz~3.9.}~
+\textsfbf{Satz~3.10.}~
 Eine Sprache $L \subseteq \Sigma^\omega$ ist Büchi-erkennbar
 genau dann,
 wenn es reguläre Sprachen $V_1,W_1,\dots,V_n,W_n$ gibt mit $n \geqslant 1$ und
@@ -2333,32 +2333,39 @@ wenn es reguläre Sprachen $V_1,W_1,\dots,V_n,W_n$ gibt mit $n \geqslant 1$ und
   L = V_1W_1^\omega \cup \dots \cup V_nW_n^\omega.
 \]
 
-\par\medskip
+\par\vspace*{-.5\baselineskip}
 \textsfbf{Beweis.}~
-Sei $L \subseteq \Sigma^\omega$ Büchi-erkennbar,
-also $L = L_\omega(\Amc)$ für einen NBA $\Amc = (Q,\Sigma,\Delta,I,F)$.
-Wir nutzen folgende Beobachtung: für jedes $\omega$-Wort $\alpha \in L_\omega(\Amc)$,
-auf dem $\Amc$ einen erfolgreichen Run $r = q_0q_1q_2\cdots$
-mit $q_f \in \textsf{Inf}(r) \cap F$ hat, gibt es
 %
-\begin{itemize}
-  \item
-    ein endliches Präfix von $\alpha$, das $q_I$ nach $q_f$ überführt und
-  \item
-    unendlich viele nicht-leere Infixe, die $q_f$ nach $q_f$ überführen.
-\end{itemize}
-%
-Diese beiden Sorten von Infixen können wir durch reguläre Sprachen beschreiben.
-Dazu verwenden wir folgende Notation: Für zwei beliebige Zustände $q_1,q_2 \in Q$
-sei $\Amc_{q_1,q_2} = (Q,\Sigma,\Delta,\{q_1\},\{q_2\})$
-und $W_{q_1,q_2} = L(\Amc_{q_1,q_2})$.
-Nach Definition sind die $W_{q_1,q_2}$ regulär.
-Wegen der Akzeptanzbedingung von Büchi-Automaten und unserer Beobachtung gilt nun:
-\[
-  L_\omega = \bigcup_{\substack{q_i \in I\\q_f \in F}} W_{q_i,q_f} W_{q_f,q_f}^\omega
-\]
-\qedhere
+\begin{description}
+  \item[{\boldmath "`$\Leftarrow$"'}]
+    Folgt aus Lemmas 3.6, 3.8 und 3.9.
+  \item[{\boldmath "`$\Rightarrow$"'}]
+    Sei $L \subseteq \Sigma^\omega$ Büchi-erkennbar,
+    also $L = L_\omega(\Amc)$ für einen NBA $\Amc = (Q,\Sigma,\Delta,I,F)$.
+    Wir nutzen folgende Beobachtung: für jedes $\omega$-Wort $\alpha \in L_\omega(\Amc)$,
+    auf dem $\Amc$ einen erfolgreichen Run $r = q_0q_1q_2\cdots$
+    mit $q_f \in \textsf{Inf}(r) \cap F$ hat, gibt es
+    %
+    \begin{itemize}
+      \item
+        ein endliches Präfix von $\alpha$, das $q_I$ nach $q_f$ überführt und
+      \item
+        unendlich viele nicht-leere Infixe, die $q_f$ nach $q_f$ überführen.
+    \end{itemize}
+    %
+    Diese beiden Sorten von Infixen können wir durch reguläre Sprachen beschreiben.
+    Dazu verwenden wir folgende Notation: Für zwei beliebige Zustände $q_1,q_2 \in Q$
+    sei $\Amc_{q_1,q_2} = (Q,\Sigma,\Delta,\{q_1\},\{q_2\})$
+    und $W_{q_1,q_2} = L(\Amc_{q_1,q_2})$.
+    Nach Definition sind die $W_{q_1,q_2}$ regulär.
+    Wegen der Akzeptanzbedingung von Büchi-Automaten und unserer Beobachtung gilt nun:
+    \[
+      L_\omega = \bigcup_{\substack{q_i \in I\\q_f \in F}} W_{q_i,q_f} W_{q_f,q_f}^\omega
+    \]
+    \qedhere
+\end{description}
 
+\par\vspace*{-.5\baselineskip}
 % ===================================================================
 \section*{T3.5~ Beispiele für {\boldmath $\Vec W$}}
 
