@@ -13,6 +13,8 @@ Alle (bisherigen und geplanten) Tafelanschriebe sind jetzt <font color="#005500"
 
 ## Versionsgeschichte (WiSe 2019/20)
 
+**18.11.2019**&nbsp; bisherigen T3.10 gelöscht (ist jetzt auf Folie); neuen T3.10 an neue Konstruktion auf Folie angepasst
+
 **11.11.2019**&nbsp; kleinere Korrekturen in T3.4
 
 **3./4.11.2019**&nbsp; T2.12–T2.17 und alle fehlenden Bilder hinzugefügt

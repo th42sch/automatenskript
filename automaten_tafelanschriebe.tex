@@ -2582,39 +2582,39 @@ für jeden \textsfbf{D}EA/\textsfbf{D}BA $\Amc=(Q,\Sigma,\Delta,\{q_I\},F)$ gilt
     $L_\omega(\Amc) = \bigcap_{i \leq n} L_\omega(Q,\Sigma,\Delta,I,\Pmc_i)$.
 \end{itemize}
 
-% ===================================================================
-\section*{T3.10~ Überblick Beweis der Gleichmächtigkeit}
-
-Das folgende Bild illustriert, wie die Aussagen der Lemmata 3.17--3.19
-zur Äquivalenz der vier Automatenmodelle (Satz 3.16) beitragen.
-Ein Pfeil vom Knoten N$x$A zum Knoten N$y$A bedeutet dabei:
-"`jede N$x$A-erkennbare Sprache ist N$y$A-erkennbar"';
-die Beschriftung der Pfeile gibt die Nummer des Lemmas an.
+%% ===================================================================
+%\section*{T3.10~ Überblick Beweis der Gleichmächtigkeit}
 %
-\begin{center}
-  \begin{tikzpicture}[%
-    node distance=20mm,>=Latex,
-    initial text="", initial where=below left,
-    every state/.style={rectangle,rounded corners,draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
-    every edge/.style={draw=black,thin}
-  ]
-    \node[state] (NRA)                   {NRA};
-    \node[state,above left of=NRA] (NBA) {NBA};
-    \node[state,below left of=NRA] (NSA) {NSA};
-    \node[state,right=20mm of NRA]      (NMA) {NMA};
-    
-    \path[->] (NBA) edge                node [above]            {3.17} (NMA)
-              (NRA) edge                node [above,near start] {3.17} (NMA)
-              (NSA) edge                node [below]            {~3.17} (NMA)
-              (NBA) edge[bend left=10]  node [left,near end]    {3.18} (NRA)
-              (NBA) edge[bend right=10] node [left]             {3.18} (NSA)
-              (NMA) edge[bend right=30] node [right,near start] {~3.19} (NBA)
-              ;
-  \end{tikzpicture}
-\end{center}
-
+%Das folgende Bild illustriert, wie die Aussagen der Lemmata 3.17--3.19
+%zur Äquivalenz der vier Automatenmodelle (Satz 3.16) beitragen.
+%Ein Pfeil vom Knoten N$x$A zum Knoten N$y$A bedeutet dabei:
+%"`jede N$x$A-erkennbare Sprache ist N$y$A-erkennbar"';
+%die Beschriftung der Pfeile gibt die Nummer des Lemmas an.
+%%
+%\begin{center}
+%  \begin{tikzpicture}[%
+%    node distance=20mm,>=Latex,
+%    initial text="", initial where=below left,
+%    every state/.style={rectangle,rounded corners,draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+%    every edge/.style={draw=black,thin}
+%  ]
+%    \node[state] (NRA)                   {NRA};
+%    \node[state,above left of=NRA] (NBA) {NBA};
+%    \node[state,below left of=NRA] (NSA) {NSA};
+%    \node[state,right=20mm of NRA]      (NMA) {NMA};
+%    
+%    \path[->] (NBA) edge                node [above]            {3.17} (NMA)
+%              (NRA) edge                node [above,near start] {3.17} (NMA)
+%              (NSA) edge                node [below]            {~3.17} (NMA)
+%              (NBA) edge[bend left=10]  node [left,near end]    {3.18} (NRA)
+%              (NBA) edge[bend right=10] node [left]             {3.18} (NSA)
+%              (NMA) edge[bend right=30] node [right,near start] {~3.19} (NBA)
+%              ;
+%  \end{tikzpicture}
+%\end{center}
+%
 % ===================================================================
-\section*{T3.11~ Beweis Korrektheit "`von Muller- zu Büchi-Automaten"'}
+\section*{T3.10~ Beweis Korrektheit "`von Muller- zu Büchi-Automaten"'}
 
 Am Ende des Beweises von Lemma~3.19 ist zu zeigen:~ $L_\omega(\Amc') = L_\omega(\Amc)$.
 %
@@ -2622,24 +2622,25 @@ Am Ende des Beweises von Lemma~3.19 ist zu zeigen:~ $L_\omega(\Amc') = L_\omega(
   \item[{\boldmath"`$\supseteq$"'}]
     Sei $\alpha \in L_\omega(\Amc)$ und $r = q_0q_1q_2\cdots$ ein
     erfolgreicher Run von \Amc (NMA!) auf $\alpha$, also $q_0 \in I$
-    und $\textsf{Inf}(r) = F$.
+    und $\textsf{Inf}(r) = F = \{f_0,\dots,f_{n-1}\}$.
     Dann gibt es eine Position $i_0 \geq 1$, ab der nur noch
-    akzeptierende Zustände auftreten, d.\,h.\ $q_i \in F$ für alle $i \geq i_0$.
-    Daraus konstruieren wir wie folgt induktiv eine Folge $s=s_0s_1s_2\cdots$ von Zuständen
+    akzeptierende Zustände auftreten, d.\,h.\ 
+    für alle $i \geq i_0$ ist $q_i = f_{j_i}$ für gewisse $j_i < n$.
+    Aus $r$ konstruieren wir wie folgt induktiv eine Folge $s=s_0s_1s_2\cdots$ von Zuständen
     von $\Amc'$:
     %
     \begin{itemize}
       \item
         Für alle $i < i_0$ setze $s_i = q_i$.
       \item
-        $s_{i_0} = \auf q_{i_0},\{q_{i_0}\}\zu$
+        $s_{i_0} = \auf f_j,j\zu$ für $j = j_{i_0}$
       \item
-        Für alle $i > i_0$ setze
+        Für alle $i \geq i_0$ setze
         \[
-          s_i = \begin{cases}
-                  \auf q_i,S \cup \{q_i\}\zu & \text{falls~} s_{i-1} = \auf q_{i-1},S\zu \text{~und~} S \neq F \\
-                  \auf q_i, \{q_i\}\zu & \text{falls~} s_{i-1} = \auf q_{i-1},F\zu 
-                \end{cases}
+          s_{i+1} = \begin{cases}
+                      \auf f_{j_{i+1}}, k \zu            & \text{falls~} s_i = \auf f_{j_i}, k \zu \text{~und~} j_i \neq k \\
+                      \auf f_{j_{i+1}}, k \oplus_n 1 \zu & \text{falls~} s_i = \auf f_{j_i}, j_i \zu
+                    \end{cases}
         \]
     \end{itemize}
     %
@@ -2653,14 +2654,14 @@ Am Ende des Beweises von Lemma~3.19 ist zu zeigen:~ $L_\omega(\Amc') = L_\omega(
         $s_0 \in I$ (nach Definition $I'$).
       \item 
         $s$ ist erfolgreich, denn wegen $\textsf{Inf}(r) = F$
-        gibt es $\infty$ viele Vorkommen von Zuständen der Form $\auf q_f,F\zu$ in $S$.
+        gibt es $\infty$ viele Vorkommen von Zuständen der Form $\auf f_0,0\zu$ in $S$.
     \end{itemize}
     %
     Also ist $\alpha \in L_\omega(\Amc')$.
   \item[{\boldmath"`$\subseteq$"'}]
     Sei $\alpha \in L_\omega(\Amc')$ und $s = s_0s_1s_2\cdots$ ein
-    erfolgreicher Run von $\Amc'$ (NBA!) auf $\alpha$, also $s_0 \in I'$
-    und ein $\auf q_f,F\zu$ kommt $\infty$ oft in $s$ vor.
+    erfolgreicher Run von $\Amc'$ (NBA!) auf $\alpha$, also $s_0 \in I' = I$
+    und $\auf f_0,0\zu$ kommt $\infty$ oft in $s$ vor.
     Konstruiere daraus eine Folge $r = q_0q_1q_2\cdots$ von Zuständen aus $Q$ wie folgt:
     %
     \goodbreak
@@ -2668,7 +2669,7 @@ Am Ende des Beweises von Lemma~3.19 ist zu zeigen:~ $L_\omega(\Amc') = L_\omega(
       \item
         Wenn $s_i \in Q$, dann $q_i = s_i$.
       \item
-        Wenn $s_i = \auf q_f,S\zu$, dann $q_i = q_f$.
+        Wenn $s_i = \auf f_{j_i},k\zu$, dann $q_i = f_{j_i}$.
     \end{itemize}
     %
     Diese Konstruktion stellt sicher:
@@ -2681,7 +2682,7 @@ Am Ende des Beweises von Lemma~3.19 ist zu zeigen:~ $L_\omega(\Amc') = L_\omega(
       \item
         $r$ enthält nur endlich viele Zustände außerhalb $F$ (weil in "`Phase 2"' nur noch Zustände aus $F$ vorkommen).
       \item 
-        Jeder Zustand aus $F$ kommt in $r$ unendlich oft vor (weil $\auf q_f,F\zu$ unendlich oft in $s$ vorkommt).
+        Jeder Zustand aus $F$ kommt in $r$ unendlich oft vor (weil $\auf f_0,0\zu$ unendlich oft in $s$ vorkommt und zwischen zwei solchen Vorkommen wegen des "`Moduswechsels"' in $\Delta'$ jedes $f_i$, $0 < i < n$, mindestens einmal durchlaufen werden muss).
     \end{itemize}
     %
     Damit ist $r$ ein erfolgreicher Run des NMA $\Amc$ auf $\alpha$,
@@ -2690,7 +2691,8 @@ Am Ende des Beweises von Lemma~3.19 ist zu zeigen:~ $L_\omega(\Amc') = L_\omega(
 \end{description}
 
 % ===================================================================
-\section*{T3.12~ Determinisierungsversuch mittels Potenzmengenkonstruktion}
+%\section*{\scalebox{.96}[1]{T3.11 Determinisierungsversuch mittels Potenzmengenkonstruktion}}
+\section*{T3.11~ Determinisierungsversuch mittels Potenzmengenkonstruktion}
 
 Wir betrachten folgenden NBA $\Amc$ über dem Alphabet $\Sigma = \{a,b\}$.
 %
@@ -2750,7 +2752,7 @@ fortgesetzt werden kann.
 
 \goodbreak
 % ===================================================================
-\section*{T3.13~ Variation der Akzeptanzbedingung im vorigen Beispiel}
+\section*{T3.12~ Variation der Akzeptanzbedingung im vorigen Beispiel}
 
 Wir betrachten dieselben Automaten $\Amc,\Amc^d$ wie im vorigen Beispiel.
 Man könnte versuchen, durch Variation der Akzeptanzbedingung von $\Amc^d$
@@ -2777,7 +2779,7 @@ im 3.\ Fall gibt es Wörter, die von $\Amc$ akzeptiert werden,
 aber nicht von $\Amc^d$, z.\,B.\ $(bba)^\omega$.
 
 % ===================================================================
-\section*{T3.14~ Beispiel für Safras Trick 1}
+\section*{T3.13~ Beispiel für Safras Trick 1}
 
 Betrachte folgenden NBA $\Amc$ über dem Alphabet $\Sigma = \{a,b\}$.
 %
@@ -2886,8 +2888,9 @@ $S_2$ unendlich oft besucht werden muss, aber $S_0$ und $S_1$ nur
 endlich oft. Dies erreicht man z.\,B.\ durch die Rabin-Akzeptanzkomponente
 $\Pmc = \{(\{S_0\},\{S_2\})\}$.
 
+\goodbreak
 % ===================================================================
-\section*{T3.15~ Beispiel für die gesamte Safra-Konstruktion}
+\section*{T3.14~ Beispiel für die gesamte Safra-Konstruktion}
 
 Wir betrachten den NBA $\Amc$ aus dem vorigen Beispiel:
 %
@@ -2989,6 +2992,7 @@ Also ist der $b$-Folgezustand von $S_0$ wieder $S_0$:
 
 \paragraph*{{\boldmath Folgezustand von $S_0$ mit $a$}}
 %
+\enlargethispage*{5mm}
 \begin{itemize}
   \item
     Schritte 1--2 sind nicht anwendbar, siehe oben.
@@ -3398,6 +3402,7 @@ Der zuletzt abgebildete Safrabaum $S_3$ ist der $a$-Folgezustand von $S_2$:
   \end{tikzpicture}
 \end{center}
 
+\enlargethispage*{10mm}
 \paragraph*{{\boldmath Folgezustand von $S_2$ mit $b$}}
 %
 \begin{itemize}
@@ -3435,7 +3440,7 @@ Der zuletzt abgebildete Safrabaum $S_3$ ist der $a$-Folgezustand von $S_2$:
       \end{tikzpicture}
     \end{center}
   \item
-    Schritt 4 ist nicht anwendbar, da alle Makrozsutände außer dem von Knoten 1 leer sind.
+    Schritt 4 ist nicht anwendbar: alle Makrozsutände außer Knoten 1 sind leer.
   \item
     In Schritt 5 werden Knoten $2,3,4$ gelöscht.
   \item
@@ -3579,7 +3584,7 @@ Laut Folie~72 ist $\Pmc = \{(E_1,F_1),\,(E_2,F_2)\}
 = \{(\emptyset,\emptyset),\,(\{S_1,S_1\},\{S_3\})\}$.
 
 % ===================================================================
-\section*{T3.16~ Korrektheitsbeweis der Safra-Konstruktion, Details}
+\section*{T3.15~ Korrektheitsbeweis der Safra-Konstruktion, Details}
 
 \textsfbf{Hilfsaussage [HA].}~
 Für alle $T_i$ und alle Zustände $p$ im Makrozustand \textsfbf{(MZ)} von $v$ in $T_{i+1}$
@@ -3587,9 +3592,10 @@ gibt es einen Zustand $q$ im Makrozustand von $v$ in $T_{i}$
 und einen endlichen Run $q\dots p$ von $\Amc$ auf dem zugehörigen Teilwort von $\alpha$,
 der einen akzeptierenden Zustand enthält.
 
-\par\medskip\noindent
+\par\smallskip\noindent
 \textsfbf{Skizze:}~
 %
+\par\vspace*{-1.5\baselineskip}
 \begin{center}
   \begin{tikzpicture}[%
     node distance=40mm,>=Latex,
@@ -3625,8 +3631,8 @@ der einen akzeptierenden Zustand enthält.
     \node [right=10mm of q] {\strut $\cdots\qquad f\qquad \cdots$};
   \end{tikzpicture}
 \end{center}
-
-\par\medskip\noindent
+%
+\par\vspace*{-.5\baselineskip}
 \textsfbf{Beweis der HA.}~
 Damit $v$ überhaupt mit \circled{!} markiert werden kann,
 muss $v$ direkt vor der entsprechenden Anwendung des Schrittes~6
@@ -3688,6 +3694,7 @@ Seien $M,N,P$ die Makrozustände des Knotens $v$ in $T_i,U,T_{i+1}$:
   \end{tikzpicture}
 \end{center}
 %
+\par\vspace*{-.5\baselineskip}
 Mit den eingeführten Bezeichnungen lässt sich die zu zeigende HA nun so formulieren:
 %
 \begin{itemize}
@@ -3794,6 +3801,7 @@ von $(**)$ "`rückwärts"' ist, also "`für alle $p \in P$ existiert ein $q \in 
 und \emph{nicht} umgekehrt.
 
 \par\smallskip
+\enlargethispage*{20mm}
 Nun betrachten wir den allgemeinen Fall, dass es mehrere Zwischenzustände
 der Art $U$ mit Eigenschaft $(*)$ gibt.
 Dann gibt es auch mehrere Situationen [1], und in [2] werden
@@ -3893,10 +3901,11 @@ in der dasjenige Kind $v'$ von $v$ erzeugt wird, das zu $p \in P$ führt.
   \end{tikzpicture}
 \end{center}
 %
+\par\vspace*{-\baselineskip}
 \qedhere
 
 % ===================================================================
-\section*{T3.17~ Vollständigkeitsbeweis der Safra-Konstruktion, Details}
+\section*{T3.16~ Vollständigkeitsbeweis der Safra-Konstruktion, Details}
 
 \textsfbf{Hilfsaussage [HA].}~
 Es gibt einen Knotennamen $v$, für den gilt:
@@ -3969,7 +3978,7 @@ und~(b) erfüllt.
 \qedhere
 
 % ===================================================================
-\section*{T3.18~ NBA für eine Kripke-Struktur}
+\section*{T3.17~ NBA für eine Kripke-Struktur}
 
 \begin{center}
   \begin{tabular}{@{}l@{\hspace*{20mm}}l@{}}
@@ -4024,7 +4033,7 @@ und~(b) erfüllt.
 \end{center}
 
 % ===================================================================
-\section*{T3.19~ NBAs für Beispiel-Eigenschaften}
+\section*{T3.18~ NBAs für Beispiel-Eigenschaften}
 
 \subsection*{(1) Mikrowellen-Beispiel}
 
@@ -4178,7 +4187,7 @@ Hier ist das Alphabet $\Sigma = 2^{\{0,1,10,11,\dots,23\}}$.
 
 \goodbreak
 % ===================================================================
-\section*{T3.20~ Beispiele für LTL-Syntax und Semantik}
+\section*{T3.19~ Beispiele für LTL-Syntax und Semantik}
 
 Betrachte folgenden Pfad $\pi$.
 %
@@ -4274,7 +4283,7 @@ Betrachte nun den folgenden Pfad $\pi'$.
 Dann gilt $\pi',0 \not\models a \U b$, aber $\pi',0 \models (\X a \lor \X\X a) \U (\X b)$.
 
 % ===================================================================
-\section*{T3.21~ Beispiele für die Erweiterung von Pfaden}
+\section*{T3.20~ Beispiele für die Erweiterung von Pfaden}
 
 Sei z.\,B. $\varphi_E = \X(a\U b)$ und der Pfad $\pi=s_0s_1s_2\cdots$
 wie folgt gegeben:
@@ -4359,7 +4368,7 @@ Das heißt also, dass z.\,B.\ $t_0$ die elementare Formelmenge $\{a,\,a\U b,\,\X
 
 
 % ===================================================================
-\section*{T3.22~ Beispiele für elementare Formelmengen}
+\section*{T3.21~ Beispiele für elementare Formelmengen}
 
 Sei $\varphi_E = a\U(\lnot a \land b)$.
 Dann ist $\textsf{cl}(\varphi_E) = \{a,\, \lnot a,\, b,\, \lnot b,\, \lnot a \land b,\, \lnot(\lnot a \land b),\, \varphi_E,\, \lnot \varphi_E\}$.
@@ -4395,9 +4404,9 @@ Dann ist $\textsf{cl}(\varphi_E) = \{a,\, \lnot a,\, b,\, \lnot b,\, \lnot a \la
 \end{itemize}
 
 % ===================================================================
-\section*{T3.23~ Skizzen zur Def.\ der Überführungsrelation des GNBA}
+\section*{T3.22~ Skizzen zur Def.\ der Überführungsrelation des GNBA}
 
-Bedingung \circled{1} besagt, dass im Beispiel in T3.21 \emph{höchstens}
+Bedingung \circled{1} besagt, dass im Beispiel in T3.20 \emph{höchstens}
 die Transitionen $(t_0,\{a\},t_1)$, $(t_1,\{a\},t_2)$, $(t_2,\{b\},t_3)$, $(t_3,\emptyset,t_4)$ usw.\
 erlaubt sind (sofern jeweils Bedingungen \circled{2} und \circled{3} auch erfüllt sind).
 
@@ -4468,7 +4477,7 @@ $\psi_1 \U \psi_2 \equiv \psi_2 \lor (\psi_1 \land \X(\psi_1 \U \psi_2))$
 (weist diese selbst nach :--)).
 
 % ===================================================================
-\section*{{\boldmath T3.24~ GNBA für die Beispiel-Formel $\X a$}}
+\section*{{\boldmath T3.23~ GNBA für die Beispiel-Formel $\X a$}}
 
 \begin{itemize}
   \item
@@ -4544,7 +4553,7 @@ Graphische Darstellung:
 
 
 % ===================================================================
-\section*{{\boldmath T3.25~ GNBA für die Beispiel-Formel $(\lnot a) \U b$}}
+\section*{{\boldmath T3.24~ GNBA für die Beispiel-Formel $(\lnot a) \U b$}}
 
 \begin{itemize}
   \item
