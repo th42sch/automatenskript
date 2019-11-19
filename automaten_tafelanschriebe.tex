@@ -2890,7 +2890,54 @@ $\Pmc = \{(\{S_0\},\{S_2\})\}$.
 
 \goodbreak
 % ===================================================================
-\section*{T3.14~ Beispiel für die gesamte Safra-Konstruktion}
+\section*{T3.14~ Anzahl der Knoten eines Safra-Baums}
+
+Wie auf Folie~3.66 halten wir die Zustandsmenge $Q$ des ursprünglichen NBA
+und eine nichtleere, genügend große Menge von Knotennamen $V$ fest.
+Ein Safra-Baum über $Q,V$ ist ein geordneter Baum mit Knoten aus $V$,
+in dem jeder Knoten mit einem nichtleeren Makrozustand (MZ, Teilmenge $M \subseteq Q$)
+markiert ist, so dass gilt:
+
+Wenn Knoten $v$ mit $M$ und $v$'s Kinder mit $M_1,\dots,M_n$ markiert sind, dann:
+%
+\begin{enumerate}
+  \item[(1)]
+    $M_1 \cup \dots \cup M_n \subsetneq M$
+  \item[(2)]
+    $M_i$ sind paarweise disjunkt
+\end{enumerate}
+
+\par\medskip\noindent
+\textsfbf{Behauptung.}~ Jeder Safra-Baum über der Zustandsmenge $Q$
+hat höchstens $|Q|$ Knoten.
+
+\par\medskip\noindent
+\textsfbf{Beweis.~}
+Wir verwenden Induktion über die Höhe des Baums.
+%
+\begin{description}
+  \item[Induktionsanfang.]
+    Safra-Bäume der Höhe 0 (nur ein Wurzel-Knoten) erfüllen die Bedingung trivialerweise.
+  \item[Induktionsschritt.]
+    Sei $S$ ein beliebiger Safra-Baum der Höhe $n \geq 2$.
+    Wir betrachten die Teilbäume $S_1,\dots,S_k$ der Kinder der Wurzel.
+    Wegen Eigenschaften (1) und (2) ist jeder $S_i$ ein Safra-Baum
+    über einer Teilmenge $Q_i \subseteq Q$,
+    wobei die $Q_i$ paarweise disjunkt sind mit 
+    \[
+      \tag{*}
+      \biguplus_{i \leq k} Q_i \subsetneq Q.
+    \]
+    Nach Induktionsvoraussetzung hat jeder $S_i$ nur höchstens $|Q_i|$ Knoten.
+    Folglich hat $S$ maximal $\sum_{i \leq k}|Q_i| + 1$ Knoten,
+    und wegen $(*)$ ist dieser Wert durch $|Q|$ beschränkt.
+    \qedhere
+\end{description}
+
+
+\pagebreak
+% ===================================================================
+\section*{T3.15~ Beispiel für die gesamte Safra-Konstruktion}
 
 Wir betrachten den NBA $\Amc$ aus dem vorigen Beispiel:
 %
@@ -3584,7 +3631,7 @@ Laut Folie~72 ist $\Pmc = \{(E_1,F_1),\,(E_2,F_2)\}
 = \{(\emptyset,\emptyset),\,(\{S_1,S_1\},\{S_3\})\}$.
 
 % ===================================================================
-\section*{T3.15~ Korrektheitsbeweis der Safra-Konstruktion, Details}
+\section*{T3.16~ Korrektheitsbeweis der Safra-Konstruktion, Details}
 
 \textsfbf{Hilfsaussage [HA].}~
 Für alle $T_i$ und alle Zustände $p$ im Makrozustand \textsfbf{(MZ)} von $v$ in $T_{i+1}$
@@ -3905,7 +3952,7 @@ in der dasjenige Kind $v'$ von $v$ erzeugt wird, das zu $p \in P$ führt.
 \qedhere
 
 % ===================================================================
-\section*{T3.16~ Vollständigkeitsbeweis der Safra-Konstruktion, Details}
+\section*{T3.17~ Vollständigkeitsbeweis der Safra-Konstruktion, Details}
 
 \textsfbf{Hilfsaussage [HA].}~
 Es gibt einen Knotennamen $v$, für den gilt:
@@ -3978,7 +4025,7 @@ und~(b) erfüllt.
 \qedhere
 
 % ===================================================================
-\section*{T3.17~ NBA für eine Kripke-Struktur}
+\section*{T3.18~ NBA für eine Kripke-Struktur}
 
 \begin{center}
   \begin{tabular}{@{}l@{\hspace*{20mm}}l@{}}
@@ -4033,7 +4080,7 @@ und~(b) erfüllt.
 \end{center}
 
 % ===================================================================
-\section*{T3.18~ NBAs für Beispiel-Eigenschaften}
+\section*{T3.19~ NBAs für Beispiel-Eigenschaften}
 
 \subsection*{(1) Mikrowellen-Beispiel}
 
@@ -4187,7 +4234,7 @@ Hier ist das Alphabet $\Sigma = 2^{\{0,1,10,11,\dots,23\}}$.
 
 \goodbreak
 % ===================================================================
-\section*{T3.19~ Beispiele für LTL-Syntax und Semantik}
+\section*{T3.20~ Beispiele für LTL-Syntax und Semantik}
 
 Betrachte folgenden Pfad $\pi$.
 %
@@ -4283,7 +4330,7 @@ Betrachte nun den folgenden Pfad $\pi'$.
 Dann gilt $\pi',0 \not\models a \U b$, aber $\pi',0 \models (\X a \lor \X\X a) \U (\X b)$.
 
 % ===================================================================
-\section*{T3.20~ Beispiele für die Erweiterung von Pfaden}
+\section*{T3.21~ Beispiele für die Erweiterung von Pfaden}
 
 Sei z.\,B. $\varphi_E = \X(a\U b)$ und der Pfad $\pi=s_0s_1s_2\cdots$
 wie folgt gegeben:
@@ -4368,7 +4415,7 @@ Das heißt also, dass z.\,B.\ $t_0$ die elementare Formelmenge $\{a,\,a\U b,\,\X
 
 
 % ===================================================================
-\section*{T3.21~ Beispiele für elementare Formelmengen}
+\section*{T3.22~ Beispiele für elementare Formelmengen}
 
 Sei $\varphi_E = a\U(\lnot a \land b)$.
 Dann ist $\textsf{cl}(\varphi_E) = \{a,\, \lnot a,\, b,\, \lnot b,\, \lnot a \land b,\, \lnot(\lnot a \land b),\, \varphi_E,\, \lnot \varphi_E\}$.
@@ -4404,7 +4451,7 @@ Dann ist $\textsf{cl}(\varphi_E) = \{a,\, \lnot a,\, b,\, \lnot b,\, \lnot a \la
 \end{itemize}
 
 % ===================================================================
-\section*{T3.22~ Skizzen zur Def.\ der Überführungsrelation des GNBA}
+\section*{T3.23~ Skizzen zur Def.\ der Überführungsrelation des GNBA}
 
 Bedingung \circled{1} besagt, dass im Beispiel in T3.20 \emph{höchstens}
 die Transitionen $(t_0,\{a\},t_1)$, $(t_1,\{a\},t_2)$, $(t_2,\{b\},t_3)$, $(t_3,\emptyset,t_4)$ usw.\
@@ -4477,7 +4524,7 @@ $\psi_1 \U \psi_2 \equiv \psi_2 \lor (\psi_1 \land \X(\psi_1 \U \psi_2))$
 (weist diese selbst nach :--)).
 
 % ===================================================================
-\section*{{\boldmath T3.23~ GNBA für die Beispiel-Formel $\X a$}}
+\section*{{\boldmath T3.24~ GNBA für die Beispiel-Formel $\X a$}}
 
 \begin{itemize}
   \item
@@ -4553,7 +4600,7 @@ Graphische Darstellung:
 
 
 % ===================================================================
-\section*{{\boldmath T3.24~ GNBA für die Beispiel-Formel $(\lnot a) \U b$}}
+\section*{{\boldmath T3.25~ GNBA für die Beispiel-Formel $(\lnot a) \U b$}}
 
 \begin{itemize}
   \item
