@@ -2795,7 +2795,7 @@ Betrachte folgenden NBA $\Amc$ über dem Alphabet $\Sigma = \{a,b\}$.
     \node[state,accepting] (q1) [right of=q0] {$q_1$};
     \node[above left=-2mm and 8mm of q0] {$\Amc$};
     
-    \path[->] (q0) edge              node [above] {$b$}    (q1)
+    \path[->] (q0) edge              node [above] {$a$}    (q1)
               (q0) edge [loop above] node [right] {~$a,b$} ()
               (q1) edge [loop above] node [right] {~$a$}   ();
   \end{tikzpicture}
@@ -2939,7 +2939,7 @@ Wir verwenden Induktion über die Höhe des Baums.
 % ===================================================================
 \section*{T3.15~ Beispiel für die gesamte Safra-Konstruktion}
 
-Wir betrachten den NBA $\Amc$ aus dem vorigen Beispiel:
+Wir betrachten den NBA $\Amc$ aus T3.13:
 %
 \begin{center}
   \begin{tikzpicture}[%
@@ -2953,7 +2953,7 @@ Wir betrachten den NBA $\Amc$ aus dem vorigen Beispiel:
     \node[state,accepting] (q1) [right of=q0] {$q_1$};
     \node[above left=-2mm and 8mm of q0] {$\Amc$};
     
-    \path[->] (q0) edge              node [above] {$b$}    (q1)
+    \path[->] (q0) edge              node [above] {$a$}    (q1)
               (q0) edge [loop above] node [right] {~$a,b$} ()
               (q1) edge [loop above] node [right] {~$a$}   ();
   \end{tikzpicture}
@@ -3560,7 +3560,7 @@ Damit ist der $b$-Folgezustand von $S_1$ wieder der Safrabaum $S_0$:
 ~\par
 Da sich der Safrabaum $S_3$ von $S_2$ nur durch die Markierung des Knotens 2 unterscheidet,
 laufen die Schritte 2--6 genauso ab, nachdem in Schritt 1 die Markierung entfernt wurde.
-Damit hat $S_3$ dieselben Folgezustände wie $S_2$ (nämlich $S_3$ für $a$ und $S_1$ für $b$):
+Damit hat $S_3$ dieselben Folgezustände wie $S_2$ (nämlich $S_3$ für $a$ und $S_0$ für $b$):
 %
 \begin{center}
   \begin{tikzpicture}[%
@@ -3614,8 +3614,8 @@ Damit hat $S_3$ dieselben Folgezustände wie $S_2$ (nämlich $S_3$ für $a$ und 
               (S0) edge [out=98,in=82,loop]   node [right] {~$b$} ()
               (S2) edge                       node [above] {$a$}  (S3)
               (S2) edge                       node [above,near start] {$b$} (S0)
-              (S3) edge                       node [left]  {$a$}  (S0)
-              (S3) edge [out=186,in=174,loop] node [left] {~$b$} ();
+              (S3) edge                       node [left]  {$b$}  (S0)
+              (S3) edge [out=186,in=174,loop] node [left] {~$a$} ();
               
     \path[-] (S21) edge (S22)
              (S31) edge (S32);
