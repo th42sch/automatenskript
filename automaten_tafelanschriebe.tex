@@ -4024,8 +4024,44 @@ Folglich muss es einen Nachfahren von 1 geben, der Bedingungen~(a)
 und~(b) erfüllt.
 \qedhere
 
+\pagebreak
 % ===================================================================
-\section*{T3.18~ NBA für eine Kripke-Struktur}
+\section*{T3.18~ Anmerkungen zum Algorithmus fürs Leerheitsproblem}
+
+Es genügt nicht, in der \textsfbf{if}-Zeile auf die Bedingung
+%
+\begin{center}
+  $L(\Amc_{q_0,q_f}) = \emptyset$ oder $L(\Amc_{q_f,q_f}) = \emptyset$
+\end{center}
+%
+zu prüfen, denn dann würde der Algorithmus bei Eingabe des Automaten
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=45mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state,initial,accepting] (q) {$q$};
+    \node[above left=-2mm and 8mm of q] {$\Amc$};
+  \end{tikzpicture}
+\end{center}
+%
+nach Raten von $q_0=q_f=q$ "`nicht leer"' ausgeben, obwohl $L_\omega(\Amc) = \emptyset$.
+
+\par\medskip\noindent
+Der Test $L(\Amc_{q_f,q_f}) \subseteq \{\varepsilon\}$ lässt sich durch den Leerheitstest
+$L(\Amc_{q_f,q_f}) \cap (\Sigma \setminus \{\varepsilon\}) = \emptyset$
+realisieren,
+wobei man für $\Sigma \setminus \{\varepsilon\}$ leicht einen (von $\Amc_{q_f,q_f}$ unabhängigen)
+NEA konstruieren kann. Der Produktautomat muss dabei "`on the fly"' konstruiert werden,
+d.\,h.\ es werden immer nur die während des Leerheitstests aktuell erforderlichen Zustände und Übergänge
+im Speicher gehalten und niemals der gesamte Automat.
+
+% ===================================================================
+\section*{T3.19~ NBA für eine Kripke-Struktur}
 
 \begin{center}
   \begin{tabular}{@{}l@{\hspace*{20mm}}l@{}}
@@ -4080,7 +4116,7 @@ und~(b) erfüllt.
 \end{center}
 
 % ===================================================================
-\section*{T3.19~ NBAs für Beispiel-Eigenschaften}
+\section*{T3.20~ NBAs für Beispiel-Eigenschaften}
 
 \subsection*{(1) Mikrowellen-Beispiel}
 
@@ -4234,7 +4270,7 @@ Hier ist das Alphabet $\Sigma = 2^{\{0,1,10,11,\dots,23\}}$.
 
 \goodbreak
 % ===================================================================
-\section*{T3.20~ Beispiele für LTL-Syntax und Semantik}
+\section*{T3.21~ Beispiele für LTL-Syntax und Semantik}
 
 Betrachte folgenden Pfad $\pi$.
 %
@@ -4330,7 +4366,7 @@ Betrachte nun den folgenden Pfad $\pi'$.
 Dann gilt $\pi',0 \not\models a \U b$, aber $\pi',0 \models (\X a \lor \X\X a) \U (\X b)$.
 
 % ===================================================================
-\section*{T3.21~ Beispiele für die Erweiterung von Pfaden}
+\section*{T3.22~ Beispiele für die Erweiterung von Pfaden}
 
 Sei z.\,B. $\varphi_E = \X(a\U b)$ und der Pfad $\pi=s_0s_1s_2\cdots$
 wie folgt gegeben:
@@ -4415,7 +4451,7 @@ Das heißt also, dass z.\,B.\ $t_0$ die elementare Formelmenge $\{a,\,a\U b,\,\X
 
 
 % ===================================================================
-\section*{T3.22~ Beispiele für elementare Formelmengen}
+\section*{T3.23~ Beispiele für elementare Formelmengen}
 
 Sei $\varphi_E = a\U(\lnot a \land b)$.
 Dann ist $\textsf{cl}(\varphi_E) = \{a,\, \lnot a,\, b,\, \lnot b,\, \lnot a \land b,\, \lnot(\lnot a \land b),\, \varphi_E,\, \lnot \varphi_E\}$.
@@ -4451,7 +4487,7 @@ Dann ist $\textsf{cl}(\varphi_E) = \{a,\, \lnot a,\, b,\, \lnot b,\, \lnot a \la
 \end{itemize}
 
 % ===================================================================
-\section*{T3.23~ Skizzen zur Def.\ der Überführungsrelation des GNBA}
+\section*{T3.24~ Skizzen zur Def.\ der Überführungsrelation des GNBA}
 
 Bedingung \circled{1} besagt, dass im Beispiel in T3.20 \emph{höchstens}
 die Transitionen $(t_0,\{a\},t_1)$, $(t_1,\{a\},t_2)$, $(t_2,\{b\},t_3)$, $(t_3,\emptyset,t_4)$ usw.\
@@ -4524,7 +4560,7 @@ $\psi_1 \U \psi_2 \equiv \psi_2 \lor (\psi_1 \land \X(\psi_1 \U \psi_2))$
 (weist diese selbst nach :--)).
 
 % ===================================================================
-\section*{{\boldmath T3.24~ GNBA für die Beispiel-Formel $\X a$}}
+\section*{{\boldmath T3.25~ GNBA für die Beispiel-Formel $\X a$}}
 
 \begin{itemize}
   \item
@@ -4600,7 +4636,7 @@ Graphische Darstellung:
 
 
 % ===================================================================
-\section*{{\boldmath T3.25~ GNBA für die Beispiel-Formel $(\lnot a) \U b$}}
+\section*{{\boldmath T3.26~ GNBA für die Beispiel-Formel $(\lnot a) \U b$}}
 
 \begin{itemize}
   \item
