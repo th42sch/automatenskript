@@ -4115,12 +4115,12 @@ im Speicher gehalten und niemals der gesamte Automat.
   \end{tabular}
 \end{center}
 
+\pagebreak
 % ===================================================================
 \section*{T3.20~ NBAs für Beispiel-Eigenschaften}
 
-\subsection*{(1) Mikrowellen-Beispiel}
-
-Hier ist das Alphabet $\Sigma = 2^{\{\textsf{S},\textsf{C},\textsf{H},\textsf{E}\}}$.
+Im Mikrowellen-Beispiel ist das Alphabet $\Sigma = 2^{\{\textsf{g},\textsf{o},\textsf{h},\textsf{f}\}}$
+(die Buchstaben stehen für \textsf{gestartet}, \textsf{offen}, \textsf{heizt} bzw.\ \textsf{fehler}).
 
 \begin{itemize}
   \item[(a)]
@@ -4139,17 +4139,17 @@ Hier ist das Alphabet $\Sigma = 2^{\{\textsf{S},\textsf{C},\textsf{H},\textsf{E}
         \node[state,initial,accepting] (q0) {};
         \node[state]                   (q1) [right of=q0] {};
         
-        \path[->] (q0) edge [bend left=10] node [above] {"`$E$"'}       (q1)
-                  (q1) edge [bend left=10] node [below] {"`kein $E$"'}  (q0)
-                  (q0) edge [loop below]   node [below] {"`kein $E$"'}  ()
+        \path[->] (q0) edge [bend left=10] node [above] {"`\textsf{f}"'}       (q1)
+                  (q1) edge [bend left=10] node [below] {"`kein \textsf{f}"'}  (q0)
+                  (q0) edge [loop below]   node [below] {"`kein \textsf{f}"'}  ()
                   (q1) edge [loop below]   node [below] {"`irgendwas"'} ();
       \end{tikzpicture}
     \end{center}
     %
-    Dabei steht z.\,B.\ die Beschriftung "`$E$"' für alle Alphabetzeichen
-    (Teilmengen von $\{\textsf{S},\textsf{C},\textsf{H},\textsf{E}\}$), die $E$ enthalten,
-    und "`kein $E$"' für alle Alphabetzeichen, die $E$ nicht enthalten.
-    Sei also $M = \{\{E\}, \{S,E\}, \{C,E\}, \dots, \{S,C,H,E\}\}$
+    Dabei steht z.\,B.\ die Beschriftung "`\textsf{f}"' für alle Alphabetzeichen
+    (Teilmengen von $\{\textsf{g},\textsf{o},\textsf{h},\textsf{f}\}$), die \textsf{f} enthalten,
+    und "`kein \textsf{f}"' für alle Alphabetzeichen, die \textsf{f} nicht enthalten.
+    Sei also $M = \{\{\textsf{f}\}, \{\textsf{g},\textsf{f}\}, \{\textsf{o},\textsf{f}\}, \dots, \{\textsf{g},\textsf{o},\textsf{h},\textsf{f}\}\}$
     und $M' = \Sigma \setminus M$. Dann sind die korrekten Kantenbeschriftungen
     im Automaten wie folgt.
     %
@@ -4188,9 +4188,9 @@ Hier ist das Alphabet $\Sigma = 2^{\{\textsf{S},\textsf{C},\textsf{H},\textsf{E}
         \node[state,initial,accepting] (q0) {};
         \node[state]                   (q1) [right of=q0] {};
         
-        \path[->] (q0) edge [bend left=10] node [above] {"`$S$"'}       (q1)
-                  (q1) edge [bend left=10] node [below] {"`$H$"'}       (q0)
-                  (q0) edge [loop below]   node [below] {"`kein $S$"'}  ()
+        \path[->] (q0) edge [bend left=10] node [above] {"`\textsf{g}"'}       (q1)
+                  (q1) edge [bend left=10] node [below] {"`\textsf{h}"'}       (q0)
+                  (q0) edge [loop below]   node [below] {"`kein \textsf{g}"'}  ()
                   (q1) edge [loop below]   node [below] {"`irgendwas"'} ();
       \end{tikzpicture}
     \end{center}
@@ -4202,42 +4202,10 @@ Hier ist das Alphabet $\Sigma = 2^{\{\textsf{S},\textsf{C},\textsf{H},\textsf{E}
     nur muss man hier existenzielles Model-Checking
     statt universellem verwenden.
     
-\end{itemize}
-
-\subsection*{(2) Nebenläufige Programme}
-
-Hier ist das Alphabet $\Sigma = 2^{\{0,1,10,11,\dots,23\}}$.
-%
-\begin{itemize}
   \item[(d)]
-    "`Es kommt nie vor,
-    dass beide Teilprogramme zugleich im kritischen Bereich sind."'
-
-    Schematisch muss der Automat so aussehen:
-    %
-    \begin{center}
-      \begin{tikzpicture}[%
-        node distance=45mm,>=Latex,
-        initial text="", initial where=below left,
-        every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
-        accepting/.style={double distance=1.5pt, double=white},
-        every edge/.style={draw=black,thin}
-      ]
-        \node[state,initial,accepting] (q0) {};
-        
-        \path[->] (q0) edge [loop below]   node [below] {"`nicht 12 oder nicht 22"'}  ();
-      \end{tikzpicture}
-    \end{center}
-    %
-    Dabei steht die Beschriftung "`nicht 12 oder nicht 22"' der Schleife für alle Alphabet\-zeichen
-    (Teilmengen von $\{0,1,10,11,\dots,23\}$), die nicht gleichzeitig 12 und 22 enthalten.
-    Damit ist die korrekte Kantenbeschriftung für die Schleife
-    die Menge $\{X \subseteq \{0,1,10,11,\dots,23\} \mid \{12,22\} \nsubseteq X\}$.
-    %
-  \item[(e)]
-    "`Jedes Teilprogramm kommt beliebig oft in seinen kritischen Bereich."'
+    "`Die Mikrowelle heizt beliebig oft und ist beliebig oft offen."'
     
-    Der Automat $\Amc_1$, der beschreibt, dass $P_1$ beliebig oft in seinen kritischen Bereich kommt,
+    Der Automat $\Amc_1$, der beschreibt, dass die Mikrowelle beliebig oft heizt,
     ist dem in (a) sehr ähnlich (hier wieder nur die schematische Darstellung):
     %
     \begin{center}
@@ -4251,26 +4219,27 @@ Hier ist das Alphabet $\Sigma = 2^{\{0,1,10,11,\dots,23\}}$.
         \node[state,initial,accepting] (q0) {};
         \node[state]                   (q1) [right of=q0] {};
         
-        \path[->] (q0) edge [bend left=10] node [above] {"`nicht 12"'}  (q1)
-                  (q1) edge [bend left=10] node [below] {"`12"'}        (q0)
-                  (q0) edge [loop below]   node [below] {"`12"'}        ()
+        \path[->] (q0) edge [bend left=10] node [above] {"`nicht \textsf{h}"'}  (q1)
+                  (q1) edge [bend left=10] node [below] {"`\textsf{h}"'}        (q0)
+                  (q0) edge [loop below]   node [below] {"`\textsf{h}"'}        ()
                   (q1) edge [loop below]   node [below] {"`irgendwas"'} ();
       \end{tikzpicture}
     \end{center}
     %
-    Der Automat $\Amc_2$ für $P_2$ ist analog.
-    Um zu beschreiben, dass \emph{beide} Programme beliebig oft in den
-    jeweiligen kritischen Bereich kommen, muss man den Produktautomaten von $\Amc_1$ und $\Amc_2$ bilden.
+    Der Automat $\Amc_2$ für "`beliebig oft offen"' ist analog.
+    Um zu beschreiben, dass die Mikrowelle \emph{beides} beliebig oft tun,
+    muss man den Produktautomaten von $\Amc_1$ und $\Amc_2$ bilden.
     
+    \enlargethispage*{10mm}
   \item[(e)]
-    "`Jedes Teilprogramm \emph{kann} beliebig oft in seinen kritischen Bereich gelangen."'
+    "`Die Mikrowelle \emph{kann} beliebig oft heizen bzw. offen sein."'
     
     Wie (d), aber mit existenziellem Model-Checking.
 \end{itemize}
 
-\goodbreak
+\pagebreak
 % ===================================================================
-\section*{T3.21~ Beispiele für LTL-Syntax und Semantik}
+\section*{T3.21~ Beispiele für LTL-Syntax und -Semantik}
 
 Betrachte folgenden Pfad $\pi$.
 %
@@ -4447,7 +4416,7 @@ Der zugehörige erweiterte Pfad $\overline{\pi}=t_0t_1t_2\cdots$ ist der folgend
   \end{tikzpicture}
 \end{center}
 %
-Das heißt also, dass z.\,B.\ $t_0$ die elementare Formelmenge $\{a,\,a\U b,\,\X(a\U b),\,\lnot b\} \subseteq \textsf{cl}(\varphi_E)$ ist.
+Das heißt also z.\,B.: $t_0$ ist die elementare Formelmenge $\{a,\,a\U b,\,\X(a\U b),\,\lnot b\} \subseteq \textsf{cl}(\varphi_E)$.
 
 
 % ===================================================================
@@ -4458,19 +4427,19 @@ Dann ist $\textsf{cl}(\varphi_E) = \{a,\, \lnot a,\, b,\, \lnot b,\, \lnot a \la
 %
 \begin{itemize}
   \item
-    $\{a,b,\varphi_E\}$ ist konsistent bezüglich der Aussagenlogik und lokal konsistent bezüglich des \U-Operators,
-    aber nicht maximal, weil weder $\lnot a \land b$ noch $\lnot(\lnot a \land b)$ enthalten ist.
+    $\{a,b,\varphi_E\}$ ist konsistent bezüglich der Aussagenlogik und lokal konsistent bzgl.\ des \U-Operators,
+    aber nicht maximal, weil sie weder $\lnot a \land b$ noch $\lnot(\lnot a \land b)$ enthält.
   \item
     Fügt man $\lnot a \land b$ hinzu, so ist die resultierende Menge $\{a,\,b,\,\lnot a \land b,\,\varphi_E\}$ 
     zwar maximal, aber nicht mehr konsistent bezüglich der Aussagenlogik,
-    da wegen $\lnot a \land b$ auch $\lnot a$ enthalten sein müsste.
+    da sie wegen $\lnot a \land b$ auch $\lnot a$ enthalten müsste.
   \item
     Fügt man stattdessen $\lnot(\lnot a \land b)$ hinzu, 
-    so ist die resultierende Menge \mbox{$\{a,\,b,\,\lnot(\lnot a \land b),\,\varphi_E\}$}
+    so ist die neue Menge \mbox{$\{a,\,b,\,\lnot(\lnot a \land b),\,\varphi_E\}$}
     maximal und konsistent bezüglich der Aussagenlogik,
     aber nicht mehr konsistent bezüglich \U,
-    weil nun zwar $\varphi_E = a \U (\lnot a \land b)$ enthalten
-    aber weder $\lnot a \land b$ noch $a$ enthalten sind.
+    weil sie nun zwar $\varphi_E = a \U (\lnot a \land b)$,
+    aber weder $\lnot a \land b$ noch $a$ enthält.
   \item
     Die elementaren Formelmengen sind folgende.
     %
@@ -4487,11 +4456,11 @@ Dann ist $\textsf{cl}(\varphi_E) = \{a,\, \lnot a,\, b,\, \lnot b,\, \lnot a \la
 \end{itemize}
 
 % ===================================================================
-\section*{T3.24~ Skizzen zur Def.\ der Überführungsrelation des GNBA}
+\section*{T3.24~ Skizzen zur Def.\ der Übergangsrelation des GNBA}
 
-Bedingung \circled{1} besagt, dass im Beispiel in T3.20 \emph{höchstens}
-die Transitionen $(t_0,\{a\},t_1)$, $(t_1,\{a\},t_2)$, $(t_2,\{b\},t_3)$, $(t_3,\emptyset,t_4)$ usw.\
-erlaubt sind (sofern jeweils Bedingungen \circled{2} und \circled{3} auch erfüllt sind).
+Bedingung \circled{1} besagt, dass im Beispiel in T3.22 \emph{höchstens}
+die Übergänge $(t_0,\{a\},t_1)$, $(t_1,\{a\},t_2)$, $(t_2,\{b\},t_3)$, $(t_3,\emptyset,t_4)$ usw.\
+erlaubt sind (sofern jeweils \circled{2} und \circled{3} auch erfüllt sind).
 
 \par\medskip
 Bedingung \circled{2} kann man so veranschaulichen:
@@ -4521,7 +4490,8 @@ Bedingung \circled{2} kann man so veranschaulichen:
   \end{tikzpicture}
 \end{center}
 
-\par\medskip
+\par\vspace*{-.5\baselineskip}
+\enlargethispage*{20mm}
 Bedingung \circled{3} kann man so veranschaulichen:
 %
 \begin{center}
@@ -4542,9 +4512,9 @@ Bedingung \circled{3} kann man so veranschaulichen:
     \node            [right=-1mm of ilabel]  {\emph{gdw.:}};
     \node (i1label)  [below=0 of q3] {\strut $t_{i+1}$};
     
-    \node (ilabel1)  [below=3mm of ilabel]   {\begin{tabular}{@{}ccc@{}}\strut enthält \\ $\psi_2$\end{tabular}};
+    \node (ilabel1)  [below=0mm of ilabel]   {\begin{tabular}{@{}ccc@{}}\strut enthält \\ $\psi_2$\end{tabular}};
     \node            [right=-1mm of ilabel1] {\emph{oder}};
-    \node (ilabel2)  [below=3mm of ilabel1]  {\begin{tabular}{@{}ccc@{}}\strut enthält \\ $\psi_1$\end{tabular}};
+    \node (ilabel2)  [below=0mm of ilabel1]  {\begin{tabular}{@{}ccc@{}}\strut enthält \\ $\psi_1$\end{tabular}};
     \node            [right=-1mm of ilabel2] {\emph{und}};
     \node (i1label2) [right of=ilabel2]      {\begin{tabular}{@{}ccc@{}}\strut enthält \\ $\psi_1\U\psi_2$\end{tabular}};
     
@@ -4634,7 +4604,7 @@ Graphische Darstellung:
 \end{center}
 %
 
-
+\pagebreak
 % ===================================================================
 \section*{{\boldmath T3.26~ GNBA für die Beispiel-Formel $(\lnot a) \U b$}}
 
@@ -4717,15 +4687,16 @@ Graphische Darstellung:
            & = \Big\{\{t_1,t_2,t_4,t_5\}\Big\}
     \end{align*}
     %
+    \enlargethispage*{20mm}%
     Es werden also Runs ausgeschlossen, die irgendwann nur noch durch $t_3$ gehen.
     Auf solchen Runs wird genau $(\lnot a)\U b$ unendlich lange "`aufgeschoben"',
     denn $(\lnot a)\U b \in t_3$ und $b \notin t_3$.
 \end{itemize}
 %
-\enlargethispage*{20mm}
 Graphische Darstellung:
 %
-\vspace*{-2\baselineskip}
+\goodbreak
+%\vspace*{-2\baselineskip}
 \begin{center}
   \begin{tikzpicture}[
      >=Latex,
