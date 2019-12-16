@@ -4743,10 +4743,668 @@ Graphische Darstellung:
 % ===================================================================
 % ===================================================================
 % ===================================================================
+\part{Alternierung}
+
+% ===================================================================
+\section*{T4.1~ Beispiel Semantik positiver Boolescher Formeln}
+
+Wir betrachten die PBF $\varphi = (p \land q) \lor (r \land s)$
+über der Variablenmenge $X = \{p,q,r,s\}$
+und die Belegungen $Y_1 = \{p,q,r\}$ und $Y_2 = \{p,r\}$.
+Dann gilt $Y_1 \models \varphi$, aber $Y_2 \not\models \varphi$.
+
+% ===================================================================
+\section*{T4.2~ Beispiel eines Run-Baums}
+
+Ein möglicher Baum mit Verzweigungsgrad $n=2$ sieht so aus:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=8mm},
+    level 1/.style = {sibling distance = 40mm, level distance =  6mm},
+    level 2/.style = {sibling distance = 22mm, level distance = 11mm},
+    level 3/.style = {sibling distance = 12mm, level distance = 11mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node {$\varepsilon$}
+    child {
+      node {1}
+      child {
+        node (00) {11}
+        child {
+          node (000) {111}
+        }
+      }
+      child {
+        node (01) {12}
+      }
+    }
+    child {
+      node {2}
+      child {
+        node {21}
+      }
+    }
+    ;
+    
+    \foreach \x in {000}
+      \node [draw=none,fill=none,below=-1mm of \x] {$\vdots$};
+    
+  \end{tikzpicture}
+\end{center}
+%
+Ein möglicher Pfad ist $\pi = \varepsilon \cdot 2 \cdot 21$; dieser Pfad ist endlich.
+%
+Wenn $\Sigma = \{p,q\}$, dann ist ein $\Sigma$-Baum z.\,B.\ folgender:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=8mm},
+    level 1/.style = {sibling distance = 40mm, level distance =  6mm},
+    level 2/.style = {sibling distance = 22mm, level distance = 11mm},
+    level 3/.style = {sibling distance = 12mm, level distance = 11mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node {$p$}
+    child {
+      node {$p$}
+      child {
+        node (00) {$p$}
+        child {
+          node (000) {$p$}
+        }
+      }
+      child {
+        node (01) {$q$}
+      }
+    }
+    child {
+      node {$q$}
+      child {
+        node {$q$}
+      }
+    }
+    ;
+    
+    \foreach \x in {000}
+      \node [draw=none,fill=none,below=-1mm of \x] {$\vdots$};
+    
+  \end{tikzpicture}
+\end{center}
+
+% ===================================================================
+\section*{T4.3~ Beispiel eines alternierenden Büchi-Automaten}
+
+Sei $\Amc = (Q,\Sigma,\delta,\{q_I\},F)$ der ABA mit
+%
+\begin{align}
+  Q & = \{p,q\},\quad \Sigma = \{a,b\},\quad F = \{p\},\quad q_I = p, \notag \\[4pt]
+  \delta(p,a) & = p \land q   \label{eq:ueb1}\\
+  \delta(p,b) & = p           \label{eq:ueb2}\\
+  \delta(q,a) & = q           \label{eq:ueb3}\\
+  \delta(q,b) & = \texttt{1}. \label{eq:ueb4}
+\end{align}
+%
+Dabei bedeutet Übergang~\eqref{eq:ueb1} von $\delta$ intuitiv:
+"`schicke zwei Kopien von $\Amc$ in Zustand $p$ bzw.\ $q$ zum nächsten Zeichen"'.
+Übergänge~\eqref{eq:ueb2} und~\eqref{eq:ueb3} entsprechen den Übergängen eines DBA.
+Übergang~\eqref{eq:ueb4} bedeutet: "`schneide den Pfad ab; hier ist die Berechnung erfolgreich"'.
+Man beachte auch, dass der Fall $\delta(\cdot,\cdot)=\texttt{0}$
+einem erfolg\emph{losen} Abbruch der Berechnung entspricht.
+
+Diesen ABA kann man graphisch wie folgt darstellen:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=15mm,>=Latex,baseline=-2pt,
+    initial text="", initial where=below left,
+    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=7mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state,initial,accepting]                          (p)    {$p$};
+    \node[rectangle,fill=black,minimum size=1.6mm,inner sep=0mm,right of=p] (rect) {};
+    \node[state,right of=rect]                              (q)    {$q$};
+    
+    \path[->]
+      (p)    edge             node[near start, above] {$b$} (q)
+      (rect) edge[out=300,in=320]                                (p)
+      (p)    edge[loop above] node[right=1mm]             {$a$} ()
+      (q)    edge[loop above] node[right=1mm]             {$a,b$} ();
+      
+    \node () [below right=-1.5mm and -.5mm of rect] {\footnotesize $\land$};
+  \end{tikzpicture}
+\end{center}
+%
+Wir betrachten außerdem das Eingabewort $\alpha = (aab)^\omega$.
+Ein möglicher Run von $\Amc$ auf $\alpha$ ist der Baum aus dem vorigen Beispiel,
+wenn man ihn ab Position 111 so fortsetzt, dass sich der
+dargestellte Teilbaum unendlich oft wiederholt. Dies ist im folgenden Bild
+durch die gestrichelte Linie dargestellt; die zu jeder Ebene gehörigen Buchstaben
+von $\alpha$ stehen rechts daneben.
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=7mm},
+    level 1/.style = {sibling distance = 40mm, level distance = 9mm},
+    level 2/.style = {sibling distance = 22mm, level distance = 9mm},
+    level 3/.style = {sibling distance = 12mm, level distance = 9mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node (eps) {$p$}
+    child {
+      node (0) {$p$}
+      child {
+        node (00) {$p$}
+        child {
+          node (000) {$p$}
+        }
+      }
+      child {
+        node (01) {$q$}
+      }
+    }
+    child {
+      node (1) {$q$}
+      child {
+        node (10) {$q$}
+      }
+    }
+    ;
+    
+    \path[-,dashed] (000) edge[out=150,in=170] (eps);
+    
+    \begin{scope}[
+      every node/.style={circle,draw=none,fill=none,inner sep=.4mm,minimum size=7mm},
+    ]
+      \node[at=(1 |- eps)] (anchor1) {};
+      \node[at=(1 |- 000)] (anchor4) {};
+    \end{scope}
+        
+    \begin{scope}[
+      every node/.style={circle,draw=none,fill=none,inner sep=.4mm,minimum size=0mm},
+    ]
+      \node[right=10mm of anchor1]         {$a$};
+      \node[right=10mm of 1]               {$a$};
+      \node[right=10mm of 10]              {$b$};
+      \node[right=10mm of anchor4] (lasta) {$a$};
+      \node[below= 2mm of lasta]           {$\vdots$};
+    \end{scope}
+  \end{tikzpicture}
+\end{center}
+%
+Dieser Run ist erfolgreich, denn der einzige unendliche Pfad
+ist $\pi = \varepsilon \cdot 1 \cdot 11 \cdot 111 \cdots$,
+welcher unendlich oft $p$ enthält und damit der Büchi-Akzeptanzbedingung
+$F=\{q\}$ entspricht.
+
+Die von $\Amc$ erkannte Sprache ist die Menge aller Wörter,
+die unendlich oft $b$ enthalten,
+also $L_\omega(\Amc) = L(((a+b)^*b)^\omega)$.
+Dies lässt sich präzise so zeigen:
+%
+\begin{description}
+  \item[{\boldmath"`$\supseteq$"'}]
+    Enthalte $\alpha \in \{a,b\}^\omega$ unendlich oft $b$.
+    Um zu zeigen, dass $\alpha$ von $\Amc$ akzeptiert wird,
+    betrachten wir den "`minimalen"' Run $(P,t)$ von $\Amc$ auf $\alpha$,
+    also denjenigen Run, der bei Übergängen~\eqref{eq:ueb2} und~\eqref{eq:ueb3}
+    nur ein Kind mit $p$ bzw.\ $q$ enthält
+    und bei Übergang~\eqref{eq:ueb4} keine Kinder.%
+    \footnote{Hier ist von einem "`minimalen Run"' die Rede,
+    weil prinzipiell immer auch mehr Kinder erlaubt sind,
+    denn wenn eine Belegung eine PBF erfüllt,
+    dann auch jede Erweiterung (d.\,h.\ Obermenge).
+    Deshalb nennt man PBFs auch manchmal \emph{monotone} Boolesche Formeln.}
+    Jeder Pfad $\pi$ dieses Runs kann
+    wegen $\delta(q,b) = \texttt{1}$ nicht in einer Folge $q^\omega$ enden.
+    Da außerdem $\delta$ keinen Übergang von $q$ nach $p$ erlaubt,
+    kann $\pi$ also nur entweder endlich sein oder aus nur $p$'s bestehen.
+    Im letzteren Fall ist die Akzeptanzbedingung erfüllt.
+    \par\smallskip
+  \item[{\boldmath"`$\subseteq$"'}]
+    Per Kontraposition:
+    enthalte $\alpha \in \{a,b\}^\omega$ endlich oft $b$.
+    Dann gibt es eine Position $m$,
+    ab der $\alpha$ nur noch aus $a$'s besteht.
+    Sei $(P,t)$ ein beliebiger Run von $\Amc$ auf $\alpha$.
+    Wir müssen zeigen, dass dieser einen unendlichen Pfad $\pi$
+    enthält, der nicht die Akzeptanzbedingung von \Amc erfüllt,
+    der also nur endlich oft $p$ enthält.
+    Da der Anfangszustand $p$ ist,
+    gibt es wegen Übergängen~\eqref{eq:ueb1} und~\eqref{eq:ueb2} einen
+    unendlichen Pfad in $(P,t)$, der nur aus $p$'s besteht.
+    Die Position in Tiefe $m$ auf diesem Pfad 
+    hat aber wegen Übergang~\eqref{eq:ueb1} ein mit $q$ markiertes Kind.
+    In diesem Kind entspringt nun wegen Übergang~\eqref{eq:ueb3}
+    ein unendlicher Pfad, der nur noch aus $q$'s besteht.
+    Damit ist der gewünschte Pfad $\pi$ gefunden.
+\end{description}
+
+% ===================================================================
+\section*{T4.4~ Beispiele für die Übersetzung {\boldmath LTL $\to$ ABA}}
+
+\paragraph*{Beispiel 1.}
+Sei $\varphi = a \U b$.
+
+Dann ist $\textsf{cl}(\varphi) = \{a,\,\lnot a,\,b,\,\lnot b,\,a \U b,\,\lnot(a \U b)\}$,
+und der ABA $\Amc_\varphi = (Q,\Sigma,\delta,\{q_I\},F)$ hat folgende Bestandteile.
+%
+\begin{align*}
+  Q      & = \{q_a,\,q_{\lnot a},\,q_b,\,q_{\lnot b},\,q_{a \U b},\,q_{\lnot(a \U b)}\} \\
+  \Sigma & = \{\emptyset,\,\{a\},\,\{b\},\,\{a,b\}\} \\
+  q_I    & = q_{a \U b} \\
+  F      & = \{q_{\lnot(a \U b)}\}
+\end{align*}
+%
+Die Übergangsfunktion $\delta$ ist durch die folgende Tabelle gegeben.
+%
+\begin{center}
+  \begin{tabular}{l|cccc}
+    ~~~~~~~~~~~~Zeichen & $\emptyset$ & $\{a\}$            & $\{b\}$    & $\{a,b\}$  \\
+    Zustand             &             &                    &            &            \\
+    \hline\rule{0pt}{11pt}%
+    $q_a$               & \texttt{0}  & \texttt{1}         & \texttt{0} & \texttt{1} \\[2pt]
+    $q_{\lnot a}$       & \texttt{1}  & \texttt{0}         & \texttt{1} & \texttt{0} \\[2pt]
+    $q_b$               & \texttt{0}  & \texttt{0}         & \texttt{1} & \texttt{1} \\[2pt]
+    $q_{\lnot b}$       & \texttt{1}  & \texttt{1}         & \texttt{0} & \texttt{0} \\[2pt]
+    $q_{a\U b}$         & \texttt{0}  & $q_{a\U b}$        & \texttt{1} & \texttt{1} \\[2pt]
+    $q_{\lnot(a\U b)}$  & \texttt{1}  & $q_{\lnot(a\U b)}$ & \texttt{0} & \texttt{0}
+  \end{tabular}
+\end{center}
+%
+Die erste Zeile $(q_a)$ ist durch die erste Gleichung für $\delta$ auf Folie~4.15 gegeben
+(Fall $q_x$),
+die zweite Zeile durch die folgende Gleichung (Fall $q_{\mathord{\sim}\psi}$).
+Die nächsten beiden Zeilen $(q_b,q_{\lnot b})$ sind analog.
+Für die fünfte Zeile $(q_{a\U b})$ betrachten wir die Spalte $\{a\}$.
+Die letzte Gleichung für $\delta$ auf Folie~4.15 lautet
+%
+\begin{align*}
+  \delta(q_{\psi\U\vartheta}, a) & = \delta(q_\vartheta, a) \lor \big(\delta(q_\psi, a) \land q_{\psi\U\vartheta}\big),
+  \intertext{also hier}
+  \delta(q_{a\U b}, \{a\}) & = \delta(q_b, \{a\}) \lor \big(\delta(q_a, \{a\}) \land q_{a\U b}\big).
+  \tag{$*$}
+  \intertext{%
+    Die Teile $\delta(q_b, \{a\})$ und $\big(\delta(q_a, \{a\})$ der Formel auf der rechten Seite von $(*)$
+    kann man aus der Tabelle ablesen: sie haben die Werte \texttt{0} bzw.\ \texttt{1}.
+    Man erhält also 
+  }
+  \delta(q_{a\U b}, \{a\}) & = \texttt{0} \lor \big(\texttt{1} \land q_{a\U b}\big)
+  \intertext{und mit den standardmäßigen Äquivalenzen der Aussagenlogik wird daraus}
+  \delta(q_{a\U b}, \{a\}) & = q_{a\U b}.
+\end{align*}
+%
+Für die anderen Spalten der 5.\ Zeile ergibt sich durch die geänderten Werte von
+$\delta(q_b, \{a\})$ und $\delta(q_a, \{a\})$ der Wert \texttt{0} bzw.\ \texttt{1}.
+Die letzte Zeile ist wieder durch die vorhergehende Zeile und den Fall $q_{\mathord{\sim}\psi}$ bestimmt.
+
+Wegen der Form von $\delta$ benutzt $\Amc_\varphi$ nicht die "`volle Mächtigkeit"' der Alternierung,
+sondern nur die Möglichkeit, Pfade erfolgreich oder erfolglos "`abzubrechen"' (Werte \texttt{1} bzw.\ \texttt{0}).
+
+\par\medskip
+\textsfbf{Läufe des Automaten auf einigen Eingaben.}~
+Sei $\alpha=\{a\}\,\{a\}\,\{a\}\,\{b\}\,\emptyset^\omega$ das Wort, das dem LTL-Pfad entspricht,
+auf dem in den ersten 3~Zuständen die Aussagenvariablen $a$, im 4.~Zustand $b$ und
+in den übrigen Zuständen keine Aussagenvariable "`gesetzt"' ist.
+Dieser Pfad erfüllt im Anfangszustand die Formel $a \U b$, also muss $\Amc_\varphi$
+auch $\alpha$ akzeptieren. Letzteres ist tatsächlich der Fall, und zwar mittels des Runs, 
+der aus einem einzigen endlichen Pfad der Länge~4 besteht,
+wobei alle Positionen mit $q_{a\U b}$ markiert sind
+(überprüft es selbst mit der obigen Tabelle).
+Analog wird das Wort $\{b\}\,\emptyset^\omega$ von $\Amc_\varphi$ akzeptiert,
+und zwar auf einem einelementigen Run mit der Markierung $q_{a\U b}$.
+Im Gegensatz dazu wird $\{a\}^\omega$ nicht akzeptiert,
+denn hier besteht der einzig mögliche Run aus einem \emph{unendlichen}
+mit $q_{a\U b}$ markierten Pfad, welcher die Akzeptanzbedingung
+$F = \{q_{\lnot(a \U b)}\}$ verletzt
+und genau der zu vermeidenden Situation entspricht,
+dass $\lnot(a \U b)$ unendlich lange hinausgezögert wird.
+
+\paragraph*{Beispiel 2.}
+Sei $\varphi = \G\F a$.
+Die Standardvorgehensweise gemäß der Folien ist,
+die Formel so umzuformen, dass sie nur noch \U verwendet
+(siehe Folie~4.12).
+Die resultierende Formel wäre jedoch deutlich größer,
+was wiederum zu einer unhandlich großen Zustandsmenge und Übergangsfunktion von $\Amc_\varphi$ führen würde.
+Es bietet sich deshalb hier an, die Konstruktion von $\Amc_\varphi$ von Folie~4.15
+um die offensichtlichen Fälle für die Operatoren \G und \F zu erweitern,
+und zwar in der Übergangsfunktion und der Akzeptanzbedingung
+%
+\begin{align*}
+  \delta(q_{\F\psi},a) & = \delta(q_\psi,a) \lor q_{\F\psi}  \\
+  \delta(q_{\G\psi},a) & = \delta(q_\psi,a) \land q_{\G\psi} \tag{$*$}\\[.4\baselineskip]
+  F & = \{q_{\lnot(\psi\U \vartheta)} \mid \lnot(\psi\U \vartheta) \in \textsf{cl}(\varphi) \}
+        ~\cup~ \{q_{\lnot\F\psi} \mid \lnot\F\psi \in \textsf{cl}(\varphi) \}
+        ~\cup~ \{q_{\G\psi} \mid \G\psi \in \textsf{cl}(\varphi) \}
+\end{align*}
+%
+Dann bleibt der ABA überschaubar: $\textsf{cl}(\varphi) = \{a,\,\lnot a,\,\F a,\,\lnot \F a,\,\G\F a,\,\lnot\G\F a\}$,
+und $\Amc_\varphi = (Q,\Sigma,\delta,\{q_I\},F)$ hat folgende Bestandteile.
+%
+\begin{align*}
+  Q      & = \{q_a,\,q_{\lnot a},\,q_{\F a},\,q_{\lnot\F a},\,q_{\G\F a},\,q_{\lnot\G\F a}\} \\
+  \Sigma & = \{\emptyset,\,\{a\}\} \\
+  q_I    & = q_{\G\F a} \\
+  F      & = \{q_{\lnot\F a},q_{\G\F a}\}
+\end{align*}
+%
+Die Übergangsfunktion $\delta$ ist durch die folgende Tabelle gegeben.
+%
+\begin{center}
+  \begin{tabular}{l|cc}
+    ~~~~~~~~~~~~Zeichen & $\emptyset$                             & $\{a\}$            \\
+    Zustand             &                                         &                    \\
+    \hline\rule{0pt}{11pt}%
+    $q_a$               & \texttt{0}                              & \texttt{1}         \\[2pt]
+    $q_{\lnot a}$       & \texttt{1}                              & \texttt{0}         \\[2pt]
+    $q_{\F a}$          & $q_{\F a}$                              & \texttt{1}         \\[2pt]
+    $q_{\lnot \F a}$    & $q_{\lnot\F a}$                         & \texttt{0}         \\[2pt]
+    $q_{\G\F a}$        & $q_{\F a} \land q_{\G\F a}$             & $q_{\G\F a}$       \\[2pt]
+    $q_{\lnot\G\F a}$   & $q_{\lnot \F a} \lor q_{\lnot \G\F a}$  & $q_{\lnot \G\F a}$
+  \end{tabular}
+\end{center}
+%
+Die ersten 2 Zeilen werden wieder wie im vorigen Beispiel erzeugt; die dritte und vierte Zeile
+sind analog zu den Fällen $q_{a\U b}$ bzw. $q_{\lnot(a\U b)}$.
+Die letzten beiden Zeilen bringen "`echte"' Alternierung;
+Zeile~5 sie kann man direkt aus Gleichung $(*)$ für $\delta$ und der 3.\ Tabellenzeile ablesen;
+Zeile~6 erhält man wieder durch "`Negation"' (Fall $q_{\mathord{\sim}\psi}$ auf Folie~4.15).
+
+\par\medskip
+\parbox[t]{.6\linewidth}{%
+  \textsfbf{Läufe des Automaten auf einigen Eingaben.}~
+  Sei $\alpha=(\{a\}\,\emptyset)^\omega$ das Wort, das dem LTL-Pfad entspricht,
+  auf dem die Aussagenvariable $a$ abwechselnd "`gesetzt"' und "`nicht gesetzt"' ist.
+  Dieser LTL-Pfad erfüllt im Anfangszustand die Formel $\G\F a$, also muss $\Amc_\varphi$
+  auch $\alpha$ akzeptieren. Letzteres ist tatsächlich der Fall, und zwar mittels des nebenstehenden Runs,
+  dessen einziger unendlicher Pfad nur mit $q_{\G\F a}$ markiert ist,
+  also die Akzeptanzbedingung $F$ erfüllt.
+}%
+\hspace*{\fill}
+\parbox[t]{.36\linewidth}{%
+  \begin{tikzpicture}[%
+    baseline=0pt,node distance=20mm,>=Latex,
+    every node/.style={ellipse,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=8mm},
+    level 1/.style = {sibling distance = 40mm, level distance = 10mm},
+    level 2/.style = {sibling distance = 20mm, level distance =  9mm},
+    level 3/.style = {sibling distance = 20mm, level distance = 10mm},
+    level 4/.style = {sibling distance = 20mm, level distance =  9mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node (eps) {$q_{\G\F a}$}
+    child {
+      node (0) {$q_{\G\F a}$}
+      child {
+        node (00) {$q_{\F a}$}
+      }
+      child {
+        node (01) {$q_{\G\F a}$}
+        child {
+          node (010) {$q_{\G\F a}$}
+          child {
+            node (0100) {$q_{\F a}$}
+          }
+          child {
+            node (0101) {$q_{\G\F a}$}
+          }
+        }
+      }
+    }
+    ;
+    
+    \begin{scope}[
+      every node/.style={circle,draw=none,fill=none,inner sep=.4mm,minimum size=7mm},
+    ]
+      \node[at=(0101 |- eps)] (anchor1) {\phantom{$q_{\G\F a}$}};
+      \node[at=(0101 |- 0)]   (anchor2) {\phantom{$q_{\G\F a}$}};
+      \node[at=(0101 |- 01)]  (anchor3) {\phantom{$q_{\G\F a}$}};
+      \node[at=(0101 |- 010)] (anchor4) {\phantom{$q_{\G\F a}$}};
+    \end{scope}
+        
+    \begin{scope}[
+      every node/.style={circle,draw=none,fill=none,inner sep=.4mm,minimum size=0mm},
+    ]
+      \node[right=5mm of anchor1]         {~$\{a\}$};
+      \node[right=5mm of anchor2]         {~~\,$\emptyset$};
+      \node[right=5mm of anchor3]         {~$\{a\}$};
+      \node[right=5mm of anchor4]         {~~\,$\emptyset$};
+      \node[right=5mm of 0101]    (lasta) {$\{a\}$};
+      \node[below=0mm of lasta]           {$\vdots$};
+
+      \node[below=0mm of 0101]            {$\vdots$};
+    \end{scope}
+  \end{tikzpicture}
+}
+
+\par\smallskip
+\parbox[t]{.6\linewidth}{%
+  Im Gegensatz dazu wird $\{a\}\,\emptyset\,\{a\}\,\emptyset^\omega$ nicht akzeptiert,
+  denn der einzig mögliche Run hat einen unendlichen
+  Pfad, der auf $q_{\F a}^\omega$ endet und somit die Akzeptanz\-bedingung verletzt,
+  siehe nebenstehendes Bild (besagter Pfad ist markiert).
+  Dieser Pfad entspricht genau der zu vermeidenden Situation,
+  dass $\F a$ unendlich lange hinausgezögert wird.
+  
+  \par\smallskip
+  Es gibt hier nur diesen einzigen Run, weil die 6.~Zeile der Tabelle nie zum Einsatz kommt.
+}
+\hspace*{\fill}
+\parbox[t]{.36\linewidth}{%
+  \begin{tikzpicture}[%
+    baseline=0pt,node distance=20mm,>=Latex,
+    every node/.style={ellipse,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=8mm},
+    level 1/.style = {sibling distance = 40mm, level distance = 10mm},
+    level 2/.style = {sibling distance = 20mm, level distance =  9mm},
+    level 3/.style = {sibling distance = 20mm, level distance = 10mm},
+    level 4/.style = {sibling distance = 20mm, level distance =  9mm},
+    level 5/.style = {sibling distance = 20mm, level distance = 10mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node (eps) {$q_{\G\F a}$}
+    child {
+      node (0) {$q_{\G\F a}$}
+      child {
+        node (00) {$q_{\F a}$}
+      }
+      child {
+        node (01) {$q_{\G\F a}$}
+        child {
+          node (010) {$q_{\G\F a}$}
+          child {
+            node (0100) {$q_{\F a}$}
+            child {
+              node (01000) {$q_{\F a}$}
+            }
+          }
+          child {
+            node (0101) {$q_{\G\F a}$}
+          }
+        }
+      }
+    }
+    ;
+    
+    \begin{scope}[
+      every node/.style={circle,draw=none,fill=none,inner sep=.4mm,minimum size=7mm},
+    ]
+      \node[at=(0101 |- eps)]   (anchor1) {\phantom{$q_{\G\F a}$}};
+      \node[at=(0101 |- 0)]     (anchor2) {\phantom{$q_{\G\F a}$}};
+      \node[at=(0101 |- 01)]    (anchor3) {\phantom{$q_{\G\F a}$}};
+      \node[at=(0101 |- 010)]   (anchor4) {\phantom{$q_{\G\F a}$}};
+      \node[at=(0101 |- 01000)] (anchor6) {\phantom{$q_{\G\F a}$}};
+      
+      \node[below=10mm of 01000] (anchor99) {};
+    \end{scope}
+        
+    \begin{scope}[
+      every node/.style={circle,draw=none,fill=none,inner sep=.4mm,minimum size=0mm},
+    ]
+      \node[right=5mm of anchor1]         {~$\{a\}$};
+      \node[right=5mm of anchor2]         {~~\,$\emptyset$};
+      \node[right=5mm of anchor3]         {~$\{a\}$};
+      \node[right=5mm of anchor4]         {~~\,$\emptyset$};
+      \node[right=5mm of 0101]            {~\,$\emptyset$};
+      \node[right=5mm of anchor6] (last0) {~~\,$\emptyset$};
+      \node[below=0mm of last0]           {~~$\vdots$};
+
+      \node[below=0mm of 01000]           {{\boldmath $\vdots$}};
+      \node[below=0mm of 0101]            {$\vdots$};
+    \end{scope}
+
+    \begin{scope}[
+      every edge/.style={draw=black,line width=2mm,draw opacity=.4}
+    ]
+    \path[-]
+      (eps)   edge (0)
+      (0)     edge (01)
+      (01)    edge (010)
+      (010)   edge (0100)
+      (0100)  edge (01000)
+      (01000) edge (anchor99)
+      ;
+    \end{scope}
+  \end{tikzpicture}
+}
+
+% ===================================================================
+\section*{T4.5~ usw.}
+\dots\ folgen \dots
+
+%\goodbreak
+%% ===================================================================
+%\section*{T5.5~ Beispiel für die Komplementierung}
+%
+%Wir betrachten den Automaten aus T5.3, aber mit einer Müller-Akzeptanzbedingung,
+%also den AMA $\Amc = (Q,\Sigma,\delta,\{q_I\},\Fmc)$ mit
+%%
+%\begin{align*}
+%  Q & = \{p,q\},\quad \Sigma = \{a,b\},\quad \Fmc = \{\{p\},\,\{p,q\}\},\quad q_I = p,\\[4pt]
+%  \delta(p,a) & = p \land q   \\
+%  \delta(p,b) & = p           \\
+%  \delta(q,a) & = q           \\
+%  \delta(q,b) & = \texttt{1},
+%\end{align*}
+%%
+%also $L_\omega(\Amc) = L(((a+b)^*b)^\omega)$.
+%
+%Die Regeln zur Komplementierung auf Folie~19 liefern den AMA
+%$\Amc' = (Q,\Sigma,\delta',\{q_I\},\Fmc')$ mit
+%%
+%\begin{align*}
+%  \Fmc & = \{\emptyset,\,\{q\}\}\\[4pt]
+%  \delta(p,a) & = p \lor q   \\
+%  \delta(p,b) & = p           \\
+%  \delta(q,a) & = q           \\
+%  \delta(q,b) & = \texttt{0}.
+%\end{align*}
+%%
+%Da in keinem $\delta(\cdot,\cdot)$ mehr eine Konjunktion auftritt,
+%verhält sich $\Amc'$ genauso wie ein NMA, der im Fall $(p,a)$ (1.~Zeile von $\delta$) zwei mögliche
+%Entscheidungen treffen kann und im Fall $(q,b)$ "`blockiert"', also keinen Übergang hat.
+%Das heißt, man überzeugt sich also leicht, dass $\Amc'$ äquivalent zum NMA
+%$\Amc'' = (Q,\Sigma,\Delta,\{q_I\},\Fmc')$ mit
+%$\Delta = \{(p,a,p),\,(p,a,q),\,(p,b,p),\,(q,a,q)\}$ ist
+%und dass $L_\omega(\Amc'') = \overline{L_\omega(\Amc)}$ gilt.
+%
+%% ===================================================================
+%\section*{Beweisskizze für die Komplementierung (fakultativ)}
+%
+%Wir haben für die Komplementierung von AMAs (Satz~5.5 auf Folie~19)
+%nicht die Korrektheit bewiesen. Falls es euch interessiert,
+%wie man vorgehen muss,
+%ist hier eine grobe Skizze --
+%allerdings für den Fall von Paritätsautomaten
+%(aber wir wissen ja bereits,
+%wie man die Muller- und Paritätsbedingung ineinander übersetzt).
+%
+%\begin{enumerate}
+%  \item
+%    Wir betrachten eine "`vereinfachte"' Variante der Alternierung,
+%    bei der die Zustandsmenge $Q$ eines APA partitioniert ist 
+%    in die Menge $Q_\exists$ der \emph{existentiellen Zustände}
+%    und die Menge $Q_\forall$ der \emph{universellen Zustände}.
+%    Für Zustände $q \in Q_\exists$ ist 
+%    $\delta(q,a)$ für jedes Zeichen $a$ eine Disjunktion von Zuständen;
+%    für Zustände $q \in Q_\forall$ ist 
+%    $\delta(q,a)$ eine Konjunktion.
+%    Diese Variante entspricht der ursprünglichen Definition
+%    von Alternierung.
+%    Wir nennen solche Automaten hier \emph{A${}^-$PAs}.
+% \item
+%    Offensichtlich ist jeder A${}^-$PA auch ein APA.
+%    Die Umkehrung gilt nicht; dennoch sind A${}^-$PAs und APAs
+%    gleichmächtig: zum einen kann man jeden APA in einen äquivalenten NPA
+%    umwandeln  (dieses nichttriviale Resultat basiert auf Spielen
+%    und hat dieses Jahr nicht mehr in die Vorlesung gepasst);
+%    zum anderen ist natürlich jeder NPA ein A${}^-$PA.
+% \item
+%    Wenn man die "`Konstruktion"' zur Komplementierung auf Folie~19
+%    auf einen A${}^-$PA anwendet, dann werden dadurch lediglich die Mengen
+%    $Q_\exists$ und $Q_\forall$ miteinander vertauscht
+%    (und die Akzeptanzkomponente komplementiert).
+%    Sei $\Amc'$ der resultierende A${}^-$PA.
+%  \item
+%    Nun können wir wieder Spiele ähnlich zu denen aus Teil~4 betrachten:
+%    für jeden A${}^-$PA $\Amc$ und jedes Eingabewort $\alpha$
+%    ist das Spiel $G_{\Amc,\alpha}$ wie folgt definiert:
+%    %
+%    \begin{itemize}
+%      \item
+%        Die Spielpositionen sind Paare $(q_i,\alpha_i)$ mit $q_i \in Q$
+%        und $\alpha_i$ der $i$-te Buchstabe von $\alpha$.
+%      \item
+%        Die Startposition ist $(q_0,\alpha_0)$ mit $q_0 = q_I$ (Startzustand von \Amc).
+%      \item 
+%        Wenn $q_i \in Q_\exists$, dann wählt \AUT einen Nachfolgerzustand $q_{i+1}$;
+%        wenn $q_i \in Q_\forall$, dann wählt \PF ihn.
+%      \item
+%        \AUT gewinnt, wenn (a) das Spiel unendlich lange läuft
+%        und die Akzeptanzbedingung von $\Amc$ erfüllt
+%        oder (b) das Spiel endet, weil \PF keinen Zug machen kann
+%        (d.\,h.\ in Position $(q_i,\alpha_i)$ ist $q_i \in Q_\forall$
+%        und $\delta(q_i,\alpha_i)$ ist die leere Konjunktion).
+%    \end{itemize}
+%    %
+%    Ähnlich wie in Teil~4 ist nun wieder einfach zu sehen,
+%    dass $\alpha \in L_\omega(\Amc)$ genau dann, wenn \AUT eine
+%    Gewinnstrategie in $G_{\Amc,\alpha}$ hat.
+%    
+%    Da es kein Unentschieden gibt, gilt auch:
+%    \[
+%      \alpha \notin L_\omega(\Amc)
+%      \quad\text{gdw.}\quad
+%      \PF \text{~hat Gewinnstrategie in~} G_{\Amc,\alpha}
+%      \tag{$*$}
+%    \]
+%    Gedächntislose Gewinnstrategien werden hier allerdings nicht benötigt.
+%  \item
+%    Da sich durch die Konstruktion in Punkt 3 die Rollen von \AUT
+%    und \PF genau vertauschen, erhält man mit $(*)$:
+%    %
+%    \begin{align*}
+%      \alpha \notin L_\omega(\Amc)
+%      & \quad\text{gdw.}\quad
+%        \PF \text{~hat Gewinnstrategie in~} G_{\Amc,\alpha} \\
+%      & \quad\text{gdw.}\quad
+%        \AUT \text{~hat Gewinnstrategie in~} G_{\Amc',\alpha} \\
+%      & \quad\text{gdw.}\quad
+%        \alpha \in L_\omega(\Amc')
+%    \end{align*}
+%    
+%\end{enumerate}
+
+% ===================================================================
+% ===================================================================
+% ===================================================================
 \part[Endliche Automaten auf unendlichen Bäumen]{Endliche Automaten \\ auf unendlichen Bäumen}
 
 % ===================================================================
-\section*{T4.1~ LTL-Formeln "`zu stark/schwach"'}
+\section*{T5.1~ LTL-Formeln "`zu stark/schwach"'}
 
 Sei $\varphi_1 := \G(e \to \F \neg e)$ und $\varphi_2 := \G\F\neg e$.
 
@@ -4826,7 +5484,7 @@ und das ist z.\,B. $\pi = s_1s_1s_2^\omega$.
 
 \pagebreak
 % ===================================================================
-\section*{T4.2~ Beispiel-Berechnungsbaum}
+\section*{T5.2~ Beispiel-Berechnungsbaum}
 
 Wenn man die Beispielstruktur Mikrowelle im Zustand 3 auf"|faltet,
 erhält man:
@@ -4889,7 +5547,7 @@ Die gegebene Struktur $\Smc$ ist eine endliche Repräsentation dieses unendliche
 
 %\enlargethispage{10mm}
 % ===================================================================
-\section*{T4.3~ Beweis Teil 2 des Ausdrucksstärke-Lemmas}
+\section*{T5.3~ Beweis Teil 2 des Ausdrucksstärke-Lemmas}
 
 \textsfbf{Lemma 4.5~(2).}~
 Es gibt keine zu $\F\G p$ äquivalente CTL-Zustandsformel.
@@ -4987,7 +5645,7 @@ Das widerspricht aber~(iii).\qedhere
 
 \goodbreak
 % ===================================================================
-\section*{T4.4~ Beispiel für den Model-Checking-Algorithmus}
+\section*{T5.4~ Beispiel für den Model-Checking-Algorithmus}
 
 Wir betrachten die Zustandsformel $\zeta = p \land \A\X\E(q\U r)$.
 Ihre Baumdarstellung ist wie folgt; die einzelnen Teilformeln
@@ -5180,7 +5838,7 @@ nachgelesen werden.
 
 \goodbreak
 % ===================================================================
-\section*{T4.5~ Veranschaulichung der Grundbegriffe}
+\section*{T5.5~ Veranschaulichung der Grundbegriffe}
 
 Die \textsfbf{Positionen} im unendlichen vollständigen Binärbaum sehen so aus:
 %
@@ -5286,7 +5944,7 @@ Wenn $\Sigma = \{a,b\}$, dann ist ein \textsfbf{{\boldmath $\Sigma$-Baum}} z.\,B
 Das heißt also $t(\varepsilon) = a$, $t(0) = a$, $t(1) = b$ usw.
 
 % ===================================================================
-\section*{\scalebox{.96}[1]{T4.6~ Details des "`Pumpens"' in "`Büchi- vs.\ Muller-Erkennbarkeit"'}}
+\section*{\scalebox{.96}[1]{T5.6~ Details des "`Pumpens"' in "`Büchi- vs.\ Muller-Erkennbarkeit"'}}
 
 Wie betrachten einen erfolgreichen Run $r$ auf $t$ (Existenz dieses Runs: siehe Ende von Folie~38).
 Auf dem Pfad $1^\omega$ wird ein $f \in F$ unendlich oft besucht.
@@ -5347,7 +6005,7 @@ ist also gar nicht in $L$ enthalten; ein Widerspruch.
 \qedhere
 
 % ===================================================================
-\section*{{\boldmath T4.7~ Beispiel für die Konstruktion "`NMBA $\Rightarrow$ NPBA"'}}
+\section*{{\boldmath T5.7~ Beispiel für die Konstruktion "`NMBA $\Rightarrow$ NPBA"'}}
 
 Seien $Q=\{1,2,3\}$ und $F=\{1,2\}$.
 Wir betrachten den Run $r=12131211\dots$ von \Amc auf einem Pfad $\pi$,
@@ -5376,7 +6034,7 @@ und ab Position 7 ist $\ell > |Q|-|F| = 1$.
 
 \goodbreak
 % ===================================================================
-\section*{{\boldmath T4.8~ Beweis der Hilfsaussage für "`NMBA $\Rightarrow$ NPBA"'}}
+\section*{{\boldmath T5.8~ Beweis der Hilfsaussage für "`NMBA $\Rightarrow$ NPBA"'}}
 
 \begin{description}
   \item[{\boldmath"`$\Rightarrow$"'}]
@@ -5426,7 +6084,7 @@ und ab Position 7 ist $\ell > |Q|-|F| = 1$.
 
 \pagebreak
 % ===================================================================
-\section*{{\boldmath T4.9~ Beweis der Korrektheit, "`NMBA $\Rightarrow$ NPBA"'}}
+\section*{{\boldmath T5.9~ Beweis der Korrektheit, "`NMBA $\Rightarrow$ NPBA"'}}
 
 Es bleibt zu zeigen: $L_\omega(\Amc) = L_\omega(\Amc')$.
 %
@@ -5513,7 +6171,7 @@ Es bleibt zu zeigen: $L_\omega(\Amc) = L_\omega(\Amc')$.
 \end{description}
 
 % ===================================================================
-\section*{{\boldmath T4.10~ Beispiel eines Spielverlaufs für \Game{A}{t}}}
+\section*{{\boldmath T5.10~ Beispiel eines Spielverlaufs für \Game{A}{t}}}
 
 Sei 
 %
@@ -5658,7 +6316,7 @@ usw.
 
 \goodbreak
 % ===================================================================
-\section*{T4.11~ Beispiel für Gewinnstrategie}
+\section*{T5.11~ Beispiel für Gewinnstrategie}
 
 Wir betrachten den NPBA \Amc aus dem letzten Beispiel.
 Eine Gewinnstrategie für \PF ab Spielposition $v$ ist folgende:
@@ -5685,12 +6343,12 @@ $f(v\cdots v')$ nur von $v'$ ab und nicht von den vorhergehenden Spielpositionen
 in $v\cdots v'$. Die Strategie ist also \emph{gedächtnislos},
 was intuitiv so viel bedeutet wie: "`der bisherige Spielverlauf kann
 ignoriert/vergessen werden"'.
-Satz 4.18 und Folgerung 4.19 zeigen, dass dies nicht an der
+Satz 5.18 und Folgerung 5.19 zeigen, dass dies nicht an der
 Einfachheit von $\Amc$ liegt.
 
 \goodbreak
 % ===================================================================
-\section*{T4.12~ Beweis der Rückrichtung von Lemma~4.17}
+\section*{T5.12~ Beweis der Rückrichtung von Lemma~5.17}
 
 \textsfbf{Behauptung.}~
 \AUT hat Gewinnstrategie in $\Game{A}{t}$ ab Position $(\varepsilon,q_I)$ ~$\Rightarrow$~ $t \in L_\omega(\Amc)$
@@ -5720,7 +6378,7 @@ was ein Widerspruch zur Annahme wäre, dass \AUT eine Gewinnstrategie hat.
 \qedhere
 
 % ===================================================================
-\section*{T4.13~ {\boldmath Beispiel für die Sprache \Lst}}
+\section*{T5.13~ {\boldmath Beispiel für die Sprache \Lst}}
 
 Ab jetzt bezeichnen wir Pfade im Baum als Wörter $\pi \in \{0,1\}^*$;
 beispielsweise steht $\pi = 0110\cdots$
@@ -5749,7 +6407,7 @@ Dann wird durch $\pi$ folgendes $\omega$-Wort $\alpha \in \Lst$ bestimmt:
   \end{tikzpicture}
 \end{center}
 %
-Dabei bezeichnet jede Box ein Symbol von $\alpha$, also gemäß Folie~55 ein Tripel,
+Dabei bezeichnet jede Box ein Symbol von $\alpha$, also gemäß Folie~5.55 ein Tripel,
 und jede erste Komponente $f_p$ eines Tripels
 steht wiederum für dasjenige $|\Delta|$-Tupel von Nullen und Einsen,
 welches $f_p$ repräsentiert.
@@ -5763,9 +6421,9 @@ ist $\pi$ selbst.
 
 \goodbreak
 % ===================================================================
-\section*{T4.14~ Beweis von Lemma~4.22}
+\section*{T5.14~ Beweis von Lemma~5.22}
 
-\textsfbf{Lemma~4.22.}~
+\textsfbf{Lemma~5.22.}~
 $s$ ist ein \PF-Gewinnbaum für $t$
 ~gdw.~
 $\Lst \cap L_\omega(\Amc') = \emptyset$
@@ -5860,9 +6518,9 @@ $\Lst \cap L_\omega(\Amc') = \emptyset$
 
 \goodbreak
 % ===================================================================
-\section*{T4.15~ Beweis von Lemma~4.23}
+\section*{T5.15~ Beweis von Lemma~5.23}
 
-\textsfbf{Lemma~4.23.}~
+\textsfbf{Lemma~5.23.}~
 $t \in L_\omega(\Bmc)$
 ~gdw.~
 es gibt $F$-Baum $s$ mit $\Lst \subseteq L_\omega(\Amc'')$
@@ -5943,660 +6601,6 @@ es gibt $F$-Baum $s$ mit $\Lst \subseteq L_\omega(\Amc'')$
     somit ist $t \in L_\omega(\Bmc)$.
     \qedhere
 \end{description}
-
-% ===================================================================
-% ===================================================================
-% ===================================================================
-\part{Alternierung}
-
-% ===================================================================
-\section*{T5.1~ Beispiel Semantik positiver Boolescher Formeln}
-
-Wir betrachten die PBF $\varphi = (p \land q) \lor (r \land s)$
-über der Variablenmenge $X = \{p,q,r,s\}$
-und die Belegungen $Y_1 = \{p,q,r\}$ und $Y_2 = \{p,r\}$.
-Dann gilt $Y_1 \models \varphi$, aber $Y_2 \not\models \varphi$.
-
-% ===================================================================
-\section*{T5.2~ Beispiel eines Run-Baums}
-
-Ein möglicher Baum mit Verzweigungsgrad $n=2$ sieht so aus:
-%
-\begin{center}
-  \begin{tikzpicture}[%
-    node distance=20mm,>=Latex,
-    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=8mm},
-    level 1/.style = {sibling distance = 40mm, level distance =  6mm},
-    level 2/.style = {sibling distance = 22mm, level distance = 11mm},
-    level 3/.style = {sibling distance = 12mm, level distance = 11mm},
-    edge from parent/.style = {draw=black, thin, -}%
-  ]
-    \node {$\varepsilon$}
-    child {
-      node {0}
-      child {
-        node (00) {00}
-        child {
-          node (000) {000}
-        }
-      }
-      child {
-        node (01) {01}
-      }
-    }
-    child {
-      node {1}
-      child {
-        node {10}
-      }
-    }
-    ;
-    
-    \foreach \x in {000}
-      \node [draw=none,fill=none,below=-1mm of \x] {$\vdots$};
-    
-  \end{tikzpicture}
-\end{center}
-%
-Ein möglicher Pfad ist $\pi = \varepsilon \cdot 1 \cdot 10$; dieser Pfad ist endlich.
-%
-Wenn $\Sigma = \{p,q\}$, dann ist ein $\Sigma$-Baum z.\,B.\ folgender:
-%
-\begin{center}
-  \begin{tikzpicture}[%
-    node distance=20mm,>=Latex,
-    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=8mm},
-    level 1/.style = {sibling distance = 40mm, level distance =  6mm},
-    level 2/.style = {sibling distance = 22mm, level distance = 11mm},
-    level 3/.style = {sibling distance = 12mm, level distance = 11mm},
-    edge from parent/.style = {draw=black, thin, -}%
-  ]
-    \node {$p$}
-    child {
-      node {$p$}
-      child {
-        node (00) {$p$}
-        child {
-          node (000) {$p$}
-        }
-      }
-      child {
-        node (01) {$q$}
-      }
-    }
-    child {
-      node {$q$}
-      child {
-        node {$q$}
-      }
-    }
-    ;
-    
-    \foreach \x in {000}
-      \node [draw=none,fill=none,below=-1mm of \x] {$\vdots$};
-    
-  \end{tikzpicture}
-\end{center}
-
-% ===================================================================
-\section*{T5.3~ Beispiel eines alternierenden Büchi-Automaten}
-
-Sei $\Amc = (Q,\Sigma,\delta,\{q_I\},F)$ der ABA mit
-%
-\begin{align}
-  Q & = \{p,q\},\quad \Sigma = \{a,b\},\quad F = \{p\},\quad q_I = p, \notag \\[4pt]
-  \delta(p,a) & = p \land q   \label{eq:ueb1}\\
-  \delta(p,b) & = p           \label{eq:ueb2}\\
-  \delta(q,a) & = q           \label{eq:ueb3}\\
-  \delta(q,b) & = \texttt{1}. \label{eq:ueb4}
-\end{align}
-%
-Dabei bedeutet Übergang~\eqref{eq:ueb1} von $\delta$ intuitiv:
-"`schicke zwei Kopien von $\Amc$ in Zustand $p$ bzw.\ $q$ zum nächsten Zeichen"'.
-Übergänge~\eqref{eq:ueb2} und~\eqref{eq:ueb3} entsprechen den Übergängen eines DBA.
-Übergang~\eqref{eq:ueb4} bedeutet: "`schneide den Pfad ab; hier ist die Berechnung erfolgreich"'.
-Man beachte auch, dass der Fall $\delta(\cdot,\cdot)=\texttt{0}$
-einem erfolg\emph{losen} Abbruch der Berechnung entspricht.
-
-Diesen ABA kann man graphisch wie folgt darstellen:
-%
-\begin{center}
-  \begin{tikzpicture}[%
-    node distance=15mm,>=Latex,baseline=-2pt,
-    initial text="", initial where=below left,
-    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=7mm},
-    accepting/.style={double distance=1.5pt, double=white},
-    every edge/.style={draw=black,thin}
-  ]
-    \node[state,initial,accepting]                          (p)    {$p$};
-    \node[rectangle,fill=black,minimum size=1.6mm,inner sep=0mm,right of=p] (rect) {};
-    \node[state,right of=rect]                              (q)    {$q$};
-    
-    \path[->]
-      (p)    edge             node[near start, above] {$b$} (q)
-      (rect) edge[out=300,in=320]                                (p)
-      (p)    edge[loop above] node[right=1mm]             {$a$} ()
-      (q)    edge[loop above] node[right=1mm]             {$a,b$} ();
-      
-    \node () [below right=-1.5mm and -.5mm of rect] {\footnotesize $\land$};
-  \end{tikzpicture}
-\end{center}
-%
-Wir betrachten außerdem das Eingabewort $\alpha = (aab)^\omega$.
-Ein möglicher Run von $\Amc$ auf $\alpha$ ist der Baum aus dem vorigen Beispiel,
-wenn man ihn ab Position 000 so fortsetzt, dass sich der
-dargestellte Teilbaum unendlich oft wiederholt. Dies ist im folgenden Bild
-durch die gestrichelte Linie dargestellt; die zu jeder Ebene gehörigen Buchstaben
-von $\alpha$ stehen rechts daneben.
-%
-\begin{center}
-  \begin{tikzpicture}[%
-    node distance=20mm,>=Latex,
-    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=7mm},
-    level 1/.style = {sibling distance = 40mm, level distance = 9mm},
-    level 2/.style = {sibling distance = 22mm, level distance = 9mm},
-    level 3/.style = {sibling distance = 12mm, level distance = 9mm},
-    edge from parent/.style = {draw=black, thin, -}%
-  ]
-    \node (eps) {$p$}
-    child {
-      node (0) {$p$}
-      child {
-        node (00) {$p$}
-        child {
-          node (000) {$p$}
-        }
-      }
-      child {
-        node (01) {$q$}
-      }
-    }
-    child {
-      node (1) {$q$}
-      child {
-        node (10) {$q$}
-      }
-    }
-    ;
-    
-    \path[-,dashed] (000) edge[out=150,in=170] (eps);
-    
-    \begin{scope}[
-      every node/.style={circle,draw=none,fill=none,inner sep=.4mm,minimum size=7mm},
-    ]
-      \node[at=(1 |- eps)] (anchor1) {};
-      \node[at=(1 |- 000)] (anchor4) {};
-    \end{scope}
-        
-    \begin{scope}[
-      every node/.style={circle,draw=none,fill=none,inner sep=.4mm,minimum size=0mm},
-    ]
-      \node[right=10mm of anchor1]         {$a$};
-      \node[right=10mm of 1]               {$a$};
-      \node[right=10mm of 10]              {$b$};
-      \node[right=10mm of anchor4] (lasta) {$a$};
-      \node[below= 2mm of lasta]           {$\vdots$};
-    \end{scope}
-  \end{tikzpicture}
-\end{center}
-%
-Dieser Run ist erfolgreich, denn der einzige unendliche Pfad
-ist $\pi = \varepsilon \cdot 0 \cdot 00 \cdot 000 \cdots$,
-welcher unendlich oft $p$ enthält und damit der Büchi-Akzeptanzbedingung
-$F=\{q\}$ entspricht.
-
-Die von $\Amc$ erkannte Sprache ist die Menge aller Wörter,
-die unendlich oft $b$ enthalten,
-also $L_\omega(\Amc) = L(((a+b)^*b)^\omega)$.
-Dies lässt sich präzise so zeigen:
-%
-\begin{description}
-  \item[{\boldmath"`$\supseteq$"'}]
-    Enthalte $\alpha \in \{a,b\}^\omega$ unendlich oft $b$.
-    Um zu zeigen, dass $\alpha$ von $\Amc$ akzeptiert wird,
-    betrachten wir den "`minimalen"' Run $(P,t)$ von $\Amc$ auf $\alpha$,
-    also denjenigen Run, der bei Übergängen~\eqref{eq:ueb2} und~\eqref{eq:ueb3}
-    nur ein Kind mit $p$ bzw.\ $q$ enthält
-    und bei Übergang~\eqref{eq:ueb4} keine Kinder.%
-    \footnote{Hier ist von einem "`minimalen Run"' die Rede,
-    weil prinzipiell immer auch mehr Kinder erlaubt sind,
-    denn wenn eine Belegung eine PBF erfüllt,
-    dann auch jede Erweiterung (d.\,h.\ Obermenge).
-    Deshalb nennt man PBFs auch manchmal \emph{monotone} Boolesche Formeln.}
-    Jeder Pfad $\pi$ dieses Runs kann
-    wegen $\delta(q,b) = \texttt{1}$ nicht in einer Folge $q^\omega$ enden.
-    Da außerdem $\delta$ keinen Übergang von $q$ nach $p$ erlaubt,
-    kann $\pi$ also nur entweder endlich sein oder aus nur $p$'s bestehen.
-    Im letzteren Fall ist die Akzeptanzbedingung erfüllt.
-    \par\smallskip
-  \item[{\boldmath"`$\subseteq$"'}]
-    Per Kontraposition:
-    enthalte $\alpha \in \{a,b\}^\omega$ endlich oft $b$.
-    Dann gibt es eine Position $m$,
-    ab der $\alpha$ nur noch aus $a$'s besteht.
-    Sei $(P,t)$ ein beliebiger Run von $\Amc$ auf $\alpha$.
-    Wir müssen zeigen, dass dieser einen unendlichen Pfad $\pi$
-    enthält, der nicht die Akzeptanzbedingung von \Amc erfüllt,
-    der also nur endlich oft $p$ enthält.
-    Da der Anfangszustand $p$ ist,
-    gibt es wegen Übergängen~\eqref{eq:ueb1} und~\eqref{eq:ueb2} einen
-    unendlichen Pfad in $(P,t)$, der nur aus $p$'s besteht.
-    Die Position in Tiefe $m$ auf diesem Pfad 
-    hat aber wegen Übergang~\eqref{eq:ueb1} ein mit $q$ markiertes Kind.
-    In diesem Kind entspringt nun wegen Übergang~\eqref{eq:ueb3}
-    ein unendlicher Pfad, der nur noch aus $q$'s besteht.
-    Damit ist der gewünschte Pfad $\pi$ gefunden.
-\end{description}
-
-% ===================================================================
-\section*{T5.4~ Beispiele für die Übersetzung {\boldmath LTL $\to$ ABA}}
-
-\paragraph*{Beispiel 1.}
-Sei $\varphi = a \U b$.
-
-Dann ist $\textsf{cl}(\varphi) = \{a,\,\lnot a,\,b,\,\lnot b,\,a \U b,\,\lnot(a \U b)\}$,
-und der ABA $\Amc_\varphi = (Q,\Sigma,\delta,\{q_I\},F)$ hat folgende Bestandteile.
-%
-\begin{align*}
-  Q      & = \{q_a,\,q_{\lnot a},\,q_b,\,q_{\lnot b},\,q_{a \U b},\,q_{\lnot(a \U b)}\} \\
-  \Sigma & = \{\emptyset,\,\{a\},\,\{b\},\,\{a,b\}\} \\
-  q_I    & = q_{a \U b} \\
-  F      & = \{q_{\lnot(a \U b)}\}
-\end{align*}
-%
-Die Übergangsfunktion $\delta$ ist durch die folgende Tabelle gegeben.
-%
-\begin{center}
-  \begin{tabular}{l|cccc}
-    ~~~~~~~~~~~~Zeichen & $\emptyset$ & $\{a\}$            & $\{b\}$    & $\{a,b\}$  \\
-    Zustand             &             &                    &            &            \\
-    \hline\rule{0pt}{11pt}%
-    $q_a$               & \texttt{0}  & \texttt{1}         & \texttt{0} & \texttt{1} \\[2pt]
-    $q_{\lnot a}$       & \texttt{1}  & \texttt{0}         & \texttt{1} & \texttt{0} \\[2pt]
-    $q_b$               & \texttt{0}  & \texttt{0}         & \texttt{1} & \texttt{1} \\[2pt]
-    $q_{\lnot b}$       & \texttt{1}  & \texttt{1}         & \texttt{0} & \texttt{0} \\[2pt]
-    $q_{a\U b}$         & \texttt{0}  & $q_{a\U b}$        & \texttt{1} & \texttt{1} \\[2pt]
-    $q_{\lnot(a\U b)}$  & \texttt{1}  & $q_{\lnot(a\U b)}$ & \texttt{0} & \texttt{0}
-  \end{tabular}
-\end{center}
-%
-Die erste Zeile $(q_a)$ ist durch die erste Gleichung für $\delta$ auf Folie~15 gegeben
-(Fall $q_x$),
-die zweite Zeile durch die folgende Gleichung (Fall $q_{\mathord{\sim}\psi}$).
-Die nächsten beiden Zeilen $(q_b,q_{\lnot b})$ sind analog.
-Für die fünfte Zeile $(q_{a\U b})$ betrachten wir die Spalte $\{a\}$.
-Die letzte Gleichung für $\delta$ auf Folie~15 lautet
-%
-\begin{align*}
-  \delta(q_{\psi\U\vartheta}, a) & = \delta(q_\vartheta, a) \lor \big(\delta(q_\psi, a) \land q_{\psi\U\vartheta}\big),
-  \intertext{also hier}
-  \delta(q_{a\U b}, \{a\}) & = \delta(q_b, \{a\}) \lor \big(\delta(q_a, \{a\}) \land q_{a\U b}\big).
-  \tag{$*$}
-  \intertext{%
-    Die Teile $\delta(q_b, \{a\})$ und $\big(\delta(q_a, \{a\})$ der Formel auf der rechten Seite von $(*)$
-    kann man aus der Tabelle ablesen: sie haben die Werte \texttt{0} bzw.\ \texttt{1}.
-    Man erhält also 
-  }
-  \delta(q_{a\U b}, \{a\}) & = \texttt{0} \lor \big(\texttt{1} \land q_{a\U b}\big)
-  \intertext{und mit den standardmäßigen Äquivalenzen der Aussagenlogik wird daraus}
-  \delta(q_{a\U b}, \{a\}) & = q_{a\U b}.
-\end{align*}
-%
-Für die anderen Spalten der 5.\ Zeile ergibt sich durch die geänderten Werte von
-$\delta(q_b, \{a\})$ und $\delta(q_a, \{a\})$ der Wert \texttt{0} bzw.\ \texttt{1}.
-Die letzte Zeile ist wieder durch die vorhergehende Zeile und den Fall $q_{\mathord{\sim}\psi}$ bestimmt.
-
-Wegen der Form von $\delta$ benutzt $\Amc_\varphi$ nicht die "`volle Mächtigkeit"' der Alternierung,
-sondern nur die Möglichkeit, Pfade erfolgreich oder erfolglos "`abzubrechen"' (Werte \texttt{1} bzw.\ \texttt{0}).
-
-\par\medskip
-\textsfbf{Läufe des Automaten auf einigen Eingaben.}~
-Sei $\alpha=\{a\}\,\{a\}\,\{a\}\,\{b\}\,\emptyset^\omega$ das Wort, das dem LTL-Pfad entspricht,
-auf dem in den ersten 3~Zuständen die Aussagenvariablen $a$, im 4.~Zustand $b$ und
-in den übrigen Zuständen keine Aussagenvariable "`gesetzt"' ist.
-Dieser Pfad erfüllt im Anfangszustand die Formel $a \U b$, also muss $\Amc_\varphi$
-auch $\alpha$ akzeptieren. Letzteres ist tatsächlich der Fall, und zwar mittels des Runs, 
-der aus einem einzigen endlichen Pfad der Länge~4 besteht,
-wobei alle Positionen mit $q_{a\U b}$ markiert sind
-(überprüft es selbst mit der obigen Tabelle).
-Analog wird das Wort $\{b\}\,\emptyset^\omega$ von $\Amc_\varphi$ akzeptiert,
-und zwar auf einem einelementigen Run mit der Markierung $q_{a\U b}$.
-Im Gegensatz dazu wird $\{a\}^\omega$ nicht akzeptiert,
-denn hier besteht der einzig mögliche Run aus einem \emph{unendlichen}
-mit $q_{a\U b}$ markierten Pfad, welcher die Akzeptanzbedingung
-$F = \{q_{\lnot(a \U b)}\}$ verletzt
-und genau der zu vermeidenden Situation entspricht,
-dass $\lnot(a \U b)$ unendlich lange hinausgezögert wird.
-
-\paragraph*{Beispiel 2.}
-Sei $\varphi = \G\F a$.
-Die Standardvorgehensweise gemäß der Folien ist,
-die Formel so umzuformen, dass sie nur noch \U verwendet
-(siehe Folie~12 in Teil~5).
-Die resultierende Formel wäre jedoch deutlich größer,
-was wiederum zu einer unhandlich großen Zustandsmenge und Übergangsfunktion von $\Amc_\varphi$ führen würde.
-Es bietet sich deshalb hier an, die Konstruktion von $\Amc_\varphi$ von Folie~15
-um die offensichtlichen Fälle für die Operatoren \G und \F zu erweitern,
-und zwar in der Übergangsfunktion und der Akzeptanzbedingung
-%
-\begin{align*}
-  \delta(q_{\F\psi},a) & = \delta(q_\psi,a) \lor q_{\F\psi}  \\
-  \delta(q_{\G\psi},a) & = \delta(q_\psi,a) \land q_{\G\psi} \tag{$*$}\\[.4\baselineskip]
-  F & = \{q_{\lnot(\psi\U \vartheta)} \mid \lnot(\psi\U \vartheta) \in \textsf{cl}(\varphi) \}
-        ~\cup~ \{q_{\lnot\F\psi} \mid \lnot\F\psi \in \textsf{cl}(\varphi) \}
-        ~\cup~ \{q_{\G\psi} \mid \G\psi \in \textsf{cl}(\varphi) \}
-\end{align*}
-%
-Dann bleibt der ABA überschaubar: $\textsf{cl}(\varphi) = \{a,\,\lnot a,\,\F a,\,\lnot \F a,\,\G\F a,\,\lnot\G\F a\}$,
-und $\Amc_\varphi = (Q,\Sigma,\delta,\{q_I\},F)$ hat folgende Bestandteile.
-%
-\begin{align*}
-  Q      & = \{q_a,\,q_{\lnot a},\,q_{\F a},\,q_{\lnot\F a},\,q_{\G\F a},\,q_{\lnot\G\F a}\} \\
-  \Sigma & = \{\emptyset,\,\{a\}\} \\
-  q_I    & = q_{\G\F a} \\
-  F      & = \{q_{\lnot\F a},q_{\G\F a}\}
-\end{align*}
-%
-Die Übergangsfunktion $\delta$ ist durch die folgende Tabelle gegeben.
-%
-\begin{center}
-  \begin{tabular}{l|cc}
-    ~~~~~~~~~~~~Zeichen & $\emptyset$                             & $\{a\}$            \\
-    Zustand             &                                         &                    \\
-    \hline\rule{0pt}{11pt}%
-    $q_a$               & \texttt{0}                              & \texttt{1}         \\[2pt]
-    $q_{\lnot a}$       & \texttt{1}                              & \texttt{0}         \\[2pt]
-    $q_{\F a}$          & $q_{\F a}$                              & \texttt{1}         \\[2pt]
-    $q_{\lnot \F a}$    & $q_{\lnot\F a}$                         & \texttt{0}         \\[2pt]
-    $q_{\G\F a}$        & $q_{\F a} \land q_{\G\F a}$             & $q_{\G\F a}$       \\[2pt]
-    $q_{\lnot\G\F a}$   & $q_{\lnot \F a} \lor q_{\lnot \G\F a}$  & $q_{\lnot \G\F a}$
-  \end{tabular}
-\end{center}
-%
-Die ersten 2 Zeilen werden wieder wie im vorigen Beispiel erzeugt; die dritte und vierte Zeile
-sind analog zu den Fällen $q_{a\U b}$ bzw. $q_{\lnot(a\U b)}$.
-Die letzten beiden Zeilen bringen "`echte"' Alternierung;
-Zeile~5 sie kann man direkt aus Gleichung $(*)$ für $\delta$ und der 3.\ Tabellenzeile ablesen;
-Zeile~6 erhält man wieder durch "`Negation"' (Fall $q_{\mathord{\sim}\psi}$ auf Folie~15).
-
-\par\medskip
-\parbox[t]{.6\linewidth}{%
-  \textsfbf{Läufe des Automaten auf einigen Eingaben.}~
-  Sei $\alpha=(\{a\}\,\emptyset)^\omega$ das Wort, das dem LTL-Pfad entspricht,
-  auf dem die Aussagenvariable $a$ abwechselnd "`gesetzt"' und "`nicht gesetzt"' ist.
-  Dieser LTL-Pfad erfüllt im Anfangszustand die Formel $\G\F a$, also muss $\Amc_\varphi$
-  auch $\alpha$ akzeptieren. Letzteres ist tatsächlich der Fall, und zwar mittels des nebenstehenden Runs,
-  dessen einziger unendlicher Pfad nur mit $q_{\G\F a}$ markiert ist,
-  also die Akzeptanzbedingung $F$ erfüllt.
-}%
-\hspace*{\fill}
-\parbox[t]{.36\linewidth}{%
-  \begin{tikzpicture}[%
-    baseline=0pt,node distance=20mm,>=Latex,
-    every node/.style={ellipse,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=8mm},
-    level 1/.style = {sibling distance = 40mm, level distance = 10mm},
-    level 2/.style = {sibling distance = 20mm, level distance =  9mm},
-    level 3/.style = {sibling distance = 20mm, level distance = 10mm},
-    level 4/.style = {sibling distance = 20mm, level distance =  9mm},
-    edge from parent/.style = {draw=black, thin, -}%
-  ]
-    \node (eps) {$q_{\G\F a}$}
-    child {
-      node (0) {$q_{\G\F a}$}
-      child {
-        node (00) {$q_{\F a}$}
-      }
-      child {
-        node (01) {$q_{\G\F a}$}
-        child {
-          node (010) {$q_{\G\F a}$}
-          child {
-            node (0100) {$q_{\F a}$}
-          }
-          child {
-            node (0101) {$q_{\G\F a}$}
-          }
-        }
-      }
-    }
-    ;
-    
-    \begin{scope}[
-      every node/.style={circle,draw=none,fill=none,inner sep=.4mm,minimum size=7mm},
-    ]
-      \node[at=(0101 |- eps)] (anchor1) {\phantom{$q_{\G\F a}$}};
-      \node[at=(0101 |- 0)]   (anchor2) {\phantom{$q_{\G\F a}$}};
-      \node[at=(0101 |- 01)]  (anchor3) {\phantom{$q_{\G\F a}$}};
-      \node[at=(0101 |- 010)] (anchor4) {\phantom{$q_{\G\F a}$}};
-    \end{scope}
-        
-    \begin{scope}[
-      every node/.style={circle,draw=none,fill=none,inner sep=.4mm,minimum size=0mm},
-    ]
-      \node[right=5mm of anchor1]         {~$\{a\}$};
-      \node[right=5mm of anchor2]         {~~\,$\emptyset$};
-      \node[right=5mm of anchor3]         {~$\{a\}$};
-      \node[right=5mm of anchor4]         {~~\,$\emptyset$};
-      \node[right=5mm of 0101]    (lasta) {$\{a\}$};
-      \node[below=0mm of lasta]           {$\vdots$};
-
-      \node[below=0mm of 0101]            {$\vdots$};
-    \end{scope}
-  \end{tikzpicture}
-}
-
-\par\smallskip
-\parbox[t]{.6\linewidth}{%
-  Im Gegensatz dazu wird $\{a\}\,\emptyset\,\{a\}\,\emptyset^\omega$ nicht akzeptiert,
-  denn der einzig mögliche Run hat einen unendlichen
-  Pfad, der auf $q_{\F a}^\omega$ endet und somit die Akzeptanz\-bedingung verletzt,
-  siehe nebenstehendes Bild (besagter Pfad ist markiert).
-  Dieser Pfad entspricht genau der zu vermeidenden Situation,
-  dass $\F a$ unendlich lange hinausgezögert wird.
-  
-  \par\smallskip
-  Es gibt hier nur diesen einzigen Run, weil die 6.~Zeile der Tabelle nie zum Einsatz kommt.
-}
-\hspace*{\fill}
-\parbox[t]{.36\linewidth}{%
-  \begin{tikzpicture}[%
-    baseline=0pt,node distance=20mm,>=Latex,
-    every node/.style={ellipse,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=8mm},
-    level 1/.style = {sibling distance = 40mm, level distance = 10mm},
-    level 2/.style = {sibling distance = 20mm, level distance =  9mm},
-    level 3/.style = {sibling distance = 20mm, level distance = 10mm},
-    level 4/.style = {sibling distance = 20mm, level distance =  9mm},
-    level 5/.style = {sibling distance = 20mm, level distance = 10mm},
-    edge from parent/.style = {draw=black, thin, -}%
-  ]
-    \node (eps) {$q_{\G\F a}$}
-    child {
-      node (0) {$q_{\G\F a}$}
-      child {
-        node (00) {$q_{\F a}$}
-      }
-      child {
-        node (01) {$q_{\G\F a}$}
-        child {
-          node (010) {$q_{\G\F a}$}
-          child {
-            node (0100) {$q_{\F a}$}
-            child {
-              node (01000) {$q_{\F a}$}
-            }
-          }
-          child {
-            node (0101) {$q_{\G\F a}$}
-          }
-        }
-      }
-    }
-    ;
-    
-    \begin{scope}[
-      every node/.style={circle,draw=none,fill=none,inner sep=.4mm,minimum size=7mm},
-    ]
-      \node[at=(0101 |- eps)]   (anchor1) {\phantom{$q_{\G\F a}$}};
-      \node[at=(0101 |- 0)]     (anchor2) {\phantom{$q_{\G\F a}$}};
-      \node[at=(0101 |- 01)]    (anchor3) {\phantom{$q_{\G\F a}$}};
-      \node[at=(0101 |- 010)]   (anchor4) {\phantom{$q_{\G\F a}$}};
-      \node[at=(0101 |- 01000)] (anchor6) {\phantom{$q_{\G\F a}$}};
-      
-      \node[below=10mm of 01000] (anchor99) {};
-    \end{scope}
-        
-    \begin{scope}[
-      every node/.style={circle,draw=none,fill=none,inner sep=.4mm,minimum size=0mm},
-    ]
-      \node[right=5mm of anchor1]         {~$\{a\}$};
-      \node[right=5mm of anchor2]         {~~\,$\emptyset$};
-      \node[right=5mm of anchor3]         {~$\{a\}$};
-      \node[right=5mm of anchor4]         {~~\,$\emptyset$};
-      \node[right=5mm of 0101]            {~\,$\emptyset$};
-      \node[right=5mm of anchor6] (last0) {~~\,$\emptyset$};
-      \node[below=0mm of last0]           {~~$\vdots$};
-
-      \node[below=0mm of 01000]           {{\boldmath $\vdots$}};
-      \node[below=0mm of 0101]            {$\vdots$};
-    \end{scope}
-
-    \begin{scope}[
-      every edge/.style={draw=black,line width=2mm,draw opacity=.4}
-    ]
-    \path[-]
-      (eps)   edge (0)
-      (0)     edge (01)
-      (01)    edge (010)
-      (010)   edge (0100)
-      (0100)  edge (01000)
-      (01000) edge (anchor99)
-      ;
-    \end{scope}
-  \end{tikzpicture}
-}
-
-\goodbreak
-% ===================================================================
-\section*{T5.5~ Beispiel für die Komplementierung}
-
-Wir betrachten den Automaten aus T5.3, aber mit einer Müller-Akzeptanzbedingung,
-also den AMA $\Amc = (Q,\Sigma,\delta,\{q_I\},\Fmc)$ mit
-%
-\begin{align*}
-  Q & = \{p,q\},\quad \Sigma = \{a,b\},\quad \Fmc = \{\{p\},\,\{p,q\}\},\quad q_I = p,\\[4pt]
-  \delta(p,a) & = p \land q   \\
-  \delta(p,b) & = p           \\
-  \delta(q,a) & = q           \\
-  \delta(q,b) & = \texttt{1},
-\end{align*}
-%
-also $L_\omega(\Amc) = L(((a+b)^*b)^\omega)$.
-
-Die Regeln zur Komplementierung auf Folie~19 liefern den AMA
-$\Amc' = (Q,\Sigma,\delta',\{q_I\},\Fmc')$ mit
-%
-\begin{align*}
-  \Fmc & = \{\emptyset,\,\{q\}\}\\[4pt]
-  \delta(p,a) & = p \lor q   \\
-  \delta(p,b) & = p           \\
-  \delta(q,a) & = q           \\
-  \delta(q,b) & = \texttt{0}.
-\end{align*}
-%
-Da in keinem $\delta(\cdot,\cdot)$ mehr eine Konjunktion auftritt,
-verhält sich $\Amc'$ genauso wie ein NMA, der im Fall $(p,a)$ (1.~Zeile von $\delta$) zwei mögliche
-Entscheidungen treffen kann und im Fall $(q,b)$ "`blockiert"', also keinen Übergang hat.
-Das heißt, man überzeugt sich also leicht, dass $\Amc'$ äquivalent zum NMA
-$\Amc'' = (Q,\Sigma,\Delta,\{q_I\},\Fmc')$ mit
-$\Delta = \{(p,a,p),\,(p,a,q),\,(p,b,p),\,(q,a,q)\}$ ist
-und dass $L_\omega(\Amc'') = \overline{L_\omega(\Amc)}$ gilt.
-
-% ===================================================================
-\section*{Beweisskizze für die Komplementierung (fakultativ)}
-
-Wir haben für die Komplementierung von AMAs (Satz~5.5 auf Folie~19)
-nicht die Korrektheit bewiesen. Falls es euch interessiert,
-wie man vorgehen muss,
-ist hier eine grobe Skizze --
-allerdings für den Fall von Paritätsautomaten
-(aber wir wissen ja bereits,
-wie man die Muller- und Paritätsbedingung ineinander übersetzt).
-
-\begin{enumerate}
-  \item
-    Wir betrachten eine "`vereinfachte"' Variante der Alternierung,
-    bei der die Zustandsmenge $Q$ eines APA partitioniert ist 
-    in die Menge $Q_\exists$ der \emph{existentiellen Zustände}
-    und die Menge $Q_\forall$ der \emph{universellen Zustände}.
-    Für Zustände $q \in Q_\exists$ ist 
-    $\delta(q,a)$ für jedes Zeichen $a$ eine Disjunktion von Zuständen;
-    für Zustände $q \in Q_\forall$ ist 
-    $\delta(q,a)$ eine Konjunktion.
-    Diese Variante entspricht der ursprünglichen Definition
-    von Alternierung.
-    Wir nennen solche Automaten hier \emph{A${}^-$PAs}.
- \item
-    Offensichtlich ist jeder A${}^-$PA auch ein APA.
-    Die Umkehrung gilt nicht; dennoch sind A${}^-$PAs und APAs
-    gleichmächtig: zum einen kann man jeden APA in einen äquivalenten NPA
-    umwandeln  (dieses nichttriviale Resultat basiert auf Spielen
-    und hat dieses Jahr nicht mehr in die Vorlesung gepasst);
-    zum anderen ist natürlich jeder NPA ein A${}^-$PA.
- \item
-    Wenn man die "`Konstruktion"' zur Komplementierung auf Folie~19
-    auf einen A${}^-$PA anwendet, dann werden dadurch lediglich die Mengen
-    $Q_\exists$ und $Q_\forall$ miteinander vertauscht
-    (und die Akzeptanzkomponente komplementiert).
-    Sei $\Amc'$ der resultierende A${}^-$PA.
-  \item
-    Nun können wir wieder Spiele ähnlich zu denen aus Teil~4 betrachten:
-    für jeden A${}^-$PA $\Amc$ und jedes Eingabewort $\alpha$
-    ist das Spiel $G_{\Amc,\alpha}$ wie folgt definiert:
-    %
-    \begin{itemize}
-      \item
-        Die Spielpositionen sind Paare $(q_i,\alpha_i)$ mit $q_i \in Q$
-        und $\alpha_i$ der $i$-te Buchstabe von $\alpha$.
-      \item
-        Die Startposition ist $(q_0,\alpha_0)$ mit $q_0 = q_I$ (Startzustand von \Amc).
-      \item 
-        Wenn $q_i \in Q_\exists$, dann wählt \AUT einen Nachfolgerzustand $q_{i+1}$;
-        wenn $q_i \in Q_\forall$, dann wählt \PF ihn.
-      \item
-        \AUT gewinnt, wenn (a) das Spiel unendlich lange läuft
-        und die Akzeptanzbedingung von $\Amc$ erfüllt
-        oder (b) das Spiel endet, weil \PF keinen Zug machen kann
-        (d.\,h.\ in Position $(q_i,\alpha_i)$ ist $q_i \in Q_\forall$
-        und $\delta(q_i,\alpha_i)$ ist die leere Konjunktion).
-    \end{itemize}
-    %
-    Ähnlich wie in Teil~4 ist nun wieder einfach zu sehen,
-    dass $\alpha \in L_\omega(\Amc)$ genau dann, wenn \AUT eine
-    Gewinnstrategie in $G_{\Amc,\alpha}$ hat.
-    
-    Da es kein Unentschieden gibt, gilt auch:
-    \[
-      \alpha \notin L_\omega(\Amc)
-      \quad\text{gdw.}\quad
-      \PF \text{~hat Gewinnstrategie in~} G_{\Amc,\alpha}
-      \tag{$*$}
-    \]
-    Gedächntislose Gewinnstrategien werden hier allerdings nicht benötigt.
-  \item
-    Da sich durch die Konstruktion in Punkt 3 die Rollen von \AUT
-    und \PF genau vertauschen, erhält man mit $(*)$:
-    %
-    \begin{align*}
-      \alpha \notin L_\omega(\Amc)
-      & \quad\text{gdw.}\quad
-        \PF \text{~hat Gewinnstrategie in~} G_{\Amc,\alpha} \\
-      & \quad\text{gdw.}\quad
-        \AUT \text{~hat Gewinnstrategie in~} G_{\Amc',\alpha} \\
-      & \quad\text{gdw.}\quad
-        \alpha \in L_\omega(\Amc')
-    \end{align*}
-    
-\end{enumerate}
 
 
 %% ===================================================================

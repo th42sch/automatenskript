@@ -9,9 +9,19 @@ Hier findet ihr die Tafelanschriebe für die Vorlesung „Automatentheorie und i
 
 ## Aktueller Stand
 
+**Kapitel 1–3** vollständig
+
+**Kapitel 4** bis T4.4 (Stand: 17.12.19)
+
+**Kapitel 5** vollständig
+
+<!--
 Alle (bisherigen und geplanten) Tafelanschriebe sind jetzt <font color="#005500">vollständig</font> vorhanden, <font color="#005500">einschließlich Bildern.</font>
+-->
 
 ## Versionsgeschichte (WiSe 2019/20)
+
+**16.12.2019**&nbsp; Kapitel 4 (Alternierung) vor bisheriges Kapitel 4 (unendliche Bäume) gezogen
 
 **2.–3.12.2019**&nbsp; neuen T3.18 eingefügt; T3.20 angepasst
 
