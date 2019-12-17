@@ -4870,9 +4870,9 @@ Diesen ABA kann man graphisch wie folgt darstellen:
     \node[right of=q]                                       (1)    {\texttt{1}};
     
     \path[->]
-      (p)    edge             node[near start, above] {$b$} (q)
+      (p)    edge             node[near start, above] {$a$} (q)
       (rect) edge[out=300,in=320]                                (p)
-      (p)    edge[loop above] node[right=1mm]             {$a$} ()
+      (p)    edge[loop above] node[right=1mm]             {$b$} ()
       (q)    edge[loop above] node[right=1mm]             {$a$} ()
       (q)    edge             node[above=0mm]             {$b$} (1)
       ;
