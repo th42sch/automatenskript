@@ -4867,12 +4867,15 @@ Diesen ABA kann man graphisch wie folgt darstellen:
     \node[state,initial,accepting]                          (p)    {$p$};
     \node[rectangle,fill=black,minimum size=1.6mm,inner sep=0mm,right of=p] (rect) {};
     \node[state,right of=rect]                              (q)    {$q$};
+    \node[right of=q]                                       (1)    {\texttt{1}};
     
     \path[->]
       (p)    edge             node[near start, above] {$b$} (q)
       (rect) edge[out=300,in=320]                                (p)
       (p)    edge[loop above] node[right=1mm]             {$a$} ()
-      (q)    edge[loop above] node[right=1mm]             {$a,b$} ();
+      (q)    edge[loop above] node[right=1mm]             {$a$} ()
+      (q)    edge             node[above=0mm]             {$b$} (1)
+      ;
       
     \node () [below right=-1.5mm and -.5mm of rect] {\footnotesize $\land$};
   \end{tikzpicture}
@@ -5381,7 +5384,7 @@ Zeile~6 erhält man wieder durch "`Negation"' (Fall $q_{\mathord{\sim}\psi}$ auf
 %      \PF \text{~hat Gewinnstrategie in~} G_{\Amc,\alpha}
 %      \tag{$*$}
 %    \]
-%    Gedächntislose Gewinnstrategien werden hier allerdings nicht benötigt.
+%    Gedächtnislose Gewinnstrategien werden hier allerdings nicht benötigt.
 %  \item
 %    Da sich durch die Konstruktion in Punkt 3 die Rollen von \AUT
 %    und \PF genau vertauschen, erhält man mit $(*)$:

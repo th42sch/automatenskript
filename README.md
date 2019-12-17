@@ -21,7 +21,7 @@ Alle (bisherigen und geplanten) Tafelanschriebe sind jetzt <font color="#005500"
 
 ## Versionsgeschichte (WiSe 2019/20)
 
-**16.12.2019**&nbsp; Kapitel 4 (Alternierung) vor bisheriges Kapitel 4 (unendliche Bäume) gezogen
+**16.–17.12.2019**&nbsp; Kapitel 4 (Alternierung) vor bisheriges Kapitel 4 (unendliche Bäume) gezogen
 
 **2.–3.12.2019**&nbsp; neuen T3.18 eingefügt; T3.20 angepasst
 
