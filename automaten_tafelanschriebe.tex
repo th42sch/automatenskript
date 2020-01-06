@@ -5275,8 +5275,315 @@ Zeile~6 erhält man wieder durch "`Negation"' (Fall $q_{\mathord{\sim}\psi}$ auf
 }
 
 % ===================================================================
-\section*{T4.5~ usw.}
+\section*{T4.5-T4.11}
 \dots\ folgen \dots
+
+% ===================================================================
+\section*{T4.12~ Beispiel für Paritätsautomat mit klass.\ Alternierung}
+
+Wir betrachten den KAPA $\Amc = (Q_\exists,Q_\forall,\Sigma,\Delta,\{s\},c)$
+mit
+%
+\begin{align*}
+  Q_\exists & = \{q_1,q_2,q_3\} \\
+  Q_\forall & = \{s\}           \\
+  \Sigma    & = \{a,b\}
+  c(s)      & = c(q_3) = 0      \\
+  c(q_1)    & = c(q_2) = 1,
+\end{align*}
+%
+dessen Übergangsrelation $\Delta$ in folgendem Bild gegeben ist
+(existentielle Zustände sind rund, universelle eckig):
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=25mm,>=Latex,baseline=-2pt,
+    initial text="", initial where=below left,
+    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=7mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state,rectangle,initial] (s)  {$s$};
+    \node[state,right of=s]        (q1) {$q_1$};
+    \node[state,right of=q1]       (q2) {$q_2$};
+    \node[state,below=8mm of q1]   (q3) {$q_3$};
+    
+    \path[->]
+      (s)  edge[loop above]   node[right=1mm] {$a,b$} ()
+      (s)  edge               node[above=0mm] {$b$}   (q1)
+      (q1) edge[bend left=10] node[above=0mm] {$a$}   (q2)
+      (q2) edge[bend left=10] node[below=0mm] {$a$}   (q1)
+      (q1) edge               node[left =0mm] {$b$}   (q3)
+      (q3) edge[loop right]   node[right=0mm] {$a,b$} ()
+      ;
+      
+    \node[above left=-2mm and 8mm of s] {$\Amc$};
+  \end{tikzpicture}
+\end{center}
+%
+Die intuitive Idee hinter diesem Automaten ist, dass es
+in jedem Run (auf einem beliebigen $\omega$-Wort)
+einen Pfad gibt, der nur den Zustand $s$ besucht
+(wegen der $a,b$-Schleife),
+wobei bei jedem $b$ ein weiterer Pfad abzweigt, der in $q_1$ beginnt
+und nur die $q_i$ besucht.
+Es wird also dafür gesorgt, dass bei jedem $b$ eine "`Kopie"'
+des $q_i$-Teils von \Amc auf dem Restwort läuft.
+Diese Kopien (bzw.\ die entsprechenden Pfade im Run)
+sind genau dann erfolgreich, wenn eine gerade Zahl $a$'s
+und dann ein $b$ gelesen werden.
+Damit akzeptiert \Amc genau die $\omega$-Wörter,
+die
+%
+\begin{itemize}
+  \item 
+    kein $b$ enthalten oder
+  \item
+    unendlich viele $b$'s sowie
+%  \item
+    zwischen je zwei $b$'s eine gerade Anzahl von $a$'s enthalten,
+\end{itemize}
+d.\,h.:
+\[
+  L_\omega(\Amc) = a^\omega + a^*(b(aa)^*)^\omega
+\]
+
+\parII
+\textsfbf{Beispiel-Runs von \Amcb:}
+%
+\begin{itemize}
+  \item
+    auf $a(baa)^\omega$:
+    %
+    \begin{center}
+      \dots\ Bild folgt \dots
+    \end{center}
+  \item
+    auf $aba^\omega$:
+    %
+    \begin{center}
+      \dots\ Bild folgt \dots
+    \end{center}
+  \item
+    auf $abaaa(baa)^\omega$:~
+    %
+    \begin{center}
+      \dots\ Bild folgt \dots
+    \end{center}
+\end{itemize}
+
+% ===================================================================
+\section*{T4.13~ Beispiel Komplementierung KAPA}
+
+Wir betrachten den KAPA \Amc aus T4.12.
+Der Komplementautomat gemäß der Konstruktion ist 
+$\Amc' = (Q_\exists',Q_\forall',\Sigma,\Delta,\{s\},c')$
+mit
+%
+\begin{xalignat*}{2}
+  Q_\exists' & = \{s\}           & c'(s)      & = c'(q_3) = 1     \\
+  Q_\forall' & = \{q_1,q_2,q_3\} & c'(q_1)    & = c'(q_2) = 2
+\end{xalignat*}
+%
+und der folgenden graphischen Darstellung:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=25mm,>=Latex,baseline=-2pt,
+    initial text="", initial where=below left,
+    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=7mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state,initial]                   (s)  {$s$};
+    \node[state,rectangle,right of=s]      (q1) {$q_1$};
+    \node[state,rectangle,right of=q1]     (q2) {$q_2$};
+    \node[state,rectangle,below=8mm of q1] (q3) {$q_3$};
+    
+    \path[->]
+      (s)  edge[loop above]   node[right=1mm] {$a,b$} ()
+      (s)  edge               node[above=0mm] {$b$}   (q1)
+      (q1) edge[bend left=10] node[above=0mm] {$a$}   (q2)
+      (q2) edge[bend left=10] node[below=0mm] {$a$}   (q1)
+      (q1) edge               node[left =0mm] {$b$}   (q3)
+      (q3) edge[loop right]   node[right=0mm] {$a,b$} ()
+      ;
+      
+    \node[above left=-2mm and 8mm of s] {$\Amc'$};
+  \end{tikzpicture}
+\end{center}
+%
+Wegen der geänderten Paritäten in $c'$ akzeptiert 
+$\Amc'$ nur, wenn $s$ irgendwann über ein $b$ verlassen wird
+und $q_3$ nie erreicht wird.
+Das heißt, es muss mindestens ein $b$ in der Eingabe auftreten,
+und es gibt nur endlich viele $b$'s (dann bleibt der Run in der $q_1$-$q_2$-Schleife)
+oder zwischen zwei $b$'s stehen ungerade viele $a$'s
+(dann endet der Pfad des Runs im universellen Zustand $q_2$,
+was auch zur Akzeptanz führt).
+Damit ist tatsächlich
+\[
+  L_\omega(\Amc') = \overline{L_\omega(\Amc)}.
+\]
+
+% ===================================================================
+\section*{{\boldmath T4.14~ Beispiel eines Spielverlaufs für \Game{A}{\alpha}}}
+
+Wir betrachten wieder den KAPA \Amc aus T4.12 und die Eingabe $\alpha = a(baa)^\omega$.
+
+Die anfängliche Spielposition ist $(0,s)$.
+%d.\,h.\ das erste Zeichen von $\alpha$ wird mit $(0,s)$ markiert.
+
+Da $s \in Q_\forall$, ist \PlA am Zug. Sie kann nur den Übergang $(s,a,s)$ wählen,
+also ist die nächste Spielposition $(1,s)$.
+
+Damit ist \PlA wieder am Zug. Sie kann jetzt $(s,b,s)$ oder $(s,b,q_1)$ wählen.
+Wenn sie immer bei $(s,b,s)$ bzw.\ $(s,a,s)$ bleibt, wird eine unendliche Folge
+von $s$ erzeugt, die \PlE gewinnen lässt.
+Also betrachten wir den Fall, dass sie $(s,b,q_1)$ wählt.
+Die Spielposition ist nun $(2,q_1)$.
+
+Da $q_1 \in Q_\exists$, ist nun \PlE am Zug.
+Sie kann nur $(q_1,a,q_2)$ wählen;
+die Spielposition ist nun $(3,q_2)$.
+
+Da $s$ nicht mehr erreichbar ist und der $q_i$-Teil von \Amc deterministisch ist,
+bleibt immer \PlE am Zug, und die folgenden Spielpositionen sind
+$(4,q_1)$, $(5,q_3)$; danach bleibt das Spiel in $q_3$, und \PlE gewinnt.
+
+\textsfbf{Wir beobachten:} Je nachdem, ob und wann (bei welchem $b$ in $\alpha$)
+\PlA den Übergang $(s,b,q_1)$ wählt, macht der Spielverlauf
+einen Pfad im (einzigen) möglichen Run von \Amc auf $\alpha$ sichtbar.
+
+% ===================================================================
+\section*{T4.15~ Beispiele für Gewinnstrategien}
+
+Wir betrachten wieder den KAPA \Amc aus T4.12.
+%
+\parI
+\begin{itemize}
+  \item
+    Wenn die Eingabe $\alpha = a(baa)^\omega$ ist,
+    hat \PlE eine Gewinnstrategie in \Game{A}{\alpha}:
+    
+    \parI
+    Wann immer \PlA am Zug ist (Zustände $q_i$),
+    wählt sie den durch das gelesene Zeichen eindeutig bestimmten Nachfolgezustand $q_i$.
+    Die Form von $\alpha$ stellt sicher, dass nach einer geraden Anzahl von $a$'s
+    ein $b$ folgt und damit von $q_2$ in $q_3$ übergegangen werden kann.
+    Mit dieser (trivialen) Gewinnstrategie gewinnt \E immer.
+    \parI
+  \item
+    Wenn die Eingabe $\alpha = aba^\omega$ ist,
+    hat \PlA eine Gewinnstrategie in \Game{A}{\alpha}:
+    
+    \parI
+    Beim ersten $a$ in $\alpha$ wähle die einzig mögliche Transition $(s,a,s)$.
+    Beim folgenden $b$ wähle $(s,b,q_1)$.
+    Dann ist \PlE immer am Zug und wechselt nur noch zwischen $q_1$ und $q_2$,
+    erreicht also nie $q_3$ und verliert damit.
+    Dies entspricht genau dem rechten Pfad im entsprechenden Run in T4.12.
+    \parI
+  \item
+    Wenn die Eingabe $\alpha = abaaa(ba)^\omega$ ist,
+    hat \PlA eine Gewinnstrategie in \Game{A}{\alpha}:
+    
+    \parI
+    Wähle wieder beim ersten $a$ in $\alpha$ den Übergang $(s,a,s)$.
+    und beim folgenden $b$ dann $(s,b,q_1)$.
+    Ab jetzt ist wieder \PlE immer am Zug und 
+    muss wegen der folgenden drei $a$'s in $q_2,q_1,q_2$ wechseln.
+    Von $q_2$ aus gibt es aber keinen Übergang mit $b$ mehr,
+    also kann \PlE nicht mehr spielen und verliert damit.
+    Dies entspricht wieder genau dem rechten Pfad im entsprechenden Teilrun in T4.12.
+\end{itemize}
+
+% ===================================================================
+\section*{T4.16~ Beweis von Lemma 4.17}
+
+\textsfbf{Lemma 4.17.}~
+Seien $\Amc = (Q_\exists,Q_\forall,\Sigma,\Delta,\{q_I\},c)$ ein KAPA
+und $\alpha$ ein $\omega$-Wort. \\ %über $\Sigma$.\\
+Dann gilt:
+%
+\begin{center}
+  $\alpha \in L_\omega(\Amc)$ ~$\Leftrightarrow$~ \PlE hat Gewinnstrategie in $\Game{A}{\alpha}$ ab Position $(0,q_I)$
+\end{center}
+
+\parII
+\textsfbf{Beweis.}~
+%
+\begin{description}
+  \item[{\boldmath "`$\Rightarrow$"'}]
+    Sei $\alpha \in L_\omega(\Amc)$ und $r$ ein erfolgreicher Run von \Amc auf $\alpha$.
+    Wir beschreiben, wie man aus $r$ eine Gewinnstrategie von \PlE konstruieren kann.
+    Dazu speichert sich \PlE zu jedem Zeitpunkt $i$ eine Position $p_i$ in $r$.
+    Für $i=0$ ist $p_i = \varepsilon$ (die Wurzel des Runs).
+    \PlE geht nun so vor:
+    %
+    \begin{itemize}
+      \item
+        In Spielposition $(i,q)$ mit $q \in Q_\forall$ (d.\,h.\ \PlA ist am Zug)
+        und gespeicherter $r$-Position $p_i$ macht \PlE folgendes:
+        
+        Wenn \PlA den Übergang $(q,\alpha_i,q')$ spielt,
+        dann wähle eine Nachfolgerposition $p'$ von $p_i$ in $r$
+        mit $r(p') = q'$ (die gibt es nach Def.\ Run)
+        und setze $p_{i+1} = p'$.
+      \item
+        In Spielposition $(i,q)$ mit $q \in Q_\exists$ (d.\,h.\ \PlE ist am Zug)
+        und gespeicherter $r$-Position $p_i$ macht \PlE folgendes:
+        
+        Wähle einen Übergang $(q,\alpha,q')$ und ein Kind $p'$ von $p$
+        mit $r(p')=q'$ (beides existiert nach Def.\ Run).
+        Setze $p_{i+1} = p'$.
+    \end{itemize}
+    %
+    Die Folge der $p_i$ bestimmt also einen Pfad $\pi$,
+    der im Laufe des Spiels in $r$ sichtbar gemacht wird.
+    
+    Wenn $\pi$ endlich ist, dann nur, weil irgendwann \PlA nicht ziehen konnte, also gewinnt \PlE.
+    Wenn $\pi$ unendlich ist, dann ist die Akzeptanzbedingung $c$ erfüllt, weil $r$ erfolgreich ist.
+    Also gewinnt auch dann \PlE.
+    
+    Das Vorgehen beschreibt also eine Gewinnstrategie \PlE
+    in $\Game{A}{\alpha}$ ab Position $(0,q_I)$.
+    \parI
+  \item[{\boldmath "`$\Leftarrow$"'}]
+    Habe \PlE eine Gewinnstrategie in $\Game{A}{\alpha}$ ab Position $(0,q_I)$.
+    Wir konstruieren daraus einen erfolgreichen Run $(P,r)$ von \Amc auf $\alpha$
+    induktiv über die Ebenen des Baums:
+    %
+    \begin{itemize}
+      \item
+        Anfangs setzen wir $P = \{\varepsilon\}$ und $r(\varepsilon) = q_I$.
+      \item
+        Wenn $p \in P$ auf Ebene $i$ liegt und noch keine Nachfolger hat, dann:
+        %
+        \begin{itemize}
+          \item
+            Wenn $r(p) \in Q_\forall$,
+            dann füge für jede Transition $(r(p),\alpha_i,q')$
+            einen Nachfolger $p'$ von $p$ zu $P$ hinzu und setze $r(p') = q'$.
+          \item
+            Wenn $r(p) \in Q_\exists$,
+            dann betrachte diejenige Transition $(r(p),\alpha_i,q')$
+            die durch die Gewinnstrategie gegeben ist,
+            füge einen Nachfolger $p'$ von $p$ zu $P$ hinzu und setze $r(p') = q'$.
+        \end{itemize}
+    \end{itemize}
+    %
+    Die Konstruktion stellt sicher, dass $r$ ein Run von \Amc auf $\alpha$ ist.
+    
+    Außerdem ist $r$ erfolgreich, denn sonst gäbe es einen unendlichen Pfad in $r$, der
+    die Akzeptanzbedingung $c$ verletzt.
+    Dann könnte aber \PlA so spielen, dass dieser Pfad aufgedeckt wird,
+    und \PlE würde verlieren, ein Widerspruch zur Annahme.
+    
+    Wir haben also den gewünschten Run gefunden, und somit gilt $\alpha \in L_\omega(\Amc)$.
+    \qedhere
+\end{description}
+
 
 %\goodbreak
 %% ===================================================================
