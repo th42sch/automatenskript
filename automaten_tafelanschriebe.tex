@@ -5855,9 +5855,9 @@ Die gegebene Struktur $\Smc$ ist eine endliche Repräsentation dieses unendliche
 
 %\enlargethispage{10mm}
 % ===================================================================
-\section*{T5.3~ Beweis Teil 2 des Ausdrucksstärke-Lemmas}
+\section*{T5.x~ Beweis Teil 2 des Ausdrucksstärke-Lemmas (fakultativ)}
 
-\textsfbf{Lemma 4.5~(2).}~
+\textsfbf{Lemma 5.5~(2).}~
 Es gibt keine zu $\F\G p$ äquivalente CTL-Zustandsformel.
 
 \par\medskip\noindent
@@ -5953,63 +5953,38 @@ Das widerspricht aber~(iii).\qedhere
 
 \goodbreak
 % ===================================================================
-\section*{T5.4~ Beispiel für den Model-Checking-Algorithmus}
+\section*{T5.3~ Beispiel für den Model-Checking-Algorithmus}
 
-Wir betrachten die Zustandsformel $\zeta = p \land \A\X\E(q\U r)$.
-Ihre Baumdarstellung ist wie folgt; die einzelnen Teilformeln
-sind mit $\zeta_1,\dots,\zeta_6$ (Zustandsformeln)
-und $\psi_1,\psi_2$ (Pfadformeln) markiert.
+Wir betrachten die Zustandsformel $p \land \A\X\E(q\U r)$
+und wandeln sie in ENF, wobei wir alle Zustands-Teilformeln in aufsteigender Größe benennen:
+\[
+  \zeta = \underbrace{p}_{\zeta_1}
+          \land
+          \underbrace{\lnot
+            \underbrace{\E\X
+              \underbrace{\lnot
+                \underbrace{\E(
+                  \underbrace{q}_{\zeta_2}\U \underbrace{r}_{\zeta_3}
+                )}_{\zeta_4}
+              }_{\zeta_5}
+            }_{\zeta_6}
+          }_{\zeta_7}
+\]
+Das heißt:
 %
-\begin{center}
-  \begin{tikzpicture}[%
-    node distance=20mm,>=Latex,
-    every node/.style={circle,draw=none,fill=none,inner sep=.5mm,minimum size=5mm},
-    level 1/.style = {sibling distance = 25mm, level distance =  6mm},
-    level 2/.style = {sibling distance = 10mm, level distance =  9mm},
-    level 3/.style = {sibling distance = 10mm, level distance =  9mm},
-    level 4/.style = {sibling distance = 10mm, level distance =  9mm},
-    level 5/.style = {sibling distance = 15mm, level distance =  6mm},
-    edge from parent/.style = {draw=black, thin, -}%
-  ]
-    \node (and) {$\land$}
-    child {
-      node (p) {$p$}
-    }
-    child {
-      node (A) {\A}
-      child {
-        node (X) {\X}
-        child {
-          node (E) {\E}
-          child {
-            node (U) {\U}
-            child {
-              node (q) {$q$}
-            }
-            child {
-              node (r) {$r$}
-            }
-          }
-        }
-      }
-    }
-    ;
-    
-%    \foreach \x in {1,...,6}
-%      \node [draw=none,fill=none,below=-1mm of n\x] {$\vdots$};
-    
-    \node[above left =-3mm and 1mm of p]   {$\zeta_1$};
-    \node[above left =-3mm and 1mm of q]   {$\zeta_2$};
-    \node[above right=-3mm and 1mm of r]   {$\zeta_3$};
-    \node[above right=-3mm and 1mm of U]   {$\psi_1$};
-    \node[above right=-3mm and 1mm of E]   {$\zeta_4$};
-    \node[above right=-3mm and 1mm of X]   {$\psi_2$};
-    \node[above right=-3mm and 1mm of A]   {$\zeta_5$};
-    \node[above right=-1mm and 1mm of and] {$\zeta_6$};
-    
-  \end{tikzpicture}
-\end{center}
-%
+\begin{align*}
+  \zeta_1 & = p \\
+  \zeta_2 & = q \\
+  \zeta_3 & = r \\
+  \zeta_4 & = \E(\zeta_2 \U \zeta_3) \\
+  \zeta_5 & = \lnot \zeta_4 \\
+  \zeta_6 & = \E\X\zeta_5 \\
+  \zeta_7 & = \lnot \zeta_6 \\
+  \zeta   & = \zeta_1 \land \zeta_7
+\end{align*}
+%und wandeln sie in ENF zu $\zeta = p \land \lnot\E\X\lnot\E(q\U r)$.
+%Wir 
+
 Die Formel $\zeta$ soll nun auf folgender Kripke-Struktur $\Smc$
 ausgewertet werden.
 %
@@ -6049,104 +6024,169 @@ ausgewertet werden.
   \end{tikzpicture}
 \end{center}
 %
-Zuerst werden für die Zustandsformeln $\zeta_1,\zeta_2,\zeta_3$
-aus den Blättern von $\zeta$ alle Zustände markiert, die mit der
-jeweiligen Aussagenvariable markiert sind:
+Dazu berechnen wir gemäß Algorithmus \texttt{CTL-MC} die Mengen $\text{Sat}(\zeta_i)$ für $i=1,\dots,7$ sowie $\text{Sat}(\zeta)$:
 %
-\begin{center}
-  \begin{tikzpicture}[%
-    node distance=20mm,>=Latex,
-    initial text="", initial where=below left,
-    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
-    accepting/.style={double distance=1.5pt, double=white},
-    every edge/.style={draw=black,thin}
-  ]
-    \structure
-    \node [below=0mm of s0] {$\zeta_1,\zeta_3$};
-    \node [below=0mm of s1] {$\zeta_2$};
-    \node [below=0mm of s2] {$\zeta_2$};
-    \node [below=0mm of s3] {$\zeta_2$};
-  \end{tikzpicture}
-\end{center}
+\begin{itemize}
+  \item
+    $\text{Sat}(\zeta_1) = \{s_0\}$
+  \item
+    $\text{Sat}(\zeta_2) = \{s_1,s_2,s_3\}$
+  \item
+    $\text{Sat}(\zeta_3) = \{s_0\}$
+    \parI
+    Das heißt, dass in den ersten drei Schritten genau die Zustände mit den $\zeta_i$ "`markiert"' werden,
+    die in der Eingabestruktur \Smc mit der
+    jeweiligen Aussagenvariable markiert sind:
+    %
+    \begin{center}
+      \begin{tikzpicture}[%
+        node distance=20mm,>=Latex,
+        initial text="", initial where=below left,
+        every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+        accepting/.style={double distance=1.5pt, double=white},
+        every edge/.style={draw=black,thin}
+      ]
+        \structure
+        \node [below=0mm of s0] {$\zeta_1,\zeta_3$};
+        \node [below=0mm of s1] {$\zeta_2$};
+        \node [below=0mm of s2] {$\zeta_2$};
+        \node [below=0mm of s3] {$\zeta_2$};
+      \end{tikzpicture}
+    \end{center}
+  \item
+    $\text{Sat}(\zeta_4)$ wird nun mittels des Subalgorithms \texttt{SatEU} aus 
+    $\text{Sat}(\zeta_2)$ und $\text{Sat}(\zeta_3)$ berechnet.
+    Dazu wird $S'$ mit $\text{Sat}(\zeta_3)=\{s_0\}$ initialisiert;
+    dann werden sukzessive $s_2, s_1, s_3$ hinzugefügt.
+    Wir erhalten $\text{Sat}(\zeta_4) = \{s_0,s_1,s_2,s_3\}$.
+    
+    \parI
+    Das heißt, in \Smc werden diese vier Zustände mit $\zeta_4$ "`markiert"':
+    %
+    \begin{center}
+      \begin{tikzpicture}[%
+        node distance=20mm,>=Latex,
+        initial text="", initial where=below left,
+        every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+        accepting/.style={double distance=1.5pt, double=white},
+        every edge/.style={draw=black,thin}
+      ]
+        \structure
+        \node [below=0mm of s0] (z13) {$\zeta_1,\zeta_3$};
+        \node [below=0mm of s1]       {$\zeta_2,\zeta_4$};
+        \node [below=0mm of s2]       {$\zeta_2,\zeta_4$};
+        \node [below=0mm of s3]       {$\zeta_2,\zeta_4$};
+        \node [below=0mm of z13]      {$\zeta_4$};
+      \end{tikzpicture}
+    \end{center}
+    %
+  \item
+    $\text{Sat}(\zeta_5) = S \setminus \text{Sat}(\zeta_4) = \{s_4,s_5\}$:
+    %
+    \begin{center}
+      \begin{tikzpicture}[%
+        node distance=20mm,>=Latex,
+        initial text="", initial where=below left,
+        every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+        accepting/.style={double distance=1.5pt, double=white},
+        every edge/.style={draw=black,thin}
+      ]
+        \structure
+        \node [below=0mm of s0] (z13) {$\zeta_1,\zeta_3$};
+        \node [below=0mm of s1]       {$\zeta_2,\zeta_4$};
+        \node [below=0mm of s2]       {$\zeta_2,\zeta_4$};
+        \node [below=0mm of s3]       {$\zeta_2,\zeta_4$};
+        \node [below=-1mm of z13]     {$\zeta_4$};
+        \node [right=0mm of s4]       {$\zeta_5$};
+        \node [right=0mm of s5]       {$\zeta_5$};
+      \end{tikzpicture}
+    \end{center}
+    %
+  \item
+    $\text{Sat}(\zeta_6)$ wird nun mittels des Subalgorithms \texttt{SatEX} aus 
+    $\text{Sat}(\zeta_5)$ berechnet, d.\,h.\
+    $\text{Sat}(\zeta_6) = \{s \in S \mid \text{es gibt~} s' \in \text{Sat}(\zeta_5) \text{~mit~} (s,s') \in R$.
+    Damit ist $\zeta_6 = \{s_1,s_3,s_4,s_5\}$:
+    %
+    \begin{center}
+      \begin{tikzpicture}[%
+        node distance=20mm,>=Latex,
+        initial text="", initial where=below left,
+        every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+        accepting/.style={double distance=1.5pt, double=white},
+        every edge/.style={draw=black,thin}
+      ]
+        \structure
+        \node [below=0mm of s0] (z13) {$\zeta_1,\zeta_3$};
+        \node [below=0mm of s1] (s1') {$\zeta_2,\zeta_4$};
+        \node [below=0mm of s2]       {$\zeta_2,\zeta_4$};
+        \node [below=0mm of s3] (s3') {$\zeta_2,\zeta_4$};
+        \node [below=-1mm of z13]     {$\zeta_4$};
+        \node [right=0mm of s4]       {$\zeta_5,\zeta_6$};
+        \node [right=0mm of s5]       {$\zeta_5,\zeta_6$};
+        \node [below=-1mm of s1']     {$\zeta_6$};
+        \node [below=-1mm of s3']     {$\zeta_6$};
+      \end{tikzpicture}
+    \end{center}
+    %
+  \item
+    $\text{Sat}(\zeta_7) = S \setminus \text{Sat}(\zeta_6) = \{s_0,s_2\}$:
+    %
+    \begin{center}
+      \begin{tikzpicture}[%
+        node distance=20mm,>=Latex,
+        initial text="", initial where=below left,
+        every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+        accepting/.style={double distance=1.5pt, double=white},
+        every edge/.style={draw=black,thin}
+      ]
+        \structure
+        \node [below=0mm of s0] (z13) {$\zeta_1,\zeta_3$};
+        \node [below=0mm of s1] (s1') {$\zeta_2,\zeta_4$};
+        \node [below=0mm of s2] (s2') {$\zeta_2,\zeta_4$};
+        \node [below=0mm of s3] (s3') {$\zeta_2,\zeta_4$};
+        \node [below=-1mm of z13]     {$\zeta_4,\zeta_7$};
+        \node [right=0mm of s4]       {$\zeta_5,\zeta_6$};
+        \node [right=0mm of s5]       {$\zeta_5,\zeta_6$};
+        \node [below=-1mm of s1']     {$\zeta_6$};
+        \node [below=-1mm of s3']     {$\zeta_6$};
+        \node [below=-1mm of s2']     {$\zeta_7$};
+      \end{tikzpicture}
+    \end{center}
+    %
+  \item
+    $\text{Sat}(\zeta) = \text{Sat}(\zeta_1) \cap \text{Sat}(\zeta_7) = \{s_0\}$:
+    %
+    \begin{center}
+      \begin{tikzpicture}[%
+        node distance=20mm,>=Latex,
+        initial text="", initial where=below left,
+        every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+        accepting/.style={double distance=1.5pt, double=white},
+        every edge/.style={draw=black,thin}
+      ]
+        \structure
+        \node [below=0mm of s0]   (z13)  {$\zeta_1,\zeta_3$};
+        \node [below=0mm of s1]   (s1')  {$\zeta_2,\zeta_4$};
+        \node [below=0mm of s2]   (s2')  {$\zeta_2,\zeta_4$};
+        \node [below=0mm of s3]   (s3')  {$\zeta_2,\zeta_4$};
+        \node [below=-1mm of z13] (s1'') {$\zeta_4,\zeta_7$};
+        \node [right=0mm of s4]          {$\zeta_5,\zeta_6$};
+        \node [right=0mm of s5]          {$\zeta_5,\zeta_6$};
+        \node [below=-1mm of s1']        {$\zeta_6$};
+        \node [below=-1mm of s3']        {$\zeta_6$};
+        \node [below=-1mm of s2']        {$\zeta_7$};
+        \node [below=-1mm of s1'']       {{\boldmath $\zeta$}};
+      \end{tikzpicture}
+    \end{center}
+    %
+\end{itemize}
 %
-Die "`nächsthöhere"' Zustandsformel ist $\zeta_4 = \E(\zeta_2 \U \zeta_3)$.
-Es werden also als nächstes alle Zustände mit $\zeta_4$ markiert,
-die aufgrund der bisherigen Markierung $\E(\zeta_2 \U \zeta_3)$ erfüllen,
-in denen also \emph{mindestens ein} (\E) Pfad beginnt,
-der die Pfadformel $\psi_1 = \zeta_2 \U \zeta_3$ erfüllt.
-Dies sind $s_0,s_1,s_2,s_3$.
-%
-\begin{center}
-  \begin{tikzpicture}[%
-    node distance=20mm,>=Latex,
-    initial text="", initial where=below left,
-    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
-    accepting/.style={double distance=1.5pt, double=white},
-    every edge/.style={draw=black,thin}
-  ]
-    \structure
-    \node [below=0mm of s0] (z13) {$\zeta_1,\zeta_3$};
-    \node [below=0mm of s1]       {$\zeta_2,\zeta_4$};
-    \node [below=0mm of s2]       {$\zeta_2,\zeta_4$};
-    \node [below=0mm of s3]       {$\zeta_2,\zeta_4$};
-    \node [below=0mm of z13]      {$\zeta_4$};
-  \end{tikzpicture}
-\end{center}
-%
-Nun wird die Zustandsformel $\zeta_5 = \A\X\zeta_4$ behandelt,
-also werden alle diejenigen Zustände mit $\zeta_5$ markiert,
-deren \emph{alle} (\A) Nachfolger (\X) bereits mit $\zeta_4$ markiert sind.
-Dies sind $s_0,s_2$.
-%
-\begin{center}
-  \begin{tikzpicture}[%
-    node distance=20mm,>=Latex,
-    initial text="", initial where=below left,
-    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
-    accepting/.style={double distance=1.5pt, double=white},
-    every edge/.style={draw=black,thin}
-  ]
-    \structure
-    \node [below=0mm of s0] (z13)          {$\zeta_1,\zeta_3$};
-    \node [below=0mm of s1]                {$\zeta_2,\zeta_4$};
-    \node [below right=1mm and -6mm of s2] {$\zeta_2,\zeta_4,\zeta_5$};
-    \node [below=0mm of s3]                {$\zeta_2,\zeta_4$};
-    \node [below=0mm of z13]               {$\zeta_4,\zeta_5$};
-  \end{tikzpicture}
-\end{center}
-%
-Schließlich ist $\zeta_6 = \zeta_1 \land \zeta_5$;
-also werden alle Zustände mit $\zeta_6$ markiert,
-die bereits mit $\zeta_1$ und $\zeta_5$ markiert sind.
-Dies ist nur noch $s_0$.
-%
-\begin{center}
-  \begin{tikzpicture}[%
-    node distance=20mm,>=Latex,
-    initial text="", initial where=below left,
-    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
-    accepting/.style={double distance=1.5pt, double=white},
-    every edge/.style={draw=black,thin}
-  ]
-    \structure
-    \node [below=0mm of s0] (z13)          {$\zeta_1,\zeta_3$};
-    \node [below=0mm of s1]                {$\zeta_2,\zeta_4$};
-    \node [below right=1mm and -6mm of s2] {$\zeta_2,\zeta_4,\zeta_5$};
-    \node [below=0mm of s3]                {$\zeta_2,\zeta_4$};
-    \node [below=0mm of z13]               {$\zeta_4,\zeta_5,\zeta_5$};
-  \end{tikzpicture}
-\end{center}
-%
-Da der einzige Startzustand $s_0$ mit $\zeta=\zeta_6$ markiert ist,
-gilt $\Smc \models \zeta$.
+Da $S_0 = \{s_0\}$ und $s_0 \in \text{Sat}(\zeta)$, gibt der Algorithmus 1 aus, d.\,h.\ $\Smc \models \zeta$.
 
-\par\medskip\noindent
-Der genaue Algorithmus kann z.\,B.\ in \cite[Abschnitt 6]{BK08}
-nachgelesen werden.
-
-\goodbreak
+\pagebreak
 % ===================================================================
-\section*{T5.5~ Veranschaulichung der Grundbegriffe}
+\section*{T5.4~ Veranschaulichung der Grundbegriffe}
 
 Die \textsfbf{Positionen} im unendlichen vollständigen Binärbaum sehen so aus:
 %
@@ -6252,7 +6292,7 @@ Wenn $\Sigma = \{a,b\}$, dann ist ein \textsfbf{{\boldmath $\Sigma$-Baum}} z.\,B
 Das heißt also $t(\varepsilon) = a$, $t(0) = a$, $t(1) = b$ usw.
 
 % ===================================================================
-\section*{\scalebox{.96}[1]{T5.6~ Details des "`Pumpens"' in "`Büchi- vs.\ Muller-Erkennbarkeit"'}}
+\section*{\scalebox{.96}[1]{T5.5~ Details des "`Pumpens"' in "`Büchi- vs.\ Muller-Erkennbarkeit"'}}
 
 Wie betrachten einen erfolgreichen Run $r$ auf $t$ (Existenz dieses Runs: siehe Ende von Folie~38).
 Auf dem Pfad $1^\omega$ wird ein $f \in F$ unendlich oft besucht.
@@ -6313,7 +6353,7 @@ ist also gar nicht in $L$ enthalten; ein Widerspruch.
 \qedhere
 
 % ===================================================================
-\section*{{\boldmath T5.7~ Beispiel für die Konstruktion "`NMBA $\Rightarrow$ NPBA"'}}
+\section*{{\boldmath T5.6~ Beispiel für die Konstruktion "`NMBA $\Rightarrow$ NPBA"'}}
 
 Seien $Q=\{1,2,3\}$ und $F=\{1,2\}$.
 Wir betrachten den Run $r=12131211\dots$ von \Amc auf einem Pfad $\pi$,
@@ -6342,7 +6382,7 @@ und ab Position 7 ist $\ell > |Q|-|F| = 1$.
 
 \goodbreak
 % ===================================================================
-\section*{{\boldmath T5.8~ Beweis der Hilfsaussage für "`NMBA $\Rightarrow$ NPBA"'}}
+\section*{{\boldmath T5.7~ Beweis der Hilfsaussage für "`NMBA $\Rightarrow$ NPBA"'}}
 
 \begin{description}
   \item[{\boldmath"`$\Rightarrow$"'}]
@@ -6392,7 +6432,7 @@ und ab Position 7 ist $\ell > |Q|-|F| = 1$.
 
 \pagebreak
 % ===================================================================
-\section*{{\boldmath T5.9~ Beweis der Korrektheit, "`NMBA $\Rightarrow$ NPBA"'}}
+\section*{{\boldmath T5.8~ Beweis der Korrektheit, "`NMBA $\Rightarrow$ NPBA"'}}
 
 Es bleibt zu zeigen: $L_\omega(\Amc) = L_\omega(\Amc')$.
 %
@@ -6479,7 +6519,7 @@ Es bleibt zu zeigen: $L_\omega(\Amc) = L_\omega(\Amc')$.
 \end{description}
 
 % ===================================================================
-\section*{{\boldmath T5.10~ Beispiel eines Spielverlaufs für \Game{A}{t}}}
+\section*{{\boldmath T5.9~ Beispiel eines Spielverlaufs für \Game{A}{t}}}
 
 Sei 
 %
@@ -6624,7 +6664,7 @@ usw.
 
 \goodbreak
 % ===================================================================
-\section*{T5.11~ Beispiel für Gewinnstrategie}
+\section*{T5.10~ Beispiel für Gewinnstrategie}
 
 Wir betrachten den NPBA \Amc aus dem letzten Beispiel.
 Eine Gewinnstrategie für \PF ab Spielposition $v$ ist folgende:
@@ -6656,7 +6696,7 @@ Einfachheit von $\Amc$ liegt.
 
 \goodbreak
 % ===================================================================
-\section*{T5.12~ Beweis der Rückrichtung von Lemma~5.17}
+\section*{T5.11~ Beweis der Rückrichtung von Lemma~5.17}
 
 \textsfbf{Behauptung.}~
 \AUT hat Gewinnstrategie in $\Game{A}{t}$ ab Position $(\varepsilon,q_I)$ ~$\Rightarrow$~ $t \in L_\omega(\Amc)$
@@ -6686,7 +6726,7 @@ was ein Widerspruch zur Annahme wäre, dass \AUT eine Gewinnstrategie hat.
 \qedhere
 
 % ===================================================================
-\section*{T5.13~ {\boldmath Beispiel für die Sprache \Lst}}
+\section*{T5.12~ {\boldmath Beispiel für die Sprache \Lst}}
 
 Ab jetzt bezeichnen wir Pfade im Baum als Wörter $\pi \in \{0,1\}^*$;
 beispielsweise steht $\pi = 0110\cdots$
@@ -6729,7 +6769,7 @@ ist $\pi$ selbst.
 
 \goodbreak
 % ===================================================================
-\section*{T5.14~ Beweis von Lemma~5.22}
+\section*{T5.13~ Beweis von Lemma~5.22}
 
 \textsfbf{Lemma~5.22.}~
 $s$ ist ein \PF-Gewinnbaum für $t$
@@ -6826,7 +6866,7 @@ $\Lst \cap L_\omega(\Amc') = \emptyset$
 
 \goodbreak
 % ===================================================================
-\section*{T5.15~ Beweis von Lemma~5.23}
+\section*{T5.14~ Beweis von Lemma~5.23}
 
 \textsfbf{Lemma~5.23.}~
 $t \in L_\omega(\Bmc)$
