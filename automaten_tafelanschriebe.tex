@@ -5284,13 +5284,11 @@ Zeile~6 erhält man wieder durch "`Negation"' (Fall $q_{\mathord{\sim}\psi}$ auf
 Wir betrachten den KAPA $\Amc = (Q_\exists,Q_\forall,\Sigma,\Delta,\{s\},c)$
 mit
 %
-\begin{align*}
-  Q_\exists & = \{q_1,q_2,q_3\} \\
-  Q_\forall & = \{s\}           \\
+\begin{xalignat*}{2}
+  Q_\exists & = \{q_1,q_2,q_3\} & c(s)      & = c(q_3) = 0  \\
+  Q_\forall & = \{s\}           & c(q_1)    & = c(q_2) = 1, \\
   \Sigma    & = \{a,b\}
-  c(s)      & = c(q_3) = 0      \\
-  c(q_1)    & = c(q_2) = 1,
-\end{align*}
+\end{xalignat*}
 %
 dessen Übergangsrelation $\Delta$ in folgendem Bild gegeben ist
 (existentielle Zustände sind rund, universelle eckig):
@@ -5467,11 +5465,11 @@ Wir betrachten wieder den KAPA \Amc aus T4.12.
     hat \PlE eine Gewinnstrategie in \Game{A}{\alpha}:
     
     \parI
-    Wann immer \PlA am Zug ist (Zustände $q_i$),
+    Wann immer \PlE am Zug ist (Zustände $q_i$),
     wählt sie den durch das gelesene Zeichen eindeutig bestimmten Nachfolgezustand $q_i$.
     Die Form von $\alpha$ stellt sicher, dass nach einer geraden Anzahl von $a$'s
     ein $b$ folgt und damit von $q_2$ in $q_3$ übergegangen werden kann.
-    Mit dieser (trivialen) Gewinnstrategie gewinnt \E immer.
+    Mit dieser (trivialen) Gewinnstrategie gewinnt \PlE immer.
     \parI
   \item
     Wenn die Eingabe $\alpha = aba^\omega$ ist,
