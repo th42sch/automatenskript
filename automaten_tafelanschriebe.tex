@@ -5714,10 +5714,9 @@ Dann gilt:
 % ===================================================================
 \section*{T5.1~ LTL-Formeln "`zu stark/schwach"'}
 
-Sei $\varphi_1 := \G(e \to \F \neg e)$ und $\varphi_2 := \G\F\neg e$.
+Sei $\varphi_1 := \G(f \to \F \neg f)$ und $\varphi_2 := \G\F\neg f$.
 
 \paragraph*{{\boldmath $\varphi_1,\varphi_2$ "`zu stark für universelles Model Checking"'.}}
-%Sei $\varphi_1 := \G(e \to \F \neg e)$ und $\varphi_2 := \G\F\neg e$.
 Wir betrachten folgende Kripke-Struktur $\Smc$:
 %
 \begin{center}
@@ -5732,9 +5731,8 @@ Wir betrachten folgende Kripke-Struktur $\Smc$:
     \node[state]         (s1) [right of=s0]     {$s_1$};
     \node[state]         (s2) [below=8mm of s0] {$s_2$};
     
-    \node [above=0mm of s0] {$e$};
-%    \node [right=0mm of s2] {$\lnot e$};
-    \node [above=0mm of s1] {$e$};
+    \node [above=0mm of s0] {$f$};
+    \node [above=0mm of s1] {$f$};
     
     \path[->] (s0) edge[bend left=15] (s1)
               (s1) edge[bend left=15] (s0)
@@ -5771,9 +5769,8 @@ Wir betrachten folgende Kripke-Struktur $\Smc'$:
     \node[state]         (s2) [right of=s1]     {$s_2$};
     \node[state]         (s3) [below=8mm of s0] {$s_3$};
     
-    \node [above=0mm of s1] {$e$};
-%    \node [right=0mm of s2] {$\lnot e$};
-    \node [below=0mm of s3] {$e$};
+    \node [above=0mm of s1] {$f$};
+    \node [below=0mm of s3] {$f$};
     
     \path[->] (s0) edge (s1)
               (s1) edge (s2)
