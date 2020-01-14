@@ -21,6 +21,8 @@ Alle (bisherigen und geplanten) Tafelanschriebe sind jetzt <font color="#005500"
 
 ## Versionsgeschichte (WiSe 2019/20)
 
+**14.1.2020**&nbsp; kleinere Korrekturen in T5.7 und T5.8
+
 **8.–9.1.2020**&nbsp; T5.3 aktualisiert; kleinere Korrektur in T5.1
 
 **7.-8.1.2020**&nbsp; T4.12–T4.16 (T4.12 ohne Bilder)

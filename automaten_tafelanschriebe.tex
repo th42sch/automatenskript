@@ -6411,11 +6411,11 @@ und ab Position 7 ist $\ell > |Q|-|F| = 1$.
     (und die ersten $n-k$ Positionen die Zustände aus $Q\setminus S$).
     In zukünftigen Zuständen $s_i$ mit $i > m_2$ wird
     nie ein Zustand aus $Q\setminus S$ in die Endposition von $\textsf{perm}_i$ gerückt;
-    also ist $\ell_i  > n-k$ (was Teil~\circled{1} der Hilfsaussage beweist),
+    also ist $\ell_i  > n-k$ (was Teil~(1) der Hilfsaussage beweist),
     und die letzten $k$ Positionen in $\textsf{perm}_i$ sind aus $S$
-    (was Teil~\circled{2}\,(b) beweist).
+    (was Teil~(2)\,(b) beweist).
     
-    Um Teil~\circled{2}\,(a) zu zeigen, nehmen wir an, es sei $\ell_i = n-k+1$
+    Um Teil~(2)\,(a) zu zeigen, nehmen wir an, es sei $\ell_i = n-k+1$
     für nur endlich viele $i$.
     Dann müsste es aber einen Zustand aus $S$ geben, der nur endlich oft besucht wird
     und deshalb dauerhaft in Position $n-k+1$ von $\textsf{perm}_i$ landet.
@@ -6459,9 +6459,9 @@ Es bleibt zu zeigen: $L_\omega(\Amc) = L_\omega(\Amc')$.
     Wegen der Hilfsaussage folgt daraus:
     %
     \begin{enumerate}
-      \item[\circled{1}]
+      \item[(1)]
         Für endlich viele $i$ ist $\ell_i \leq n - |F|$.
-      \item[\circled{2}]
+      \item[(2)]
         Für unendlich viele $i$ gilt:
         %
         \begin{enumerate}
@@ -6472,9 +6472,9 @@ Es bleibt zu zeigen: $L_\omega(\Amc) = L_\omega(\Amc')$.
         \end{enumerate}
     \end{enumerate}
     %
-    Wegen \circled{2} muss $\textsf{Inf}(s,\pi)$ einen Zustand der Form 
+    Wegen (2) muss $\textsf{Inf}(s,\pi)$ einen Zustand der Form 
     $\auf q_1\cdots q_n, n-|F|+1\zu$ mit $\{q_{n-|F|+1},\dots,q_n\} = F$ enthalten,
-    aber wegen \circled{1} \emph{keinen} Zustand der Form
+    aber wegen (1) \emph{keinen} Zustand der Form
     $\auf q_1\cdots q_n,\ell\zu$ für $\ell \leq n-|F|$.
     Damit erfüllt der Pfad $\pi$ in $s$ die Akzeptanzbedingung von $\Amc'$;
     also ist $t \in L_\omega(\Amc')$.
@@ -6482,19 +6482,22 @@ Es bleibt zu zeigen: $L_\omega(\Amc) = L_\omega(\Amc')$.
   \item[{\boldmath"`$\supseteq$"'}]
     Sei $t \in L_\omega(\Amc')$.
     Dann gibt es einen erfolgreichen Run $s$ von $\Amc'$ auf $t$.
-    Sei $s(p) = \auf \textsf{perm}_p,\ell_p\zu$ 
-    und $r(p)$ das letzte Element von $\textsf{perm}_p$,
+    Sei $s(p) = \auf \textsf{perm}_p,\ell_p\zu$.
+    Wir konstruieren einen Run $r$ von $\Amc$ auf $t$, indem
+    wir $r(p)$ auf das letzte Element von $\textsf{perm}_p$ setzen,
     für alle $p \in \{0,1\}^*$.
-    Nach Definition von $I'$ und $\Delta'$ ist dann
+    Nach Definition von $I'$ und $\Delta'$ ist dann nämlich
     %
     \begin{itemize}
       \item
         $r(\varepsilon) \in I'$\quad und
       \item
-        $\Big(r(p),t(p),r(p0),r(p1)\Big) \in \Delta$ für alle $p \in \{0,1\}^*$.
+        $\Big(r(p),t(p),r(p0),r(p1)\Big) \in \Delta$ für alle $p \in \{0,1\}^*$,
     \end{itemize}
     %
-    Folglich ist $r$ ein Run von $\Amc$ auf $t$, und es bleibt zu zeigen,
+    also ist $r$ tatsächlich ein Run von $\Amc$ auf $t$.
+%    
+    Es bleibt zu zeigen,
     dass $r$ erfolgreich ist.
     Dazu betrachten wir einen beliebigen Pfad $\pi$.
     Da $s$ erfolgreich ist und wegen der Akzeptanzbedingung von $\Amc'$
@@ -6505,11 +6508,11 @@ Es bleibt zu zeigen: $L_\omega(\Amc) = L_\omega(\Amc')$.
       \item[(i)]
         $\auf q_1\cdots q_n,\ell\zu$ unendlich oft in $s$ auftritt,\quad aber
       \item[(ii)]
-        \emph{kein} $\auf \cdot,\ell'\zu$ mit $\ell' < \ell$ unendlich oft auftritt.
+        \emph{kein} $\auf q_1'\cdots q_n',\ell'\zu$ mit $\{q_1',\dots,q_n'\} \neq F$ und $\ell' < \ell$ unendlich oft auftritt.
     \end{enumerate}
     %
     Die Eigenschaften (i) und (ii) entsprechen aber genau den Teilen
-    \circled{2} bzw.\ \circled{1} aus der Hilfsaussage,
+    (2) bzw.\ (1) aus der Hilfsaussage,
     also gilt $\textsf{Inf}(r,\pi) = \{q_\ell,\dots,q_n\}=F$.
     Damit ist $t \in L_\omega(\Amc)$.
     \qedhere
