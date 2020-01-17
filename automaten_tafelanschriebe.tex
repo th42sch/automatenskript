@@ -6695,35 +6695,94 @@ Satz 5.18 und Folgerung 5.19 zeigen, dass dies nicht an der
 Einfachheit von $\Amc$ liegt.
 
 \goodbreak
-% ===================================================================
-\section*{T5.11~ Beweis der Rückrichtung von Lemma~5.17}
+%% ===================================================================
+%\section*{T5.11~ Beweis der Rückrichtung von Lemma~5.17}
+%
+%\textsfbf{Behauptung.}~
+%\AUT hat Gewinnstrategie in $\Game{A}{t}$ ab Position $(\varepsilon,q_I)$ ~$\Rightarrow$~ $t \in L_\omega(\Amc)$
+%
+%\par\medskip
+%\textsfbf{Beweis.}~
+%Habe \AUT eine Gewinnstrategie in $\Game{A}{t}$ ab Position $(\varepsilon,q_I)$.
+%Wir konstruieren einen erfolgreichen Run $r$ von \Amc auf $t$
+%induktiv über die Ebenen von $t$:
+%%
+%\begin{itemize}
+%  \item
+%    $r(\varepsilon) = q_I$
+%  \item
+%    Wenn $r(p)$ definiert ist,
+%    dann betrachte die Transition $\big(r(p),t(p),q_0,q_1\big)$,
+%    die durch die Gewinnstrategie der Position $\big(p,r(p)\big)$
+%    zugewiesen wird.
+%    Setze $r(p0) = q_0$ und $r(p1) = q_1$.
+%\end{itemize}
+%%
+%Nach Definition der Spielzüge von \AUT ist $r$ ein Run von $\Amc$ auf $t$.
+%Außerdem ist $r$ erfolgreich,
+%denn sonst gäbe es einen Pfad in $t$, auf dem die Akzeptanzbedingung von $\Amc$
+%nicht erfüllt wäre. Dann könnte aber \AUT verlieren, indem \PF diesen Pfad wählt,
+%was ein Widerspruch zur Annahme wäre, dass \AUT eine Gewinnstrategie hat.
+%\qedhere
 
-\textsfbf{Behauptung.}~
-\AUT hat Gewinnstrategie in $\Game{A}{t}$ ab Position $(\varepsilon,q_I)$ ~$\Rightarrow$~ $t \in L_\omega(\Amc)$
+\pagebreak
+% ===================================================================
+\section*{T5.11~ Beweis von Lemma~5.17}
+
+\textsfbf{Lemma 5.17.}~
+Seien $\Amc = (Q,\Sigma,\Delta,\{q_I\},c)$ ein NPBA und $t$ ein $\Sigma$-Baum.
+Dann gilt:
+$t \in L_\omega(\Amc)$ ~\textsfbf{gdw.}~ \AUT hat Gewinnstrategie in $\Game{A}{t}$ ab Position $(\varepsilon,q_I)$
 
 \par\medskip
 \textsfbf{Beweis.}~
-Habe \AUT eine Gewinnstrategie in $\Game{A}{t}$ ab Position $(\varepsilon,q_I)$.
-Wir konstruieren einen erfolgreichen Run $r$ von \Amc auf $t$
-induktiv über die Ebenen von $t$:
+Wir wandeln erfolgreiche Runs direkt in Gewinnstrategien
+und umgekehrt.
 %
-\begin{itemize}
-  \item
-    $r(\varepsilon) = q_I$
-  \item
-    Wenn $r(p)$ definiert ist,
-    dann betrachte die Transition $\big(r(p),t(p),q_0,q_1\big)$,
-    die durch die Gewinnstrategie der Position $\big(p,r(p)\big)$
-    zugewiesen wird.
-    Setze $r(p0) = q_0$ und $r(p1) = q_1$.
-\end{itemize}
-%
-Nach Definition der Spielzüge von \AUT ist $r$ ein Run von $\Amc$ auf $t$.
-Außerdem ist $r$ erfolgreich,
-denn sonst gäbe es einen Pfad in $t$, auf dem die Akzeptanzbedingung von $\Amc$
-nicht erfüllt wäre. Dann könnte aber \AUT verlieren, indem \PF diesen Pfad wählt,
-was ein Widerspruch zur Annahme wäre, dass \AUT eine Gewinnstrategie hat.
-\qedhere
+\begin{description}
+  \item[{\boldmath "`$\Rightarrow$"'}] 
+    Gelte $t \in L_\omega(\Amc)$ und sei $r$ erfolgreicher Run von $\Amc$ auf $t$.
+    Die Gewinnstrategie für \AUT lässt sich leicht wie folgt aus $r$ konstruieren.
+    %
+    \begin{itemize}
+      \item
+        In Startposition $(\varepsilon,q_I)$ wähle
+        $(r(\varepsilon),t(\varepsilon),r(0),r(1))$.
+      \item
+        In allen anderen Spielpositionen $(p,q)$ wähle
+        $(q,t(p),r(p0),r(p1))$.
+    \end{itemize}
+    %
+    Wenn \AUT diese Strategie befolgt,
+    dann entspricht die im Spiel erzeugte Zustandsmenge
+    einem Pfad in $r$.
+    Da $r$ erfolgreich ist, gewinnt \AUT nach Def.\ von $G_{\Amc,t}$\,.
+    \parI
+  \item[{\boldmath "`$\Leftarrow$"'}] 
+    Habe \AUT eine Gewinnstrategie in $\Game{A}{t}$ ab Position $(\varepsilon,q_I)$.
+    Wir konstruieren einen erfolgreichen Run $r$ von \Amc auf $t$
+    induktiv über die Ebenen von $t$:
+    %
+    \begin{itemize}
+      \item
+        $r(\varepsilon) = q_I$
+      \item
+        Wenn $r(p)$ definiert ist,
+        dann betrachte die Transition $\big(r(p),t(p),q_0,q_1\big)$,
+        die durch die Gewinnstrategie der Spielposition $\big(p,r(p)\big)$
+        zugewiesen wird.
+        Setze $r(p0) = q_0$ und $r(p1) = q_1$.
+    \end{itemize}
+    %
+    Nach Definition der Spielzüge von \AUT ist $r$ ein Run von $\Amc$ auf $t$.
+    Außerdem ist $r$ erfolgreich,
+    denn sonst gäbe es einen Pfad in $t$, auf dem die Akzeptanzbedingung von $\Amc$
+    nicht erfüllt wäre. Dann könnte aber \AUT verlieren, indem \PF diesen Pfad wählt
+    -- Widerspruch zur Annahme, dass \AUT eine Gewinnstrategie hat.
+    \qedhere
+\end{description}
+
+
 
 % ===================================================================
 \section*{T5.12~ {\boldmath Beispiel für die Sprache \Lst}}
@@ -7005,8 +7064,8 @@ es gibt $F$-Baum $s$ mit $\Lst \subseteq L_\omega(\Amc'')$
 %
 %Die übrigen griechischen Großbuchstaben werden genauso geschrieben wie die entsprechenden lateinischen.
 
-\pagebreak
-\addcontentsline{toc}{part}{Literaturverzeichnis}
-\bibliographystyle{babalpha}
-\bibliography{biblio.bib}
+%\pagebreak
+%\addcontentsline{toc}{part}{Literaturverzeichnis}
+%\bibliographystyle{babalpha}
+%\bibliography{biblio.bib}
 \end{document}
