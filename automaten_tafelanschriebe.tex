@@ -6882,9 +6882,8 @@ Wie oben bereits angedeutet, gibt es mehrere \PF-Gewinnbäume für $\Amc,t$:
 es ist nur wichtig, dass auf dem hervorgehobenen Pfad abwechselnd
 $f^0$ und $f^2$ auftreten; in allen übrigen Positionen ist die Wahl der Funktion
 irrelevant für das Gewinnen von \PF, denn die Akzeptanzbedingung ist auf allen
-übrigen Pfaden wegen der $b$'s sowieso erfüllt.
-
-
+übrigen Pfaden sowieso erfüllt, denn dort treten irgendwann nur noch $b$'s auf,
+und damit wird nur noch der Zustand $B$ eingenommen.
 
 % ===================================================================
 \section*{T5.13~ {\boldmath Beispiel für die Sprache \Lst}}
@@ -6895,35 +6894,65 @@ für den Pfad $\{\varepsilon,0,01,011,\dots\}$.
 
 Sei $t$ ein beliebiger Baum, $s$ ein Strategiebaum (der nach Definition
 für jede Position $p \in \{0,1\}^*$ eine Funktion $f_p : \Delta \to \{0,1\}$ enthält)
-und $\pi = 0110\cdots$.
+und $\pi = 01010\cdots$.
 Dann wird durch $\pi$ folgendes $\omega$-Wort $\alpha \in \Lst$ bestimmt:
 %
 \begin{center}
-  $\alpha ~=~ {}$
+  $\alpha ~= {}$
   \newcommand{\Tripel}[3]{
-    ~\begin{tabular}{@{}c@{}}#1\\[3pt]#2\\[3pt]#3\end{tabular}\,%
+%    ~\begin{tabular}{@{}c@{}}#1\\[3pt]#2\\[3pt]#3\end{tabular}\,%
+    $\left\langle
+%      \text{%
+%        ~\begin{tabular}{@{}c@{}}#1\\[3pt]#2\\[3pt]#3\end{tabular}\,%
+%      }
+      \begin{array}{@{}c@{}}#1\\[1pt]#2\\[1pt]#3\end{array}%
+    \right\rangle$
   }%
   \begin{tikzpicture}[
     baseline=-2pt,
-    every node/.style={rectangle,rounded corners,draw=black,thin,inner sep=1mm}
+%    every node/.style={rectangle,rounded corners,draw=black,thin,inner sep=1mm}
+    every node/.style={draw=none,thin,inner sep=1mm}
   ]
-    \node                 (0) {\Tripel{$f_\varepsilon$}{$t(\varepsilon)$}{0}};
-    \node[right=3mm of 0] (1) {\Tripel{$f_0$}{$t(0)$}{1}};
-    \node[right=3mm of 1] (2) {\Tripel{$f_{01}$}{$t(01)$}{1}};
-    \node[right=3mm of 2] (3) {\Tripel{$f_{011}$}{$t(011)$}{0}};
-    \node[right=3mm of 3] (4) {\Tripel{$f_{0110}$}{$t(0110)$}{0}};
-    \node[right=3mm of 4,draw=none] (5) {$\cdots$};
+    \node                 (0) {\Tripel{f_\varepsilon}{t(\varepsilon)}{0}};
+    \node[right=0mm of 0] (1) {\Tripel{f_0}          {t(0)}          {1}};
+    \node[right=0mm of 1] (2) {\Tripel{f_{01}}       {t(01)}         {0}};
+    \node[right=0mm of 2] (3) {\Tripel{f_{010}}      {t(010)}        {1}};
+    \node[right=0mm of 3] (4) {\Tripel{f_{0101}}     {t(0101)}       {0}};
+    \node[right=1mm of 4,draw=none] (5) {$\cdots$};
   \end{tikzpicture}
 \end{center}
 %
-Dabei bezeichnet jede Box ein Symbol von $\alpha$, also gemäß Folie~5.55 ein Tripel,
+Dabei bezeichnet jede Box ein Symbol von $\alpha$, also gemäß Folie~5.59 ein Tripel,
 und jede erste Komponente $f_p$ eines Tripels
 steht wiederum für dasjenige $|\Delta|$-Tupel von Nullen und Einsen,
 welches $f_p$ repräsentiert.
 Das erste Zeichen von $\alpha$ ist also $\big\auf f_\varepsilon,t(\varepsilon),0\big\zu$.
 
+Im letzten Beispiel entspricht dem (hervorgehobenen) Pfad
+$\pi = 01010\cdots$ also folgendes Wort:
+%
+\begin{center}
+  $\alpha ~= {}$
+  \newcommand{\Tripel}[3]{
+    $\left\langle
+      \begin{array}{@{}c@{}}#1\\[-1pt]#2\\[-1pt]#3\end{array}\,%
+    \right\rangle$
+  }%
+  \begin{tikzpicture}[
+    baseline=-2pt,
+    every node/.style={draw=none,thin,inner sep=1mm}
+  ]
+    \node                 (0) {\Tripel{f^0}{a}{0}};
+    \node[right=0mm of 0] (1) {\Tripel{f^2}{b}{1}};
+    \node[right=0mm of 1] (2) {\Tripel{f^0}{a}{0}};
+    \node[right=0mm of 2] (3) {\Tripel{f^2}{b}{1}};
+    \node[right=1mm of 3,draw=none] (4) {$\cdots$};
+  \end{tikzpicture}
+\end{center}
+%
+
 Mit anderen Worten: die Folge $f_\varepsilon,f_0,f_{01},\dots$
-aller ersten Komponenten der Zeichen von $\alpha$ gibt den Inhalt von $s$
+aller ersten Komponenten der Zeichen von $\alpha$ gibt den Inhalt von $t$
 auf dem Pfad $\pi$ wieder und die Folge aller zweiten Komponenten 
 den Inhalt von $t$ auf $\pi$. Die Folge der dritten Komponenten
 ist $\pi$ selbst.
