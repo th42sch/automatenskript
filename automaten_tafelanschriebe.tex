@@ -6678,24 +6678,24 @@ Im Allgemeinen hat \AUT natürlich mehrere Wahlmöglichkeiten.
 % ===================================================================
 \section*{T5.10~ Beispiel für Gewinnstrategie}
 
-Wir betrachten den NPBA \Amc aus dem letzten Beispiel.
+Wir betrachten den NPBA \Amc und die Eingabe $t$ aus dem letzten Beispiel.
 Eine Gewinnstrategie für \PF ab Spielposition $v$ ist folgende:
 %
 \begin{center}
   \parbox{.8\linewidth}{%
-    In Spielposition $v'$, die durch die Zugfolge $v\cdots v'$ bestimmt ist,
-    wobei $v'=\big(q_i,t(p),q_j,q_k\big)$ mit $(i,j,k \in \{1,2\})$,
+    In Spielposition $v'$, die durch die Zugfolge $v\cdots v'$ bestimmt ist, \\
+    wobei $v'=\big(q,t(p),q',q''\big)$ mit $q,q',q'' \in \{A,B\}$,
     \par\smallskip
-    wähle das linke Kind, wenn $j=2$ und das rechte Kind, wenn $k=2$\\
-    (wegen $\Delta$ muss immer einer dieser beiden Fälle eintreten).%
+    wähle das linke Kind, wenn $t(p)=a$ und das rechte Kind, wenn $t(p)=b$. %\\
+%    (wegen $\Sigma=\{a,b\}$ muss immer einer dieser beiden Fälle eintreten).%
   }
 \end{center}
 %
 Diese Strategie stellt eine Funktion $f$ dar, die jeder Zugfolge $v\cdots v'$
 einen eindeutig bestimmten Zug von \PF (linkes/rechtes Kind) zuweist.
-Sie ist eine Gewinnstrategie, denn sie stellt sicher, dass unabhängig davon, wie \AUT spielt,
-auf dem gesamten gespielten Pfad nur $q_2$ auftritt; also ist die Akzeptanzbedingung
-von \Amc verletzt.
+Sie ist eine Gewinnstrategie, denn sie stellt sicher, dass unabhängig davon, wie \AUT spielt (hier hat \AUT sowieso keine Wahl),
+auf dem gesamten gespielten Pfad Zustand $A$ unendlich oft auftritt;
+also ist die Akzeptanzbedingung von \Amc verletzt.
 
 \goodbreak
 In dieser Gewinnstrategie für den sehr einfachen Automaten $\Amc$ hängt
