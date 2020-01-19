@@ -6521,137 +6521,136 @@ Es bleibt zu zeigen: $L_\omega(\Amc) = L_\omega(\Amc')$.
 % ===================================================================
 \section*{{\boldmath T5.9~ Beispiel eines Spielverlaufs für \Game{A}{t}}}
 
-Sei 
-%
-%\begin{align*}
-%  \Amc & = (\{q_1,q_2\},~\{a,b\},~\Delta,~\{q_1\},~c)
-%  \intertext{ein NPBA mit}
-%  \Delta & = \{(q_1,a,q_1,q_2),~(q_2,a,q_2,q_1),~(q_1,b,q_2,q_1),~(q_2,b,q_1,q_2)\} \quad\text{und} \\
-%  c      & ~:~~ q_1 \mapsto 0,~ q_2 \mapsto 1.
-%\end{align*}
-$\Amc = (\{q_1,q_2\},~\{a,b\},~\Delta,~\{q_1\},~c)$
-ein NPBA mit
+Wir betrachten den NPBA von Folie~5.41,
+d.\,h.\
 %
 \begin{align*}
-  \Delta & = \{(q_1,a,q_1,q_2),~(q_2,a,q_2,q_1),~(q_1,b,q_2,q_1),~(q_2,b,q_1,q_2)\} \quad\text{und} \\
-  c      & ~:~~ q_1 \mapsto 0,~ q_2 \mapsto 1.
+  \Amc   & = (\{A,B\},~\{a,b\},~\Delta,~\{A\},~c) \qquad \text{mit} \\
+  \Delta & = \{(A,a,A,A),~(B,a,A,A),~(A,b,B,B),~(B,b,B,B)\} \qquad\text{und} \\
+  c      & ~:~~ A \mapsto 1,~ B \mapsto 2.
 \end{align*}
 %
-Die Übergangsrelation von \Amc sorgt also dafür, dass beim Lesen eines $a$
-der aktuelle Zustand ans linke Kind und der andere ans rechte Kind weitergegeben wird
-und umgekehrt beim Lesen eines $b$. Die Akzeptanzbedingung fordert,
-dass $q_1$ unendlich oft vorkommen muss, und entspricht der
-Büchi-Akzeptanzkomponente $F = \{q_1\}$.
+Zur Erinnerung: $L_\omega(\Amc) = \{t \mid \text{jeder Pfad in $t$ hat endlich viele $a$'s}\}$.
 
 Wir betrachten folgenden Eingabebaum $t$.
 %
 \newcommand{\Baum}{%
-  \node (eps) {$a$}
-  child {
-    node (0) {$a$}
+  \begin{scope}[
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    level 1/.style = {sibling distance = 64mm, level distance =  6mm},
+    level 2/.style = {sibling distance = 30mm, level distance =  9mm},
+    level 3/.style = {sibling distance = 13mm, level distance =  11mm},
+    level 4/.style = {sibling distance = 8mm, level distance = 11mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node (eps) {$a$}
     child {
-      node (00) {$a$}
+      node (0) {$b$}
+      child {
+        node (00) {$b$}
+        child {
+          node (000) {$b$}
+        }
+        child {
+          node (001) {$b$}
+        }
+      }
+      child {
+        node (01) {$a$}
+        child {
+          node (010) {$b$}
+          child {
+            node (0100) {$b$}
+          }
+          child {
+            node (0101) {$a$}
+          }
+        }
+        child {
+          node (011) {$b$}
+        }
+      }
     }
     child {
-      node (01) {$b$}
+      node (1) {$b$}
+      child {
+        node (10) {$b$}
+      }
+      child {
+        node (11) {$b$}
+      }
     }
-  }
-  child {
-    node (1) {$b$}
-    child {
-      node (10) {$b$}
-    }
-    child {
-      node (11) {$a$}
-    }
-  }
-  ;
-  
-  \foreach \x in {00,01,10,11}
+    ;
+  \end{scope}
+    
+  \foreach \x in {000,001,0100,0101,011,10,11}
     \node [draw=none,fill=none,below=-1mm of \x] {$\vdots$};
 }
 \newcommand{\labeleps}{%
-  \node [draw=none,fill=none,above right=-4mm and 2mm of eps] {$(\varepsilon,q_1)$};
+  \node [draw=none,fill=none,above right=-2mm and 0mm of eps] {$(\varepsilon,A)$};
 }
 \newcommand{\labelone}{%
-  \node [draw=none,fill=none,above right=-6mm and 2.5mm of 1] {$(1,q_2)$};
+  \node [draw=none,fill=none,above right=-5mm and .8mm of 1] {$(1,A)$};
   \path[-] (eps) edge[draw=black,line width=2mm,draw opacity=.4] (1);
 }
 \newcommand{\labelonezero}{%
-  \node [draw=none,fill=none,left=-.4mm of 10] {$(10,q_1)$};
+  \node [draw=none,fill=none,left=0mm of 10] {$(10,B)$};
   \path[-] (1) edge[draw=black,line width=2mm,draw opacity=.4] (10);
 }
 %
 \begin{center}
-  \begin{tikzpicture}[%
-    node distance=20mm,>=Latex,
-    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
-    level 1/.style = {sibling distance = 32mm, level distance =  6mm},
-    level 2/.style = {sibling distance = 8.5mm, level distance =  9mm},
-%    level 3/.style = {sibling distance = 12mm, level distance = 11mm},
-    edge from parent/.style = {draw=black, thin, -}%
-  ]
+  \begin{tikzpicture}[node distance=20mm,>=Latex]
     \Baum
+    \path[-,draw=black,line width=2mm,draw opacity=.4] 
+      (eps) edge (0)
+      (0)   edge (01)
+      (01)  edge (010)
+      (010) edge (0101)
+      ;
   \end{tikzpicture}
 \end{center}
 %
-In der anfänglichen Spielposition ist nur die Wurzel mit $q_1$ markiert,
+In $t$ ist der hervorgehobene Pfad $(01)^\omega$ abwechselnd mit $a$'s und $b$'s beschriftet;
+an allen anderen Positionen stehen $b$'s. Folglich ist $t \notin L_\omega(\Amc)$.
+
+Wir betrachten nun die ersten zwei Runden eines Spielverlaufs
+im Spiel $\Game{A}{t}$\,.
+In der anfänglichen Spielposition ist nur die Wurzel mit dem Anfangszustand $A$ markiert;
 also ist der bisherige Spielverlauf die Folge, die nur aus dem Paar
-$(\varepsilon,q_1)$ besteht. Zur Veranschaulichung wird der Spielverlauf
+$(\varepsilon,A)$ besteht. Zur Veranschaulichung wird der Spielverlauf
 im Folgenden an den von \PF gewählten Pfad im Baum geschrieben, also
 zu Beginn so:
 %
-\par\vspace*{-2\baselineskip}
+%\par\vspace*{-2\baselineskip}
 \begin{center}
-  \begin{tikzpicture}[%
-    node distance=20mm,>=Latex,
-    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
-    level 1/.style = {sibling distance = 32mm, level distance =  6mm},
-    level 2/.style = {sibling distance = 8.5mm, level distance =  9mm},
-%    level 3/.style = {sibling distance = 12mm, level distance = 11mm},
-    edge from parent/.style = {draw=black, thin, -}%
-  ]
+  \begin{tikzpicture}[node distance=20mm,>=Latex]
     \Baum    
     \labeleps
   \end{tikzpicture}
 \end{center}
 %
-In der ersten Runde wählt \AUT die zum Zustand $q_1$ und Zeichen $a$
-passende Transition $(q_1,a,q_1,q_2)$,
+In der ersten Runde wählt \AUT die einzige zum Zustand $A$ und Zeichen $a$
+passende Transition $(A,a,A,A)$,
 und \PF antwortet darauf mit der Wahl des rechten Kindknotens.
-Dadurch ist nun das rechte Kind der Wurzel mit $q_2$ markiert:
+Dadurch ist nun das rechte Kind der Wurzel mit $A$ markiert:
 %
-\par\vspace*{-\baselineskip}
+%\par\vspace*{-\baselineskip}
 \begin{center}
-  \begin{tikzpicture}[%
-    node distance=20mm,>=Latex,
-    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
-    level 1/.style = {sibling distance = 32mm, level distance =  6mm},
-    level 2/.style = {sibling distance = 8.5mm, level distance =  9mm},
-%    level 3/.style = {sibling distance = 12mm, level distance = 11mm},
-    edge from parent/.style = {draw=black, thin, -}%
-  ]
+  \begin{tikzpicture}[node distance=20mm,>=Latex]
     \Baum    
     \labeleps
     \labelone
   \end{tikzpicture}
 \end{center}
 %
-In der zweiten Runde wählt \AUT die zum Zustand $q_2$ und Zeichen $b$
-passende Transition $(q_2,b,q_1,q_2)$,
+In der zweiten Runde wählt \AUT die einzige zum Zustand $A$ und Zeichen $b$
+passende Transition $(A,b,B,B)$,
 und \PF antwortet darauf mit der Wahl des linken Kindknotens.
-Dadurch ist nun das linke Kind der zuletzt betrachteten Position mit $q_1$ markiert:
+Dadurch ist nun das linke Kind der zuletzt betrachteten Position mit $B$ markiert:
 %
-\par\vspace*{-\baselineskip}
+%\par\vspace*{-\baselineskip}
 \begin{center}
-  \begin{tikzpicture}[%
-    node distance=20mm,>=Latex,
-    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
-    level 1/.style = {sibling distance = 32mm, level distance =  6mm},
-    level 2/.style = {sibling distance = 8.5mm, level distance =  9mm},
-%    level 3/.style = {sibling distance = 12mm, level distance = 11mm},
-    edge from parent/.style = {draw=black, thin, -}%
-  ]
+  \begin{tikzpicture}[node distance=20mm,>=Latex]
     \Baum    
     \labeleps
     \labelone
@@ -6659,8 +6658,21 @@ Dadurch ist nun das linke Kind der zuletzt betrachteten Position mit $q_1$ marki
   \end{tikzpicture}
 \end{center}
 %
-\par\vspace*{-\baselineskip}
-usw.
+%\par\vspace*{-\baselineskip}
+Es ist klar, dass in diesem Spiel \AUT gewinnt, weil in den folgenden Runden nur noch
+$b$'s gelesen und damit nur noch der Zustand $B$ eingenommen wird.
+Damit kommt $A$ endlich oft und $B$ unendlich oft auf dem gespielten Pfad vor,
+und die durch $c$ gegebene Akzeptanzbedingung ist erfüllt. Folglich gewinnt \AUT
+diesen Spielverlauf.
+
+Würde \PF in Runde 1 den linken und danach immer im Wechsel den linken und rechten
+Nachfolger der aktuellen Position wählen, dann wird der "`defekte"' Pfad $(10)^\omega$
+sichtbar gemacht, auf welchem die Akzeptanzbedingung \emph{nicht} erfüllt ist.
+In diesem Spielverlauf gewinnt \PF.
+
+Man beachte bei beiden Spielverläufen: da der gegebene NPBA deterministisch ist,
+hat \AUT in jeder Runde nur eine mögliche Transition zur Auswahl.
+Im Allgemeinen hat \AUT natürlich mehrere Wahlmöglichkeiten.
 
 \goodbreak
 % ===================================================================
