@@ -6928,7 +6928,7 @@ steht wiederum für dasjenige $|\Delta|$-Tupel von Nullen und Einsen,
 welches $f_p$ repräsentiert.
 Das erste Zeichen von $\alpha$ ist also $\big\auf f_\varepsilon,t(\varepsilon),0\big\zu$.
 
-Im letzten Beispiel entspricht dem (hervorgehobenen) Pfad
+Im letzten Beispiel entspricht dem (markierten) Pfad
 $\pi = 01010\cdots$ also folgendes Wort:
 %
 \begin{center}
@@ -6957,9 +6957,66 @@ auf dem Pfad $\pi$ wieder und die Folge aller zweiten Komponenten
 den Inhalt von $t$ auf $\pi$. Die Folge der dritten Komponenten
 ist $\pi$ selbst.
 
+% ===================================================================
+\section*{T5.14~ Beispiel für NPA}
+
+\enlargethispage*{20mm}
+Wir betrachten weiterhin den NPBA \Amc und die Eingabe $t$ aus T5.9--T5.12.
+Der zugehörige NPA $\Amc' = (Q, \Sigma', \Delta', \{A\}, c)$
+hat dieselben Komponenten $Q,\{A\},c$ wie \Amc.
+%Das Alphabet $\Sigma' \subseteq L_{s,t}$ ist folgendes:
+%%
+%\[
+%  \Sigma' = \{\auf f,c,i\zu \mid f \in F,~ c \in \{a,b\},~i \in \{0,1\}\}
+%\]
+Das Alphabet $\Sigma' \subseteq L_{s,t}$ besteht also aus allen Tripeln
+$\{\auf f,c,i\zu$ mit $f \in F$, $c \in \{a,b\}$, $i \in \{0,1\}$,
+wobei $F = \{f^0,\dots,f^{15}\} = \{0000,0001,\dots,1111\}$,
+d.\,h.\ $|\Sigma'| = 16 \cdot 2 \cdot 2 = 64$.
+%
+Die Übergangsrelation $\Delta'$ enthält für jeden Übergang $\delta \in \Delta$
+16 Übergänge. Für $\delta_1 = (A,a,A,A)$ sind das beispielsweise:
+%
+\begin{itemize}
+  \item
+    $(A, \auf f,a,0\zu, A)$ mit $f \in \{f^0,\dots,f^7\}$ \\
+    (denn für $i=0$ muss $f(\delta_1)=0$ sein, und das leisten genau die $f^i$ mit $i \leq 7$)
+  \item
+    $(A, \auf f,a,1\zu, A)$ mit $f \in \{f^8,\dots,f^{15}\}$
+    (denn für $i=1$ muss $f(\delta_1)=1$ sein, und das leisten genau die $f^i$ mit $i > 7$)
+\end{itemize}
+%
+Insgesamt enthält $\Delta$ somit $16 \cdot 4 = 64$ Elemente.
+
+Das Wort
+%
+\begin{center}
+  $\alpha ~= {}$
+  \newcommand{\Tripel}[3]{
+    $\left\langle
+      \begin{array}{@{}c@{}}#1\\[-1pt]#2\\[-1pt]#3\end{array}\,%
+    \right\rangle$
+  }%
+  \begin{tikzpicture}[
+    baseline=-2pt,
+    every node/.style={draw=none,thin,inner sep=1mm}
+  ]
+    \node                 (0) {\Tripel{f^0}{a}{0}};
+    \node[right=0mm of 0] (1) {\Tripel{f^2}{b}{1}};
+    \node[right=0mm of 1] (2) {\Tripel{f^0}{a}{0}};
+    \node[right=0mm of 2] (3) {\Tripel{f^2}{b}{1}};
+    \node[right=1mm of 3,draw=none] (4) {$\cdots$};
+  \end{tikzpicture}
+\end{center}
+%
+aus T5.13 wird von $\Amc'$ wie erwartet \emph{nicht} akzeptiert,
+denn der einzig mögliche\footnote{Wie \Amc ist auch $\Amc'$ deterministisch.}
+Run von $\Amc'$ auf $\alpha$ ist
+$AABABA\dots$ und enthält unendlich oft $B$.
+
 \goodbreak
 % ===================================================================
-\section*{T5.14~ Beweis von Lemma~5.22}
+\section*{T5.15~ Beweis von Lemma~5.22}
 
 \textsfbf{Lemma~5.22.}~
 $s$ ist ein \PF-Gewinnbaum für $\Amc,t$
@@ -7056,7 +7113,7 @@ $\Lst \cap L_\omega(\Amc') = \emptyset$
 
 \goodbreak
 % ===================================================================
-\section*{T5.15~ Beweis von Lemma~5.23}
+\section*{T5.16~ Beweis von Lemma~5.23}
 
 \textsfbf{Lemma~5.23.}~
 $t \in L_\omega(\Bmc)$
