@@ -6737,7 +6737,7 @@ Einfachheit von $\Amc$ liegt.
 %was ein Widerspruch zur Annahme wäre, dass \AUT eine Gewinnstrategie hat.
 %\qedhere
 
-\pagebreak
+%\pagebreak
 % ===================================================================
 \section*{T5.11~ Beweis von Lemma~5.17}
 
@@ -6794,10 +6794,100 @@ und umgekehrt.
     \qedhere
 \end{description}
 
+% ===================================================================
+\section*{T5.12~ {\boldmath Beispiel für einen Gewinnbaum}}
+
+Wir betrachten wieder den NPBA \Amc und die Eingabe $t$ aus T5.9 und T5.10
+und formulieren die genannte gedächtnislose Gewinnstrategie von \PF
+als Baum von Funktionen.
+So ist beispielsweise $f_\varepsilon$ gegeben durch:
+%
+\begin{align*}
+f_\varepsilon : {} & (A,a,A,A) \mapsto 0 \\
+                   & (B,a,A,A) \mapsto 0 \\
+                   & (A,b,B,B) \mapsto 0 \\
+                   & (B,b,B,B) \mapsto 0
+\end{align*}
+%
+Dabei ist der Funktionswert nur in der ersten Zeile relevant,
+denn in Spielposition $(\varepsilon,A)$ kann \AUT nur die erste Transition spielen.
+In den übrigen drei Zeilen kann also durchaus ein anderer Wert stehen,
+d.\,h.\ es gibt mehrere \PF-Gewinnbäume für $\Amc,t$.
+
+Analog dazu ist $f_0$ gegeben durch:
+%
+\begin{align*}
+f_0 : {} & (A,a,A,A) \mapsto 0 \\
+         & (B,a,A,A) \mapsto 0 \\
+         & (A,b,B,B) \mapsto 1 \\
+         & (B,b,B,B) \mapsto 0
+\end{align*}
+%
+Auch hier ist wieder nur eine Zeile relevant, nämlich die dritte,
+denn in Spielposition $(0,A)$ kann \AUT nur die dritte Transition spielen.
+
+Da $\Delta$ aus 4 Transitionen besteht, können alle Funktionen
+als 4-Tupel geschrieben werden, also z.\,B.\ $f_\varepsilon = 0000$
+und $f_0 = 0010$.
+Insgesamt gibt es in $F$ (Menge aller Funktionen $f : \Delta \to \{0,1\}$)
+somit $2^4 = 16$ Funktionen, die wir der Einfachheit halber durchnummerieren
+als $F = \{f^0,\dots,f^{15}\} = \{0000,0001,\dots,1111\}$.
+Damit ist $f_\varepsilon = f^0$ und $f_0 = f^2$.
+
+Ein möglicher \PF-Gewinnbaum für $\Amc,t$ beinhaltet somit nur die Funktionen
+$f^0$ und $f^2$:
+%
+\begin{center}
+  \begin{tikzpicture}[
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    level 1/.style = {sibling distance = 64mm, level distance =  6mm},
+    level 2/.style = {sibling distance = 30mm, level distance =  9mm},
+    level 3/.style = {sibling distance = 13mm, level distance =  11mm},
+    level 4/.style = {sibling distance = 8mm, level distance = 11mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node (eps) {$f^0$}
+    child {
+      node (0) {$f^2$}
+      child {
+        node (00) {$f^0$}
+      }
+      child {
+        node (01) {$f^0$}
+      }
+    }
+    child {
+      node (1) {$f^0$}
+      child {
+        node (10) {$f^0$}
+      }
+      child {
+        node (11) {$f^0$}
+      }
+    }
+    ;
+
+  \foreach \x in {00,01,10,11}
+    \node [draw=none,fill=none,below=-1mm of \x] {$\vdots$};
+
+    \path[-,draw=black,line width=2mm,draw opacity=.4] 
+      (eps) edge (0)
+      (0)   edge (01)
+      ;
+  \end{tikzpicture}
+\end{center}
+%
+Wie oben bereits angedeutet, gibt es mehrere \PF-Gewinnbäume für $\Amc,t$:
+es ist nur wichtig, dass auf dem hervorgehobenen Pfad abwechselnd
+$f^0$ und $f^2$ auftreten; in allen übrigen Positionen ist die Wahl der Funktion
+irrelevant für das Gewinnen von \PF, denn die Akzeptanzbedingung ist auf allen
+übrigen Pfaden wegen der $b$'s sowieso erfüllt.
+
 
 
 % ===================================================================
-\section*{T5.12~ {\boldmath Beispiel für die Sprache \Lst}}
+\section*{T5.13~ {\boldmath Beispiel für die Sprache \Lst}}
 
 Ab jetzt bezeichnen wir Pfade im Baum als Wörter $\pi \in \{0,1\}^*$;
 beispielsweise steht $\pi = 0110\cdots$
@@ -6840,7 +6930,7 @@ ist $\pi$ selbst.
 
 \goodbreak
 % ===================================================================
-\section*{T5.13~ Beweis von Lemma~5.22}
+\section*{T5.14~ Beweis von Lemma~5.22}
 
 \textsfbf{Lemma~5.22.}~
 $s$ ist ein \PF-Gewinnbaum für $\Amc,t$
@@ -6937,7 +7027,7 @@ $\Lst \cap L_\omega(\Amc') = \emptyset$
 
 \goodbreak
 % ===================================================================
-\section*{T5.14~ Beweis von Lemma~5.23}
+\section*{T5.15~ Beweis von Lemma~5.23}
 
 \textsfbf{Lemma~5.23.}~
 $t \in L_\omega(\Bmc)$
