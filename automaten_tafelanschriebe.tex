@@ -6629,8 +6629,8 @@ zu Beginn so:
   \end{tikzpicture}
 \end{center}
 %
-In der ersten Runde wählt \AUT die einzige zum Zustand $A$ und Zeichen $a$
-passende Transition $(A,a,A,A)$,
+In der ersten Runde wählt \AUT den einzigen zum Zustand $A$ und Zeichen $a$
+passenden Übergang $(A,a,A,A)$,
 und \PF antwortet darauf mit der Wahl des rechten Kindknotens.
 Dadurch ist nun das rechte Kind der Wurzel mit $A$ markiert:
 %
@@ -6643,8 +6643,8 @@ Dadurch ist nun das rechte Kind der Wurzel mit $A$ markiert:
   \end{tikzpicture}
 \end{center}
 %
-In der zweiten Runde wählt \AUT die einzige zum Zustand $A$ und Zeichen $b$
-passende Transition $(A,b,B,B)$,
+In der zweiten Runde wählt \AUT den einzigen zum Zustand $A$ und Zeichen $b$
+passenden Übergang $(A,b,B,B)$,
 und \PF antwortet darauf mit der Wahl des linken Kindknotens.
 Dadurch ist nun das linke Kind der zuletzt betrachteten Position mit $B$ markiert:
 %
@@ -6671,7 +6671,7 @@ sichtbar gemacht, auf welchem die Akzeptanzbedingung \emph{nicht} erfüllt ist.
 In diesem Spielverlauf gewinnt \PF.
 
 Man beachte bei beiden Spielverläufen: da der gegebene NPBA deterministisch ist,
-hat \AUT in jeder Runde nur eine mögliche Transition zur Auswahl.
+hat \AUT in jeder Runde nur einen möglichen Übergang zur Auswahl.
 Im Allgemeinen hat \AUT natürlich mehrere Wahlmöglichkeiten.
 
 \goodbreak
@@ -6724,7 +6724,7 @@ Einfachheit von $\Amc$ liegt.
 %    $r(\varepsilon) = q_I$
 %  \item
 %    Wenn $r(p)$ definiert ist,
-%    dann betrachte die Transition $\big(r(p),t(p),q_0,q_1\big)$,
+%    dann betrachte den Übergang $\big(r(p),t(p),q_0,q_1\big)$,
 %    die durch die Gewinnstrategie der Position $\big(p,r(p)\big)$
 %    zugewiesen wird.
 %    Setze $r(p0) = q_0$ und $r(p1) = q_1$.
@@ -6780,7 +6780,7 @@ und umgekehrt.
         $r(\varepsilon) = q_I$
       \item
         Wenn $r(p)$ definiert ist,
-        dann betrachte die Transition $\big(r(p),t(p),q_0,q_1\big)$,
+        dann betrachte den Übergang $\big(r(p),t(p),q_0,q_1\big)$,
         die durch die Gewinnstrategie der Spielposition $\big(p,r(p)\big)$
         zugewiesen wird.
         Setze $r(p0) = q_0$ und $r(p1) = q_1$.
@@ -6810,7 +6810,7 @@ f_\varepsilon : {} & (A,a,A,A) \mapsto 0 \\
 \end{align*}
 %
 Dabei ist der Funktionswert nur in der ersten Zeile relevant,
-denn in Spielposition $(\varepsilon,A)$ kann \AUT nur die erste Transition spielen.
+denn in Spielposition $(\varepsilon,A)$ kann \AUT nur den ersten Übergang spielen.
 In den übrigen drei Zeilen kann also durchaus ein anderer Wert stehen,
 d.\,h.\ es gibt mehrere \PF-Gewinnbäume für $\Amc,t$.
 
@@ -6824,9 +6824,9 @@ f_0 : {} & (A,a,A,A) \mapsto 0 \\
 \end{align*}
 %
 Auch hier ist wieder nur eine Zeile relevant, nämlich die dritte,
-denn in Spielposition $(0,A)$ kann \AUT nur die dritte Transition spielen.
+denn in Spielposition $(0,A)$ kann \AUT nur den dritten Übergang spielen.
 
-Da $\Delta$ aus 4 Transitionen besteht, können alle Funktionen
+Da $\Delta$ aus vier Übergängen besteht, können alle Funktionen
 als 4-Tupel geschrieben werden, also z.\,B.\ $f_\varepsilon = 0000$
 und $f_0 = 0010$.
 Insgesamt gibt es in $F$ (Menge aller Funktionen $f : \Delta \to \{0,1\}$)
@@ -7042,11 +7042,11 @@ $\Lst \cap L_\omega(\Amc') = \emptyset$
     \]
     von $\Amc'$ akzeptiert wird.
     Sei $r=q_0q_1q_2\cdots$ ein erfolgreicher Run von $\Amc'$ auf $\alpha$.
-    Dann gibt es für jede Position $j \geq 0$ in $\alpha$ eine Transition
+    Dann gibt es für jede Position $j \geq 0$ in $\alpha$ einen Übergang
     \[
       \Big(q_j,~\big\auf s(\pi_1\cdots\pi_j),t(\pi_1\cdots\pi_j),\pi_{j+1}\big\zu,~q_{j+1}\Big) ~\in~ \Delta'.
     \]
-    Nach Konstruktion von $\Delta'$ gibt es dann in $\Amc$ eine entsprechende Transition
+    Nach Konstruktion von $\Delta'$ gibt es dann in $\Amc$ einen entsprechenden Übergang
     \[
       \delta_j = \Big(q_j,~t(\pi_1\cdots\pi_j),~q_0',~q_1'\Big) ~\in~ \Delta
     \]
@@ -7072,7 +7072,7 @@ $\Lst \cap L_\omega(\Amc') = \emptyset$
     \begin{itemize}
       \item
         wählt \AUT in Spielposition $(\pi_1\cdots\pi_j,\,q_j)$
-        eine beliebige Transition 
+        einen beliebigen Übergang 
         \[
           \delta_j = \Big(q_j,~ t(\pi_1\cdots \pi_j),~ q_{j0}, q_{j1}\Big) ~\in~ \Delta
           \qquad\text{und}
