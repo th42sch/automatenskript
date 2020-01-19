@@ -6831,7 +6831,7 @@ ist $\pi$ selbst.
 \section*{T5.13~ Beweis von Lemma~5.22}
 
 \textsfbf{Lemma~5.22.}~
-$s$ ist ein \PF-Gewinnbaum für $t$
+$s$ ist ein \PF-Gewinnbaum für $\Amc,t$
 ~gdw.~
 $\Lst \cap L_\omega(\Amc') = \emptyset$
 
@@ -6839,7 +6839,7 @@ $\Lst \cap L_\omega(\Amc') = \emptyset$
 \textsfbf{Beweis.}~
 \begin{description}
   \item[{\boldmath"`$\Rightarrow$"'}]
-%    Sei $s$ ein \PF-Gewinnbaum für $t$.
+%    Sei $s$ ein \PF-Gewinnbaum für $\Amc,t$.
 %    Wir nehmen an, $\Lst \cap L_\omega(\Amc') \neq \emptyset$.
     Wir beweisen die Kontraposition.
     Gelte $\Lst \cap L_\omega(\Amc') \neq \emptyset$.
@@ -6872,7 +6872,7 @@ $\Lst \cap L_\omega(\Amc') = \emptyset$
     also gewinnt \AUT (denn $\Amc'$ hat nach Konstruktion dieselbe Akzeptanzkomponente $c$
     wie $\Amc$).
     In diesem Spielverlauf verliert also \PF, obwohl sie nach Strategie $s$ gespielt hat.
-    Folglich ist $s$ kein \PF-Gewinnbaum für $t$.
+    Folglich ist $s$ kein \PF-Gewinnbaum für $\Amc,t$.
     \par\medskip
   \item[{\boldmath"`$\Leftarrow$"'}]
     Gelte $\Lst \cap L_\omega(\Amc') = \emptyset$.
@@ -6919,7 +6919,7 @@ $\Lst \cap L_\omega(\Amc') = \emptyset$
     Wir haben also für eine \emph{beliebige} Zugfolge von \AUT gezeigt, 
     dass der zugehörige Run von \Amc auf $t$ nicht erfolgreich sein kann.
     Somit muss $s$ eine Gewinnstrategie für \PF kodieren,
-    ist also ein \PF-Gewinnbaum.
+    ist also ein \PF-Gewinnbaum für $\Amc,t$.
     \qedhere
 \end{description}
 
