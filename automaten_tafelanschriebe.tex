@@ -6892,7 +6892,7 @@ Ab jetzt bezeichnen wir Pfade im Baum als Wörter $\pi \in \{0,1\}^*$;
 beispielsweise steht $\pi = 0110\cdots$
 für den Pfad $\{\varepsilon,0,01,011,\dots\}$.
 
-Sei $t$ ein beliebiger Baum, $s$ ein Strategiebaum (der nach Definition
+Seien $t$ ein $\Sigma$-Baum, $s$ ein $F$-Baum (der nach Definition
 für jede Position $p \in \{0,1\}^*$ eine Funktion $f_p : \Delta \to \{0,1\}$ enthält)
 und $\pi = 01010\cdots$.
 Dann wird durch $\pi$ folgendes $\omega$-Wort $\alpha \in \Lst$ bestimmt:
@@ -7024,6 +7024,7 @@ $s$ ist ein \PF-Gewinnbaum für $\Amc,t$
 $\Lst \cap L_\omega(\Amc') = \emptyset$
 
 \par\medskip
+\enlargethispage*{10mm}
 \textsfbf{Beweis.}~
 \begin{description}
   \item[{\boldmath"`$\Rightarrow$"'}]
@@ -7050,8 +7051,9 @@ $\Lst \cap L_\omega(\Amc') = \emptyset$
     \[
       \delta_j = \Big(q_j,~t(\pi_1\cdots\pi_j),~q_0',~q_1'\Big) ~\in~ \Delta
     \]
-    mit $s(\pi_1\cdots\pi_j)(\delta_j) = \pi_{i+1}$,
-    wobei $s(\pi_1\cdots\pi_j)$ die Funktion $f_{\pi_1\cdots\pi_j} \in F$ ist.
+    mit $s(\pi_1\cdots\pi_j)(\delta_j) = \pi_{j+1}$,
+    wobei $s(\pi_1\cdots\pi_j)$ die Funktion $f_{\pi_1\cdots\pi_j} \in F$ ist,
+    und mit $q_i'=q_{j+1}$.
     
     Wir betrachten nun denjenigen Spielverlauf von $\Game{A}{t}$,
     in dem \AUT in Spielposition $\pi_1\cdots\pi_j$ jeweils $\delta_j$ wählt
