@@ -7199,6 +7199,136 @@ es gibt $F$-Baum $s$ mit $\Lst \subseteq L_\omega(\Amc'')$
     \qedhere
 \end{description}
 
+\goodbreak
+% ===================================================================
+\section*{T5.17~ Beispiel für Komplement-NBPA}
+
+Da für den NBPA \Amc aus T5.9--T5.14 der NPA $\Amc''$ bereits 64 Übergänge hat,
+ist dessen Komplementierung äußerst unpraktikabel.
+Deshalb beginnen wir hier mit einem noch einfacheren NBPA \Amc.
+
+Sei $\Amc = (\{A\}, \{a,b\}, \Delta, \{A\}, \{A \mapsto 0\})$
+mit $\Delta = \{(A,a,A,A)\}$. Es gibt also nur einen einzigen Übergang,
+welchen wir $\delta_1$ nennen. Er "`propagiert"' beim Lesen eines $a$'s
+den Zustand $A$ zu beiden Kindern.
+Die Akzeptanzkomponente $c = \{A \mapsto 0\}$
+besagt, dass alle Runs erfolgreich sind.
+Damit ist
+\[
+  L_\omega(\Amc) = \{t \mid t(p)=a \text{~für alle~} p \in \{0,1\}^*\}.
+\]
+Die Menge $F$ der Funktionen, aus denen \PF-Gewinnbäume gebildet werden können,
+ist
+\[
+  F = \{g^0,g^1\}\qquad
+  \text{mit~~} g^0 : \delta_1 \mapsto 0
+  \text{~~und~~} g^1 : \delta_1 \mapsto 1.
+\]
+%
+Wir konstruieren zunächst den NPA $\Amc'$. Dieser übernimmt die Zustände, den Anfangszustand
+und die Akzeptanzkomponente von \Amc:
+%
+\begin{align*}
+  \Amc'   & = (\{A\}, \Sigma', \Delta', \{A\}, \{A \mapsto 0\}) \qquad\text{mit} \\
+  \Sigma' & = \{\auf g^i, c, j\zu \mid i,j \in \{0,1\},~ c \in \{a,b\}\}\qquad \text{(d.\,h.\ $|\Sigma'|=8$)}\qquad \text{und} \\
+  \Delta' & = \{(A,\,\underbrace{\auf g^0,a,0\zu}_{\text{{\normalsize $=: \sigma_0$}}},\,A),~ 
+                (A,\,\underbrace{\auf g^1,a,1\zu}_{\text{{\normalsize $=: \sigma_1$}}},\,A)\}
+\end{align*}
+%
+Da $\Amc'$ ein $\omega$-\emph{Wort}automat ist, kann man ihn graphisch darstellen:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state,initial] (A) {$A$};
+    
+    \path[->] (A) edge[loop right] node[right] {$\sigma_0,\sigma_1$} ();
+
+    \node[above left=-2mm and 8mm of A] {$\Amc'$};
+  \end{tikzpicture}
+\end{center}
+%
+Es fällt auf, dass $\Amc'$ deterministisch ist, bis auf einen fehlenden Papierkorbzustand $M$.
+Fügen wir $M$ und die notwendigen Transitionen zu $\Amc'$ hinzu
+und setzen $c(M) = 1$, dann können wir $\Amc'$ einfach komplementieren,
+indem wir lediglich die Akzeptanzkomponente "`invertieren"',
+d.\,h.\ $\Amc''$ ist folgender Automat mit Akzeptanzkomponente $c'' = \{A \mapsto 1,~ M \mapsto 0\}$.
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    initial text="", initial where=below left,
+    every state/.style={draw=black,thin,fill=black!5,inner sep=1mm,minimum size=6mm},
+    accepting/.style={double distance=1.5pt, double=white},
+    every edge/.style={draw=black,thin}
+  ]
+    \node[state,initial] (A)                  {$A$};
+    \node[state]         (M) [below=7mm of A] {$M$};
+    
+    \path[->]
+      (A) edge[loop right] node[right] {$\sigma_0,\sigma_1$} ()
+      (A) edge             node[right] {$\Sigma' \setminus \{\sigma_0,\sigma_1\}$} (M)
+      (M) edge[loop right] node[right] {$\Sigma'$} ()
+      ;
+
+    \node[above left=-2mm and 8mm of A] {$\Amc'$};
+  \end{tikzpicture}
+\end{center}
+%
+Nun können wir den Komplement-NPBA \Bmc bilden:
+\[
+  \Bmc = (\{A,M\},~ \{a,b\},~ \Delta^{\textsf{neu}},~ \{A\},~ \{A \mapsto 1,\,M \mapsto 0\})
+\]
+Um $\Delta^{\textsf{neu}}$ zu bilden, nummerieren wir die 16 Übergänge von $\Amc''$ durch
+(Übergänge 1--2 $\hat=$ Schleife an $A$; Übergänge 3--8 $\hat=$ Kante von $A$ zu $M$;
+Übergänge 9--16 $\hat=$ Schleife an $M$):
+%
+\begin{center}
+  \begin{tabular}{@{}rl@{\qquad}rl@{\qquad}l@{}}
+%  \begin{tabular}{@{}ll@{\qquad}ll@{\qquad}ll@{\qquad}ll@{}}
+     1 & $(A,\,\auf g^0,a,0\zu,\,A)$ &  2 & $(A,\,\auf g^1,a,1\zu,\,A)$ & ($A$-Schleife mit $\sigma_0,\sigma_1$)  \\[4pt]
+     3 & $(A,\,\auf g^0,a,1\zu,\,M)$ &  4 & $(A,\,\auf g^1,a,0\zu,\,M)$ & (Kante von $A$ zu $M$ mit den   \\
+     5 & $(A,\,\auf g^0,b,0\zu,\,M)$ &  6 & $(A,\,\auf g^1,b,0\zu,\,M)$ & ~übrigen Zeichen aus $\Sigma'$) \\
+     7 & $(A,\,\auf g^0,b,1\zu,\,M)$ &  8 & $(A,\,\auf g^1,b,1\zu,\,M)$ & \\[4pt]
+     9 & $(M,\,\auf g^0,a,0\zu,\,M)$ & 10 & $(M,\,\auf g^0,a,1\zu,\,M)$ & ($M$-Schleife mit allen Zeichen) \\
+    11 & $(M,\,\auf g^0,b,0\zu,\,M)$ & 12 & $(M,\,\auf g^0,b,1\zu,\,M)$ & \\
+    13 & $(M,\,\auf g^1,a,0\zu,\,M)$ & 14 & $(M,\,\auf g^1,a,1\zu,\,M)$ & \\
+    15 & $(M,\,\auf g^1,b,0\zu,\,M)$ & 16 & $(M,\,\auf g^1,b,1\zu,\,M)$ &
+  \end{tabular}
+\end{center}
+%
+Diese liefern jeweils paarweise die fünf Übergänge in $\Delta^{\textsf{neu}}$:
+%
+\begin{center}
+  \begin{tabular}{@{}ll@{}}
+    $(A,a,A,M)$ & aus 1+3 mit $q=A$, $f=g^0$, Zeichen $a$ \\
+    $(A,a,M,A)$ & aus 4+2 mit $q=A$, $f=g^1$, Zeichen $a$ \\
+    $(A,b,M,M)$ & aus 5+7 mit $q=A$, $f=g^0$, Zeichen $b$ \\
+                & bzw.\ 6+8 mit $q=A$, $f=g^1$, Zeichen $b$ \\
+    $(M,a,M,M)$ & aus 9+10 mit $q=M$, $f=g^0$, Zeichen $a$ \\
+                & bzw.\ 13+14 mit $q=M$, $f=g^1$, Zeichen $a$ \\
+    $(M,b,M,M)$ & aus 11+12 mit $q=M$, $f=g^0$, Zeichen $b$ \\
+                & bzw.\ 15+16 mit $q=M$, $f=g^1$, Zeichen $b$ \\
+  \end{tabular}
+\end{center}
+%
+Es ist nun leicht zu sehen, dass
+\[
+  L_\omega(\Bmc) = \overline{L_\omega(\Amc)} = \{t \mid t(p) = b \text{~für mindestens ein~} p \in \{0,1\}^*\}:
+\]
+Da für jedes Paar aus Zustand und Zeichen mindestens ein Übergang in $\Delta^{\textsf{neu}}$ existiert,
+hat \Bmc auf \emph{jeder} Eingabe mindestens einen Run. Dieser ist erfolgreich
+gdw.\ auf allen Pfaden $A$ nur endlich oft gesehen wird.
+Da jeder Run in $A$ beginnt und beim Lesen eines $a$'s der Zustand $A$ an mindestens ein Kind weitergegeben wird,
+kann dieser $A$-Pfad nur durch den dritten Übergang $(A,b,M,M)$ "`abgebrochen"' werden,
+d.\,h.\ ein Run von \Bmc auf einem Eingabebaum $t$ ist erfolgreich gdw.\ 
+$t$ mindestens ein $b$ enthält.
+
 
 %% ===================================================================
 %% ===================================================================
