@@ -6679,7 +6679,7 @@ Im Allgemeinen hat \AUT natürlich mehrere Wahlmöglichkeiten.
 \section*{T5.10~ Beispiel für Gewinnstrategie}
 
 Wir betrachten den NPBA \Amc und die Eingabe $t$ aus dem letzten Beispiel.
-Eine Gewinnstrategie für \PF ab Spielposition $v$ ist folgende:
+Eine Gewinnstrategie für \PF ab Spielposition $v = (\varepsilon,A)$ ist folgende:
 %
 \begin{center}
   \parbox{.8\linewidth}{%
@@ -6797,8 +6797,8 @@ und umgekehrt.
 % ===================================================================
 \section*{T5.12~ {\boldmath Beispiel für einen Gewinnbaum}}
 
-Wir betrachten wieder den NPBA \Amc und die Eingabe $t$ aus T5.9 und T5.10
-und formulieren die genannte gedächtnislose Gewinnstrategie von \PF
+Wir betrachten wieder den NPBA \Amc und die Eingabe $t$ aus T5.9
+und formulieren die genannte gedächtnislose Gewinnstrategie aus T5.10 von \PF
 als Baum von Funktionen.
 So ist beispielsweise $f_\varepsilon$ gegeben durch:
 %
@@ -6831,11 +6831,11 @@ als 4-Tupel geschrieben werden, also z.\,B.\ $f_\varepsilon = 0000$
 und $f_0 = 0010$.
 Insgesamt gibt es in $F$ (Menge aller Funktionen $f : \Delta \to \{0,1\}$)
 somit $2^4 = 16$ Funktionen, die wir der Einfachheit halber durchnummerieren
-als $F = \{f^0,\dots,f^{15}\} = \{0000,0001,\dots,1111\}$.
-Damit ist $f_\varepsilon = f^0$ und $f_0 = f^2$.
+als $F = \{g^0,\dots,g^{15}\} = \{0000,0001,\dots,1111\}$.
+Damit ist $f_\varepsilon = g^0$ und $f_0 = g^2$.
 
 Ein möglicher \PF-Gewinnbaum für $\Amc,t$ beinhaltet somit nur die Funktionen
-$f^0$ und $f^2$:
+$g^0$ und $g^2$:
 %
 \begin{center}
   \begin{tikzpicture}[
@@ -6847,23 +6847,23 @@ $f^0$ und $f^2$:
     level 4/.style = {sibling distance = 8mm, level distance = 11mm},
     edge from parent/.style = {draw=black, thin, -}%
   ]
-    \node (eps) {$f^0$}
+    \node (eps) {$g^0$}
     child {
-      node (0) {$f^2$}
+      node (0) {$g^2$}
       child {
-        node (00) {$f^0$}
+        node (00) {$g^0$}
       }
       child {
-        node (01) {$f^0$}
+        node (01) {$g^0$}
       }
     }
     child {
-      node (1) {$f^0$}
+      node (1) {$g^0$}
       child {
-        node (10) {$f^0$}
+        node (10) {$g^0$}
       }
       child {
-        node (11) {$f^0$}
+        node (11) {$g^0$}
       }
     }
     ;
@@ -6880,10 +6880,9 @@ $f^0$ und $f^2$:
 %
 Wie oben bereits angedeutet, gibt es mehrere \PF-Gewinnbäume für $\Amc,t$:
 es ist nur wichtig, dass auf dem hervorgehobenen Pfad abwechselnd
-$f^0$ und $f^2$ auftreten; in allen übrigen Positionen ist die Wahl der Funktion
-irrelevant für das Gewinnen von \PF, denn die Akzeptanzbedingung ist auf allen
-übrigen Pfaden sowieso erfüllt, denn dort treten irgendwann nur noch $b$'s auf,
-und damit wird nur noch der Zustand $B$ eingenommen.
+$g^0$ und $g^2$ auftreten; in allen übrigen Positionen ist die Wahl der Funktion
+irrelevant für das Gewinnen von \PF, denn diese werden nie erreicht,
+wenn \PF nach der Strategie aus T5.10 spielt.
 
 % ===================================================================
 \section*{T5.13~ {\boldmath Beispiel für die Sprache \Lst}}
@@ -6942,10 +6941,10 @@ $\pi = 01010\cdots$ also folgendes Wort:
     baseline=-2pt,
     every node/.style={draw=none,thin,inner sep=1mm}
   ]
-    \node                 (0) {\Tripel{f^0}{a}{0}};
-    \node[right=0mm of 0] (1) {\Tripel{f^2}{b}{1}};
-    \node[right=0mm of 1] (2) {\Tripel{f^0}{a}{0}};
-    \node[right=0mm of 2] (3) {\Tripel{f^2}{b}{1}};
+    \node                 (0) {\Tripel{g^0}{a}{0}};
+    \node[right=0mm of 0] (1) {\Tripel{g^2}{b}{1}};
+    \node[right=0mm of 1] (2) {\Tripel{g^0}{a}{0}};
+    \node[right=0mm of 2] (3) {\Tripel{g^2}{b}{1}};
     \node[right=1mm of 3,draw=none] (4) {$\cdots$};
   \end{tikzpicture}
 \end{center}
@@ -6961,7 +6960,7 @@ ist $\pi$ selbst.
 \section*{T5.14~ Beispiel für NPA}
 
 \enlargethispage*{20mm}
-Wir betrachten weiterhin den NPBA \Amc und die Eingabe $t$ aus T5.9--T5.12.
+Wir betrachten weiterhin den NPBA \Amc und die Eingabe $t$ aus T5.9.
 Der zugehörige NPA $\Amc' = (Q, \Sigma', \Delta', \{A\}, c)$
 hat dieselben Komponenten $Q,\{A\},c$ wie \Amc.
 %Das Alphabet $\Sigma' \subseteq L_{s,t}$ ist folgendes:
@@ -6971,7 +6970,7 @@ hat dieselben Komponenten $Q,\{A\},c$ wie \Amc.
 %\]
 Das Alphabet $\Sigma' \subseteq L_{s,t}$ besteht also aus allen Tripeln
 $\{\auf f,c,i\zu$ mit $f \in F$, $c \in \{a,b\}$, $i \in \{0,1\}$,
-wobei $F = \{f^0,\dots,f^{15}\} = \{0000,0001,\dots,1111\}$,
+wobei $F = \{g^0,\dots,g^{15}\} = \{0000,0001,\dots,1111\}$ (T5.12),
 d.\,h.\ $|\Sigma'| = 16 \cdot 2 \cdot 2 = 64$.
 %
 Die Übergangsrelation $\Delta'$ enthält für jeden Übergang $\delta \in \Delta$
@@ -6979,11 +6978,11 @@ Die Übergangsrelation $\Delta'$ enthält für jeden Übergang $\delta \in \Delt
 %
 \begin{itemize}
   \item
-    $(A, \auf f,a,0\zu, A)$ mit $f \in \{f^0,\dots,f^7\}$ \\
-    (denn für $i=0$ muss $f(\delta_1)=0$ sein, und das leisten genau die $f^i$ mit $i \leq 7$)
+    $(A, \auf f,a,0\zu, A)$ mit $f \in \{g^0,\dots,g^7\}$ \\
+    (denn für $i=0$ muss $f(\delta_1)=0$ sein, und das leisten genau die $g^i$ mit $i \leq 7$)
   \item
-    $(A, \auf f,a,1\zu, A)$ mit $f \in \{f^8,\dots,f^{15}\}$
-    (denn für $i=1$ muss $f(\delta_1)=1$ sein, und das leisten genau die $f^i$ mit $i > 7$)
+    $(A, \auf f,a,1\zu, A)$ mit $f \in \{g^8,\dots,g^{15}\}$
+    (denn für $i=1$ muss $f(\delta_1)=1$ sein, und das leisten genau die $g^i$ mit $i > 7$)
 \end{itemize}
 %
 Insgesamt enthält $\Delta$ somit $16 \cdot 4 = 64$ Elemente.
@@ -7001,10 +7000,10 @@ Das Wort
     baseline=-2pt,
     every node/.style={draw=none,thin,inner sep=1mm}
   ]
-    \node                 (0) {\Tripel{f^0}{a}{0}};
-    \node[right=0mm of 0] (1) {\Tripel{f^2}{b}{1}};
-    \node[right=0mm of 1] (2) {\Tripel{f^0}{a}{0}};
-    \node[right=0mm of 2] (3) {\Tripel{f^2}{b}{1}};
+    \node                 (0) {\Tripel{g^0}{a}{0}};
+    \node[right=0mm of 0] (1) {\Tripel{g^2}{b}{1}};
+    \node[right=0mm of 1] (2) {\Tripel{g^0}{a}{0}};
+    \node[right=0mm of 2] (3) {\Tripel{g^2}{b}{1}};
     \node[right=1mm of 3,draw=none] (4) {$\cdots$};
   \end{tikzpicture}
 \end{center}
@@ -7203,7 +7202,7 @@ es gibt $F$-Baum $s$ mit $\Lst \subseteq L_\omega(\Amc'')$
 % ===================================================================
 \section*{T5.17~ Beispiel für Komplement-NBPA}
 
-Da für den NBPA \Amc aus T5.9--T5.14 der NPA $\Amc''$ bereits 64 Übergänge hat,
+Da für den NBPA \Amc aus T5.9 der NPA $\Amc''$ (T5.14) bereits 64 Übergänge hat,
 ist dessen Komplementierung äußerst unpraktikabel.
 Deshalb beginnen wir hier mit einem noch einfacheren NBPA \Amc.
 
@@ -7284,9 +7283,9 @@ Nun können wir den Komplement-NPBA \Bmc bilden:
 \[
   \Bmc = (\{A,M\},~ \{a,b\},~ \Delta^{\textsf{neu}},~ \{A\},~ \{A \mapsto 1,\,M \mapsto 0\})
 \]
-Um $\Delta^{\textsf{neu}}$ zu bilden, nummerieren wir die 16 Übergänge von $\Amc''$ durch
-(Übergänge 1--2 $\hat=$ Schleife an $A$; Übergänge 3--8 $\hat=$ Kante von $A$ zu $M$;
-Übergänge 9--16 $\hat=$ Schleife an $M$):
+Um $\Delta^{\textsf{neu}}$ zu bilden, nummerieren wir die 16 Übergänge von $\Amc''$ durch:
+%(Übergänge 1--2 $\hat=$ Schleife an $A$; Übergänge 3--8 $\hat=$ Kante von $A$ zu $M$;
+%Übergänge 9--16 $\hat=$ Schleife an $M$):
 %
 \begin{center}
   \begin{tabular}{@{}rl@{\qquad}rl@{\qquad}l@{}}
