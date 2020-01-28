@@ -7328,6 +7328,711 @@ kann dieser $A$-Pfad nur durch den dritten Übergang $(A,b,M,M)$ "`abgebrochen"'
 d.\,h.\ ein Run von \Bmc auf einem Eingabebaum $t$ ist erfolgreich gdw.\ 
 $t$ mindestens ein $b$ enthält.
 
+\pagebreak
+% ===================================================================
+\section*{T5.18~ Beispiele für endliche Teilbäume}
+
+Sei $\Sigma = \{a,b\}$ und $t$ der unendliche $\Sigma$-Baum mit
+$t(p) = \begin{cases}
+          a & \text{falls $|p|$ gerade} \\
+          b & \text{sonst}
+        \end{cases}$
+~:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=7mm},
+%    level 1/.style = {sibling distance = 30mm, level distance =  6mm},
+%    level 2/.style = {sibling distance = 12mm, level distance =  9mm},
+    level 1/.style = {sibling distance = 66mm, level distance =  7mm},
+    level 2/.style = {sibling distance = 30mm, level distance =  9mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node (eps) {$a$}
+    child {
+      node (0) {$b$}
+      child {
+        node (00) {$a$}
+      }
+      child {
+        node (01) {$a$}
+      }
+    }
+    child {
+      node (1) {$b$}
+      child {
+        node (10) {$a$}
+      }
+      child {
+        node (11) {$a$}
+      }
+    }
+    ;
+    
+    \foreach \x in {00,01,10,11}
+      \node [draw=none,fill=none,below=-1mm of \x] {$\vdots$};
+    
+  \end{tikzpicture}
+\end{center}
+%
+Ein möglicher endlicher Teilbaum von $t$ ist dann $T=(P,t')$
+mit $P = \{\varepsilon,0,1,10,11,111\}$
+und $t'$ gleich der Einschränkung von $t$ auf $P$,
+im Bild durch dicke Linien markiert:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=7mm},
+    level 1/.style = {sibling distance = 66mm, level distance =  7mm},
+    level 2/.style = {sibling distance = 30mm, level distance =  9mm},
+    level 3/.style = {sibling distance = 13mm, level distance = 12mm},
+    level 4/.style = {sibling distance =  9mm, level distance = 12mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node (eps) {$a$}
+    child {
+      node[fill=black!25] (0) {$b$}
+      child {
+        node[fill=none] (00) {$a$}
+      }
+      child {
+        node[fill=none] (01) {$a$}
+      }
+    }
+    child {
+      node (1) {$b$}
+      child {
+        node[fill=black!25] (10) {$a$}
+        child {
+          node[fill=none] (100) {$b$}
+        }
+        child {
+          node[fill=none] (101) {$b$}
+        }
+      }
+      child {
+        node (11) {$a$}
+        child {
+          node[fill=none] (110) {$b$}
+        }
+        child {
+          node[fill=black!25] (111) {$b$}
+          child {
+            node[fill=none] (1110) {$a$}
+          }
+          child {
+            node[fill=none] (1111) {$a$}
+          }
+        }
+      }
+    }
+    ;
+    
+    \foreach \x in {00,01,100,101,110,1110,1111}
+      \node [draw=none,fill=none,below=-1mm of \x] {$\vdots$};
+    
+    \path[-,draw=black,line width=2mm,draw opacity=.4] 
+      (eps) edge (0)
+      (eps) edge (1)
+      (1)   edge (10)
+      (1)   edge (11)
+      (11)  edge (111)
+      ;
+      
+    \begin{scope}[
+      every node/.style={circle,draw=black,line width=2mm,draw opacity=.4,minimum size=7mm},
+    ]
+      \foreach \x in {eps,0,1,10,11,111}
+      \node [at=(\x)] {};
+    \end{scope}
+  \end{tikzpicture}
+\end{center}
+%
+Die Blätter von $T$ sind an Positionen $0,10,111$ und im Bild dunkel ausgefüllt.
+
+Die Hülle von $T$ besteht aus den Positionen $00,01,100,101,110,1110,1111$ (im Bild nicht ausgefüllt).
+
+\pagebreak
+% ===================================================================
+\section*{T5.19~ Beispiel für Teilruns}
+
+Wie betrachten die Zustandsmenge $Q=\{a,b\}$ mit $F=\{b\}$.
+Das folgende Bild zeigt einen möglichen Run $r$ und 
+die (nach unten durch $b$-Positionen begrenzten) endlichen Teilruns
+$r_\varepsilon, r_{00}, r_1, r_{11}, r_{010}, r_{011}$.
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=7mm},
+    level 1/.style = {sibling distance = 72mm, level distance =  7mm},
+    level 2/.style = {sibling distance = 34mm, level distance =  9mm},
+    level 3/.style = {sibling distance = 18mm, level distance =  12mm},
+    level 4/.style = {sibling distance = 8.5mm, level distance = 12mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node (eps) {$a$}
+    child {
+      node (0) {$a$}
+      child {
+        node (00) {$b$}
+        child {
+          node (000) {$a$}
+          child {
+            node (0000) {$b$}
+          }
+          child {
+            node (0001) {$b$}
+          }
+        }
+        child {
+          node (001) {$b$}
+        }
+      }
+      child {
+        node (01) {$a$}
+        child {
+          node (010) {$b$}
+          child {
+            node (0100) {$b$}
+          }
+          child {
+            node (0101) {$b$}
+          }
+        }
+        child {
+          node (011) {$b$}
+          child {
+            node (0110) {$b$}
+          }
+          child {
+            node (0111) {$b$}
+          }
+        }
+      }
+    }
+    child {
+      node (1) {$b$}
+      child {
+        node (10) {$a$}
+        child {
+          node (100) {$a$}
+          child {
+            node (1000) {$b$}
+          }
+          child {
+            node (1001) {$b$}
+          }
+        }
+        child {
+          node (101) {$a$}
+          child {
+            node (1010) {$b$}
+          }
+          child {
+            node (1011) {$b$}
+          }
+        }
+      }
+      child {
+        node (11) {$b$}
+        child {
+          node (110) {$b$}
+        }
+        child {
+          node (111) {$b$}
+        }
+      }
+    }
+    ;
+    
+    \foreach \x in {0000,0001,001,0100,0101,0110,0111,1000,1001,1010,1011,110,111}
+      \node [draw=none,fill=none,below=-1mm of \x] {$\vdots$};
+
+    \begin{scope}[
+      every node/.style={circle,draw=black,line width=2mm,draw opacity=.4,minimum size=7mm},
+    ]
+      \foreach \x in {eps,0,00,000,01,010,011,1,10,100,101,11}
+      \node [at=(\x)] {};
+    \end{scope}
+      
+    \begin{scope}[
+      every node/.style={draw=none,fill=none},
+    ]
+      \path[-,draw=black,line width=2mm,draw opacity=.4] 
+        (eps) edge node[above left=-1mm and 0mm] {$r_\varepsilon$} (0)
+        (0)   edge (01)
+        (00)  edge node[above left =-1mm and -1mm] {$r_{00}$} (000)
+        (1)   edge node[below right=0mm and -1mm] {$r_1$} (10)
+        (10)  edge (100)
+        (10)  edge (101)
+        ;
+      
+      \node[above left =0mm and -2mm of 010] {$r_{010}$};
+      \node[above right=0mm and -2mm of 011] {$r_{011}$};
+      \node[above right=0mm and -2mm of 11]  {$r_{11}$};
+    \end{scope}
+  \end{tikzpicture}
+\end{center}
+
+% ===================================================================
+\section*{T5.20~ Beweis von Lemma~5.25}
+
+\textsfbf{Lemma 5.25.}~
+Für jede Position $p \in \{0,1\}$ ist $r_p$ endlich.
+
+\parII
+\textsfbf{Beweis.}~
+Für den Baum $r_p$ gilt:
+%
+\begin{itemize}
+  \item
+    $r_p$ hat endlichen Verzweigungsgrad (nämlich 2).
+  \item
+    Jeder Pfad in $r_p$ ist endlich,
+    denn jeder unendliche Pfad in $r_p$ entspräche einem
+    unendlichen Pfad in $r$, auf dem kein akzeptierender Zustand besucht würde,
+    und das widerspricht der Tatsache, dass $r$ erfolgreich ist.
+\end{itemize}
+%
+Nach dem Lemma von K\H onig (Lemma~3.24) ist $r_p$ also endlich.
+\qedhere
+
+% ===================================================================
+\section*{T5.21~ Beispiel für Zerlegung eines Runs}
+
+Betrachte $r$ aus T5.19 und die eingezeichneten endlichen Teilruns.
+Schicht 1 besteht aus $r_\varepsilon$,
+Schicht 2 wird durch $r_{00}, r_1, r_{11}, r_{010}, r_{011}$ gebildet
+usw.
+
+\pagebreak
+% ===================================================================
+\section*{T5.22~ Beispiel für {\boldmath $\Tmc_{\Sigma,F}$ und $\Tmc_q$}}
+
+Sei $\Sigma = \{a,b\}$ und $F=\{f_1,f_2,f_3\}$.
+Das folgende Bild zeigt einen Baum $T \in \Tmc_{\Sigma,F}$ (links),
+den Teilbaum $T^-$ (links markiert) und einen Teilrun eines möglichen
+NBBAs auf $T^-$, der die Eigenschaften (1) und (2) von Folie 5.73 erfüllt (rechts).
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=7mm},
+%    level 1/.style = {sibling distance = 30mm, level distance =  6mm},
+%    level 2/.style = {sibling distance = 12mm, level distance =  9mm},
+    level 1/.style = {sibling distance = 36mm, level distance =  7mm},
+    level 2/.style = {sibling distance = 16mm, level distance =  9mm},
+    level 3/.style = {sibling distance = 9mm, level distance = 12mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node (eps) {$a$}
+    child {
+      node (0) {$b$}
+      child {
+        node[fill=none] (00) {$f_1$}
+      }
+      child {
+        node[fill=none] (01) {$f_2$}
+      }
+    }
+    child {
+      node (1) {$a$}
+      child {
+        node (10) {$b$}
+        child {
+          node[fill=none] (100) {$f_2$}
+        }
+        child {
+          node[fill=none] (101) {$f_1$}
+        }
+      }
+      child {
+        node[fill=none] (11) {$f_3$}
+      }
+    }
+    ;
+    
+    \begin{scope}[
+      every node/.style={circle,draw=black,line width=2mm,draw opacity=.4,minimum size=7mm},
+    ]
+      \foreach \x in {eps,0,1,10}
+      \node [at=(\x)] {};
+    \end{scope}
+      
+    \begin{scope}[
+      every node/.style={draw=none,fill=none},
+    ]
+      \path[-,draw=black,line width=2mm,draw opacity=.4] 
+        (eps) edge (0)
+        (eps) edge node [above right=-.5mm and -.5mm] {$T^-$} (1)
+        (1)   edge (10)
+        ;
+      
+    \end{scope}
+    
+  \end{tikzpicture}
+  \hspace*{20mm}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=7mm},
+%    level 1/.style = {sibling distance = 30mm, level distance =  6mm},
+%    level 2/.style = {sibling distance = 12mm, level distance =  9mm},
+    level 1/.style = {sibling distance = 36mm, level distance =  7mm},
+    level 2/.style = {sibling distance = 16mm, level distance =  9mm},
+    level 3/.style = {sibling distance = 9mm, level distance = 12mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node (eps) {$q$}
+    child {
+      node (0) {$q'$}
+      child {
+        node[fill=none] (00) {$f_1$}
+      }
+      child {
+        node[fill=none] (01) {$f_2$}
+      }
+    }
+    child {
+      node (1) {$q''$}
+      child {
+        node (10) {$q'''$}
+        child {
+          node[fill=none] (100) {$f_2$}
+        }
+        child {
+          node[fill=none] (101) {$f_1$}
+        }
+      }
+      child {
+        node[fill=none] (11) {$f_3$}
+      }
+    }
+    ;
+    
+  \end{tikzpicture}
+\end{center}
+
+% ===================================================================
+\section*{T5.23~ Beweis von Lemma 5.26}
+
+\textsfbf{Lemma~5.26.}~
+$\Tmc_q$ ist NETDBA-erkennbar.
+
+\parII
+\textsfbf{Beweisskizze.}~
+Sei $\Amc = (Q,\Sigma,\Delta,\{q_I\},F)$ der ursprüngliche NBBA
+und $q \in Q$.
+Wir konstruieren den NETDBA $\Amc' = (Q, \Sigma \cup F, \Delta', \{q\})$%
+%\footnote{Beachte, dass ein Top-Down-Baumautomat keine akzeptierenden Zustände hat,
+%denn diese sind implizit in der Übergangsrelation.}
+mit
+\[
+  \Delta' ~=~ \{(q,a) \to (q_1,q_2) \mid (q,a,q_1,q_2) \in \Delta\}
+          ~\cup~ \{(f,f) \to () \mid f \in F\}
+\]
+Nun ist einfach zu zeigen, dass $t \in \Tmc_q$ gdw.\ $t \in L(\Amc')$.
+\qedhere
+
+% ===================================================================
+\section*{T5.24~ Beispiele für Verkettungen endlicher Bäume}
+
+Seien $\Tmc_i = \{T_i\}$, $i=0,1,2$ jeweils einelementige Baummengen mit $T_i$ wie folgt:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
+    level 1/.style = {sibling distance = 10mm, level distance =  8mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node (eps) {$a$}
+    child {
+      node (0) {$a$}
+    }
+    child {
+      node (1) {$b$}
+    }
+    ;
+    
+    \begin{scope}[
+      every node/.style={draw=none,fill=none},
+    ]  
+      \node[above left=0mm and 5mm of eps] {$T_0$}; 
+    \end{scope}
+    
+  \end{tikzpicture}
+  \hspace*{20mm}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
+    level 1/.style = {sibling distance = 10mm, level distance =  8mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node (eps) {$a$}
+    child {
+      node (0) {$a$}
+    }
+    child {
+      node (1) {$a$}
+    }
+    ;
+    
+    \begin{scope}[
+      every node/.style={draw=none,fill=none},
+    ]  
+      \node[above left=0mm and 5mm of eps] {$T_1$}; 
+    \end{scope}
+    
+  \end{tikzpicture}
+  \hspace*{20mm}
+  \begin{tikzpicture}[%
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
+    level 1/.style = {sibling distance = 10mm, level distance =  8mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node (eps) {$b$}
+    child {
+      node (0) {$b$}
+    }
+    child {
+      node (1) {$b$}
+    }
+    ;
+    
+    \begin{scope}[
+      every node/.style={draw=none,fill=none},
+    ]  
+      \node[above left=0mm and 5mm of eps] {$T_2$}; 
+    \end{scope}
+    
+  \end{tikzpicture}
+\end{center}
+%
+Sei außerdem $\overline{a} = (b,a)$.
+Dann sind $\Tmc_0 \cdot^{\overline{a}} (\Tmc_1,\Tmc_2)$ und
+$\Tmc_0 \cdot^{\overline{a}} (\Tmc_1,\Tmc_2)^{\omega,\overline{a}}$
+ebenfalls einelementig:
+%
+\begin{center}
+  \begin{tikzpicture}[%
+    baseline=2pt,
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
+    level 1/.style = {sibling distance = 24mm, level distance =  7mm},
+    level 2/.style = {sibling distance = 10mm, level distance =  8mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node (eps) {$a$}
+    child {
+      node (0) {$b$}
+      child {
+        node (00) {$b$}
+      }
+      child {
+        node (01) {$b$}
+      }
+    }
+    child {
+      node (1) {$a$}
+      child {
+        node (10) {$a$}
+      }
+      child {
+        node (11) {$a$}
+      }
+    }
+    ;    
+    \begin{scope}[
+      every node/.style={draw=none,fill=none},
+    ]  
+      \node[above left=-4mm and 3mm of eps] {$\Tmc_0 \cdot^{\overline{a}} (\Tmc_1,\Tmc_2)$}; 
+    \end{scope}
+  \end{tikzpicture}
+  \hspace*{10mm}
+  \begin{tikzpicture}[%
+    baseline=2pt,
+    node distance=20mm,>=Latex,
+    every node/.style={circle,draw=black,thin,fill=black!5,inner sep=.4mm,minimum size=6mm},
+    level 1/.style = {sibling distance = 46mm, level distance =  7mm},
+    level 2/.style = {sibling distance = 20mm, level distance =  8mm},
+    level 3/.style = {sibling distance = 8.5mm, level distance =  9mm},
+    edge from parent/.style = {draw=black, thin, -}%
+  ]
+    \node (eps) {$a$}
+    child {
+      node (0) {$b$}
+      child {
+        node (00) {$a$}
+        child {
+          node (000) {$b$}
+        }
+        child {
+          node (001) {$b$}
+        }
+      }
+      child {
+        node (01) {$a$}
+        child {
+          node (010) {$b$}
+        }
+        child {
+          node (011) {$b$}
+        }
+      }
+    }
+    child {
+      node (1) {$a$}
+      child {
+        node (10) {$b$}
+        child {
+          node (100) {$a$}
+        }
+        child {
+          node (101) {$a$}
+        }
+      }
+      child {
+        node (11) {$b$}
+        child {
+          node (110) {$a$}
+        }
+        child {
+          node (111) {$a$}
+        }
+      }
+    }
+    ;    
+
+    \foreach \x in {000,001,010,011,100,101,110,111}
+      \node [draw=none,fill=none,below=-1mm of \x] {$\vdots$};
+
+    \begin{scope}[
+      every node/.style={draw=none,fill=none},
+    ]  
+      \node[above left=-4mm and 3mm of eps] {$\Tmc_0 \cdot^{\overline{a}} (\Tmc_1,\Tmc_2)^{\omega,\overline{a}}$}; 
+    \end{scope}
+  \end{tikzpicture}
+\end{center}
+
+% ===================================================================
+\section*{T5.25~ Beweis von Satz~5.27}
+
+\textsfbf{Satz~5.27.}~
+Eine Menge \Tmc unendlicher $\Sigma$-Bäume ist NBBA-erkennbar \\
+gdw. es NETDBA-erkennbare Mengen $\Tmc_0,\Tmc_1,\dots,\Tmc_m \subseteq \Tmc_{\Sigma,\Sigma'}$ gibt mit
+\[
+  \Tmc = \Tmc_0 \cdot^{\overline{a}} (\Tmc_1,\dots,\Tmc_m)^{\omega,\overline{a}},
+\]
+wobei $\Sigma' = \{a_1,\dots,a_m\}$ und $\overline{a} = (a_1,\dots,a_m)$.
+
+\parII
+\textsfbf{Beweis.}
+%
+\begin{description}
+  \item[{\boldmath "`$\Rightarrow$"'}]
+    Sei $\Amc = (Q,\Sigma,\Delta,\{q_I\},F)$ ein NBBA mit $L_\omega(\Amc) = \Tmc$.
+    Wir setzen $\Sigma' := F = \{f_1,\dots,f_m\}$ und $\overline{a} := (f_1,\dots,f_m)$.
+    Nun konstruieren wir die folgenden NETDBAs $\Amc_0,\Amc_1,\dots,\Amc_m$,
+    die allesamt die Übergangsrelation $\Delta$ von \Amc übernehmen.
+    %
+    \begin{itemize}
+      \item 
+        $\Amc_0$ hat Anfangszustand $q_I$
+        und "`akzeptierende"' Zustände $F$ (d.\,h.\ zusätzliche Übergänge $(f_i,f_i) \to ()$, $i \leq m$).
+      \item
+        $\Amc_i$ hat Anfangszustand $f_i$ und dieselben "`akzeptierenden"' Zustände wie $\Amc_0$.
+    \end{itemize}
+    %
+    Es bleibt zu zeigen:
+    \[
+      L_\omega(\Amc) = L(\Amc_0) \cdot^{\overline{a}} (L(\Amc_1),\dots,L(\Amc_m))^{\omega,\overline{a}}
+    \]
+    %
+    \begin{description}
+      \item[{\boldmath "`$\subseteq$"'}] 
+        Sei $t \in L_\omega(\Amc)$. Dann gibt es erfolgreichen Run $r$ von \Amc auf $t$.
+        Wir können $r$ in endliche Teilruns zerlegen anhand der Auftreten der $f_i$,
+        wie anfangs beschrieben.
+        Dann ist jeder Teilrun ein erfolgreicher Run des entsprechenden NETDBA $\Amc_i$
+        auf dem zugehörigen Teilbaum von $t$.
+        Folglich lässt sich $t$ wie gewünscht in Teilbäume zerlegen.
+      \item[{\boldmath "`$\supseteq$"'}] 
+        Wenn sich $t$ gemäß der obigen Konkatenation aus Teilbäumen zusammensetzt,
+        kann man einen Run von \Amc auf $t$
+        aus den Teilruns der $\Amc_i$
+        auf den entsprechenden Teilbäumen zusammensetzen. Damit ist $t \in L_\omega(\Amc)$.
+    \end{description}
+  \item[{\boldmath "`$\Leftarrow$"'}] (Skizze)
+    Seien $\Amc_i$ die NETDBAs, die die $\Tmc_i$ erkennen.
+    Sei $F := \Sigma'$ und $f_i := a_i$, $i \leq m$.
+    O.\,B.\,d.\,A.\ haben alle $\Amc_i$ genau die $f_i$ als "`akzeptierende Zustände"'.
+    Wir können nun einen NBBA \Amc für \Tmc konstruieren, indem wir
+    %
+    \begin{itemize}
+      \item 
+        als Zustände die disjunkte Vereinigung aller \emph{nicht-akzeptierenden} Zustände
+        plus einer "`Kopie"' von $F$ wählen,
+      \item
+        $F$ als Akzeptanzkomponente setzen,
+      \item
+        als Anfangszustände die von $\Amc_0$ wählen,
+      \item
+        als Übergänge die Vereinigung aller Übergänge der $\Amc_i$
+        außer der $(f_i,f_i) \to ()$ wählen
+        und dabei alle Übergänge
+        %
+        \begin{itemize}
+          \item 
+            $(q,a,f_i,f_j)$ ersetzen durch $(q,a,q_i,q_j)$ mit $q_i,q_j$ Anfangszustände von $\Amc_i$ bzw.\ $\Amc_j$,
+          \item 
+            $(q,a,q',f_i)$ ersetzen durch $(q,a,q',q_i)$ mit $q_i$ Anfangszustand von $\Amc_i$,
+          \item 
+            $(q,a,f_i,q')$ ersetzen durch $(q,a,q_i,q')$ mit $q_i$ Anfangszustand von $\Amc_i$.
+        \end{itemize}
+    \end{itemize}
+    %
+    Nun zeigt man leicht, dass $L_\omega(\Amc) = \Tmc$.
+    \qedhere
+\end{description}
+
+% ===================================================================
+\section*{T5.26~ Beweis von Lemma~5.28}
+
+\textsfbf{Lemma~5.28.}~
+Der Algorithmus auf Folie~5.76 ist korrekt und terminiert in polynomieller Zeit.
+\parII
+\textsfbf{Beweis.}
+%
+\begin{description}
+  \item[Korrektheit:]
+    Wenn $q_I$ nicht eliminiert wird, dann seien $f_1,\dots,f_{m'}$
+    die akzeptierenden Zustände aus der am Ende des Algorithmus
+    verbleibenden Zustandsmenge $Q$.
+    Sei außerdem $\overline{f}' = (f_1,\dots,f_{m'})$.
+    
+    Wegen $\Tmc_{q_I} \neq \emptyset$ ist $m \geq 1$;
+    außerdem sind alle $\Tmc_{f_i}$ nicht leer.
+    Damit ist auch die Menge
+    \[
+      \tag{$*$}
+      \Tmc_{q_I} \cdot^{\overline{f}'} (\Tmc_{f_1},\dots,\Tmc_{f_{m'}})^{\omega,\overline{f}'}
+    \]
+    nicht leer. Da diese eine Teilmenge von $L_\omega(\Amc)$ ist,
+    ist letztere auch nicht leer.
+    
+    \parI
+    Ist umgekehrt $L_\omega(\Amc) \neq \emptyset$,
+    dann wird auch $q_I$ niemals eliminiert.
+  \item[Zeitanalyse:]
+    Die Schleife kann maximal $|Q|$-mal durchlaufen werden;
+    in jedem Durchlauf benötigt der Test $\Tmc_q = \emptyset$
+    nur polynomielle Zeit gemäß Satz~2.20.
+    \qedhere
+\end{description}
 
 %% ===================================================================
 %% ===================================================================
