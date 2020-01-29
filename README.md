@@ -11,7 +11,7 @@ Hier findet ihr die Tafelanschriebe für die Vorlesung „Automatentheorie und i
 
 **Kapitel 1–3** vollständig
 
-**Kapitel 4** T4.1–T4.4, T4.12 (ohne Bilder), T4.13–T4.16  (Stand: 7.1.20)
+**Kapitel 4** T4.1–T4.4, T4.12 (ohne Bilder), T4.13–T4.16
 
 **Kapitel 5** vollständig
 
@@ -21,7 +21,7 @@ Alle (bisherigen und geplanten) Tafelanschriebe sind jetzt <font color="#005500"
 
 ## Versionsgeschichte (WiSe 2019/20)
 
-**28.1.2020**&nbsp; T5.18–T5.26 hinzugefügt
+**28.-29.1.2020**&nbsp; T5.18–T5.26 hinzugefügt
 
 **21–22.1.2020**&nbsp; T5.17 hinzugefügt; kleinere Korrekturen in T5.10, T5.12--16
 

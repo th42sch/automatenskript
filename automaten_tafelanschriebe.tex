@@ -7725,7 +7725,9 @@ $\Tmc_q$ ist NETDBA-erkennbar.
 \textsfbf{Beweisskizze.}~
 Sei $\Amc = (Q,\Sigma,\Delta,\{q_I\},F)$ der ursprüngliche NBBA
 und $q \in Q$.
-Wir konstruieren den NETDBA $\Amc' = (Q, \Sigma \cup F, \Delta', \{q\})$%
+Wir setzen $\Sigma' = \Sigma \cup F$ und weisen allen $\Sigma$-Symbolen die Stelligkeit 2
+und allen $F$-"`Symbolen"' die Stelligkeit 0 zu.
+Dann konstruieren wir den NETDBA $\Amc' = (Q, \Sigma', \Delta', \{q\})$
 %\footnote{Beachte, dass ein Top-Down-Baumautomat keine akzeptierenden Zustände hat,
 %denn diese sind implizit in der Übergangsrelation.}
 mit
@@ -8014,7 +8016,7 @@ Der Algorithmus auf Folie~5.76 ist korrekt und terminiert in polynomieller Zeit.
     verbleibenden Zustandsmenge $Q$.
     Sei außerdem $\overline{f}' = (f_1,\dots,f_{m'})$.
     
-    Wegen $\Tmc_{q_I} \neq \emptyset$ ist $m \geq 1$;
+    Wegen $\Tmc_{q_I} \neq \emptyset$ ist $m' \geq 1$;
     außerdem sind alle $\Tmc_{f_i}$ nicht leer.
     Damit ist auch die Menge
     \[
